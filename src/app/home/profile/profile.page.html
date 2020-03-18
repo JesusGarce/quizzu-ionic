@@ -1,0 +1,94 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png"></ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card color="mediumlight">
+        <ion-row>
+            <ion-avatar>
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+            </ion-avatar>
+            <ion-card-header>
+                <ion-card-title><h2>{{this.authService.currentUser.username}}</h2></ion-card-title>
+                <ion-card-title>Level {{this.authService.currentUser.level}}</ion-card-title>
+                <ion-card-subtitle><ion-label color="dark">Points {{this.authService.currentUser.points}}</ion-label></ion-card-subtitle>
+            </ion-card-header>
+        </ion-row>
+        <ion-row class="profile-buttons">
+            <ion-button color="primary">Change Pic</ion-button>
+            <ion-button color="primary" (click)="authService.goToEditProfile()">Edit Profile</ion-button>
+            <ion-button color="primary" (click)="authService.SignOut()">Log Out</ion-button>
+        </ion-row>
+    </ion-card>
+
+    <ion-card class="stats" color="mediumlight">
+        <ion-card-header class="stats-title">
+            <ion-card-title>Stats</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">Won games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">Draw games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">Lost games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">C2 games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">C1 games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">B2 games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label color="primary">B1 games</ion-label>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <ion-label color="dark">0</ion-label>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+
+    </ion-card>
+</ion-content>
