@@ -6,6 +6,12 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import {FacebookLoginResponse} from '@ionic-native/facebook';
 import * as firebase from 'firebase';
+import {Observable} from 'rxjs';
+import {AngularFireStorage} from '@angular/fire/storage';
+import {finalize} from 'rxjs/operators';
+import {UserStats} from './user-stats.model';
+import {SpinnerLoadingComponent} from './spinner-loading/spinner-loading.component';
+import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,22 +20,30 @@ import * as firebase from 'firebase';
 export class AuthenticationService {
   userData: any;
   currentUser: any;
+  currentUserStats: any;
+  downloadURL: Observable<string>;
 
   constructor(
     public afStore: AngularFirestore,
     public ngFireAuth: AngularFireAuth,
     public router: Router,
-    public ngZone: NgZone
+    public ngZone: NgZone,
+    private storage: AngularFireStorage,
+    private spinnerLoading: SpinnerLoadingService,
   ) {
+    spinnerLoading.show();
     this.ngFireAuth.authState.subscribe(user => {
       if (user) {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
-        this.saveCurrentUser(user.uid);
+        this.getCurrentUser(user.uid);
+        this.getCurrentUserStats(user.uid);
         JSON.parse(localStorage.getItem('user'));
+        spinnerLoading.hide();
       } else {
         localStorage.setItem('user', null);
         JSON.parse(localStorage.getItem('user'));
+        spinnerLoading.hide();
       }
     });
   }
@@ -47,14 +61,47 @@ export class AuthenticationService {
           user.level = 1;
           user.points = 0;
           user.friends = [];
-          user.profile = '';
+          user.profile = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=25150dc7-a848-4fce-b900-53f47a9518ee';
+          this.createUserStats();
           const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
           userRef.set(JSON.parse(JSON.stringify(user)), {
                 merge: true
           });
+          const userStatsRef: AngularFirestoreDocument<any> = this.afStore.doc(`user-stats/${user.id}`);
+          userStatsRef.set(JSON.parse(JSON.stringify(this.currentUserStats)), {
+            merge: true
+          });
     }).catch((error) => {
       window.alert('Something bad happened: ' + error);
     });
+  }
+
+  createUserStats() {
+    this.currentUserStats = new UserStats();
+    this.currentUserStats.c2level = {
+      c2played: 0,
+      c2won: 0,
+      c2draw: 0,
+      c2lost: 0,
+    };
+    this.currentUserStats.c1level = {
+      c1played: 0,
+      c1won: 0,
+      c1draw: 0,
+      c1lost: 0,
+    };
+    this.currentUserStats.b2level = {
+      b2played: 0,
+      b2won: 0,
+      b2draw: 0,
+      b2lost: 0,
+    };
+    this.currentUserStats.b1level = {
+      b1played: 0,
+      b1won: 0,
+      b1draw: 0,
+      b1lost: 0,
+    };
   }
 
   // Email verification when new user register
@@ -94,22 +141,28 @@ export class AuthenticationService {
   
   // Sign in with Facebook
   FacebookAuth(res: FacebookLoginResponse) {
+    this.spinnerLoading.show();
     const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
     this.ngFireAuth.auth.signInWithCredential(credential)
         .then((response) => {
-          this.SetUserDataGoogle(response.user);
+          this.SetUserDataGoogle(response.user).then( r => {
+            this.spinnerLoading.hide();
+          });
           this.router.navigate(['/home']);
         });
   }
 
   // Auth providers
   AuthLogin(provider) {
+    this.spinnerLoading.show();
     return this.ngFireAuth.auth.signInWithPopup(provider)
     .then((result) => {
        this.ngZone.run(() => {
           this.router.navigate(['home']);
         });
-       this.SetUserDataGoogle(result.user);
+       this.SetUserDataGoogle(result.user).then( r => {
+        this.spinnerLoading.hide();
+      });
     }).catch((error) => {
       window.alert(error);
     });
@@ -117,6 +170,10 @@ export class AuthenticationService {
 
   // Store user in localStorage
   SetUserDataGoogle(user) {
+    const userStatsRef: AngularFirestoreDocument<any> = this.afStore.doc(`user-stats/${user.uid}`);
+    userStatsRef.set(JSON.parse(JSON.stringify(this.currentUserStats)), {
+      merge: true
+    });
     const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
     const userData: User = {
       id: user.uid,
@@ -130,8 +187,8 @@ export class AuthenticationService {
       birthDate: new Date(),
       friends: []
     };
-    this.saveCurrentUser(user.uid);
-    return userRef.set(userData, {
+    this.getCurrentUser(user.uid);
+    return userRef.set(JSON.parse(JSON.stringify(userData)), {
       merge: true
     });
   }
@@ -144,14 +201,22 @@ export class AuthenticationService {
     });
   }
 
-  saveCurrentUser(uid) {
-    console.log(uid);
+  getCurrentUser(uid) {
     this.afStore.doc(`users/${uid}`).ref.get().then(doc => {
       if (doc.exists) {
         this.currentUser = doc.data();
-        console.log('CURRENT USER SAVED: ' + this.currentUser);
       } else {
-        console.log('No such document!');
+      }
+    }).catch(err => {
+      console.log('Error getting document:' + err);
+    });
+  }
+
+  getCurrentUserStats(uid) {
+    this.afStore.doc(`user-stats/${uid}`).ref.get().then(doc => {
+      if (doc.exists) {
+        this.currentUserStats = doc.data();
+      } else {
       }
     }).catch(err => {
       console.log('Error getting document:' + err);
@@ -167,7 +232,47 @@ export class AuthenticationService {
   }
 
   setCurrentUser(editUser) {
+    this.currentUser = editUser;
+    return this.afStore.collection('users')
+        .doc(this.currentUser.id)
+        .set(JSON.parse(JSON.stringify(editUser)), {
+          merge: true
+        });
+  }
 
+  checkCurrentPassword(password) {
+    const credentials = firebase.auth.EmailAuthProvider.credential(
+        this.userData.email, password);
+
+    return this.userData.reauthenticateWithCredential(credentials);
+  }
+
+  setPassword(password) {
+    return this.userData.updatePassword(password);
+  }
+
+  onProfileUpload(event) {
+    this.spinnerLoading.show();
+    const n = Date.now();
+    const file = event.target.files[0];
+    const filePath = `profile/${n}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(`profile/${n}`, file);
+    return task
+        .snapshotChanges()
+        .pipe(
+            finalize(() => {
+              this.downloadURL = fileRef.getDownloadURL();
+              this.downloadURL.subscribe(url => {
+                if (url) {
+                  this.currentUser.profile = url;
+                  this.spinnerLoading.hide();
+                  return this.setCurrentUser(this.currentUser);
+                }
+              });
+            })
+        )
+        .subscribe(url => {});
   }
 
 }

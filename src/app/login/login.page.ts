@@ -25,7 +25,8 @@ export class LoginPage implements OnInit {
     this.authService.SignIn(email.value, password.value)
       .then((res) => {
         if (this.authService.isEmailVerified) {
-          this.authService.saveCurrentUser(res.user.uid);
+          this.authService.getCurrentUser(res.user.uid);
+          this.authService.getCurrentUserStats(res.user.uid);
           this.router.navigate(['home']);
         } else {
           this.toastEmailNotVerified();

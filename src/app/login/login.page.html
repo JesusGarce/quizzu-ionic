@@ -31,10 +31,11 @@
       <ion-col> 
         <ion-button 
          type="submit" 
-         color="danger"
+         color="google"
          (click)="authService.GoogleAuth()" 
          expand="block">
-           Login with Google
+          <ion-icon name="logo-google"></ion-icon>
+          Login with Google
         </ion-button>
       </ion-col>
     </ion-row>
@@ -43,9 +44,10 @@
       <ion-col>
         <ion-button
                 type="submit"
-                color="success"
+                color="fb"
                 (click)="this.logInFacebook()"
                 expand="block">
+          <ion-icon name="logo-facebook"></ion-icon>
           Login with Facebook
         </ion-button>
       </ion-col>

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -14,13 +14,20 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
+import {AngularFireStorageModule, StorageBucket} from '@angular/fire/storage';
 
 import { AuthenticationService } from './shared/authentication-service';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import {EditImageProfileComponent} from './home/profile/edit-image-profile.component';
+import {SpinnerLoadingComponent} from './shared/spinner-loading/spinner-loading.component';
+import {OverlayModule} from '@angular/cdk/overlay';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
+  entryComponents: [
+      EditImageProfileComponent,
+      SpinnerLoadingComponent,
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -29,6 +36,8 @@ import { Facebook } from '@ionic-native/facebook/ngx';
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
+    OverlayModule,
   ],
   providers: [
     StatusBar,
@@ -36,8 +45,10 @@ import { Facebook } from '@ionic-native/facebook/ngx';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AuthenticationService,
     AngularFirestoreModule,
-    Facebook
+    Facebook,
+    { provide: StorageBucket, useValue: 'gs://quizzu-1fd29.appspot.com/' }
   ],
+  schemas: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -8,7 +8,7 @@
     <ion-card color="mediumlight">
         <ion-row>
             <ion-avatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                <img src="{{this.authService.currentUser.profile}}">
             </ion-avatar>
             <ion-card-header>
                 <ion-card-title><h2>{{this.authService.currentUser.username}}</h2></ion-card-title>
@@ -17,7 +17,7 @@
             </ion-card-header>
         </ion-row>
         <ion-row class="profile-buttons">
-            <ion-button color="primary">Change Pic</ion-button>
+            <ion-button color="primary" (click)="this.editImagePopover()">Change Pic</ion-button>
             <ion-button color="primary" (click)="authService.goToEditProfile()">Edit Profile</ion-button>
             <ion-button color="primary" (click)="authService.SignOut()">Log Out</ion-button>
         </ion-row>
@@ -34,7 +34,7 @@
                         <ion-label color="primary">Won games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{matchesWon}}</ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -42,7 +42,7 @@
                         <ion-label color="primary">Draw games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{matchesDraw}}</ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -50,7 +50,7 @@
                         <ion-label color="primary">Lost games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{matchesLost}}</ion-label>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -60,7 +60,7 @@
                         <ion-label color="primary">C2 games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{this.authService.currentUserStats.c2level.c2played}}</ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -68,7 +68,7 @@
                         <ion-label color="primary">C1 games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{this.authService.currentUserStats.c1level.c1played}}</ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -76,7 +76,7 @@
                         <ion-label color="primary">B2 games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{this.authService.currentUserStats.b2level.b2played}}</ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -84,7 +84,7 @@
                         <ion-label color="primary">B1 games</ion-label>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <ion-label color="dark">0</ion-label>
+                        <ion-label color="dark">{{this.authService.currentUserStats.b1level.b1played}}</ion-label>
                     </ion-col>
                 </ion-row>
             </ion-grid>

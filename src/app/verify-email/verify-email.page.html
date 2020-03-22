@@ -7,9 +7,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content align="center">
   <ion-grid>
-    <ion-row>
+    <ion-col>
+      <ion-icon name="mail"></ion-icon>
       <h2>Verification Email Sent</h2>
       <p>
         Please check your email and click on the link to verfiy your email address.
@@ -17,6 +18,6 @@
       <ion-button type="submit" (click)="authService.SendVerificationMail()" expand="block">
         Resend Verification Email
       </ion-button>
-    </ion-row>
+    </ion-col>
   </ion-grid>
 </ion-content>
