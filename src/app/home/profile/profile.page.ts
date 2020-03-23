@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthenticationService} from '../../shared/authentication-service';
 import {Router} from '@angular/router';
 import {EditImageProfileComponent} from './edit-image-profile.component';
 import {PopoverController} from '@ionic/angular';
+import {UserService} from '../../shared/user-service';
 
 @Component({
   selector: 'app-profile',
@@ -17,14 +18,15 @@ export class ProfilePage {
   constructor(
       private authService: AuthenticationService,
       private router: Router,
-      private popoverController: PopoverController
+      private popoverController: PopoverController,
+      private userService: UserService,
   ) {
-    this.matchesWon = authService.currentUserStats.c2level.c2won + authService.currentUserStats.c1level.c1won +
-        authService.currentUserStats.b2level.b2won + authService.currentUserStats.b1level.b1won;
-    this.matchesDraw = authService.currentUserStats.c2level.c2draw + authService.currentUserStats.c1level.c1draw +
-        authService.currentUserStats.b2level.b2draw + authService.currentUserStats.b1level.b1draw;
-    this.matchesLost = authService.currentUserStats.c2level.c2lost + authService.currentUserStats.c1level.c1lost +
-        authService.currentUserStats.b2level.b2lost + authService.currentUserStats.b1level.b1lost;
+    this.matchesWon = userService.currentUserStats.c2level.c2won + userService.currentUserStats.c1level.c1won +
+        userService.currentUserStats.b2level.b2won + userService.currentUserStats.b1level.b1won;
+    this.matchesDraw = userService.currentUserStats.c2level.c2draw + userService.currentUserStats.c1level.c1draw +
+        userService.currentUserStats.b2level.b2draw + userService.currentUserStats.b1level.b1draw;
+    this.matchesLost = userService.currentUserStats.c2level.c2lost + userService.currentUserStats.c1level.c1lost +
+        userService.currentUserStats.b2level.b2lost + userService.currentUserStats.b1level.b1lost;
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }

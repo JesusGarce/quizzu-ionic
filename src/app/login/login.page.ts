@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../shared/authentication-service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthenticationService} from '../shared/authentication-service';
 import {ToastController} from '@ionic/angular';
 import {Facebook, FacebookLoginResponse} from '@ionic-native/facebook/ngx';
+import {UserService} from '../shared/user-service';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,11 @@ import {Facebook, FacebookLoginResponse} from '@ionic-native/facebook/ngx';
 export class LoginPage implements OnInit {
 
   constructor(
-    public authService: AuthenticationService,
-    public router: Router,
-    public fb: Facebook,
-    public toastController: ToastController
+      public authService: AuthenticationService,
+      public router: Router,
+      public fb: Facebook,
+      public toastController: ToastController,
+      private userService: UserService,
     ) {}
 
   ngOnInit() {}
@@ -25,8 +27,8 @@ export class LoginPage implements OnInit {
     this.authService.SignIn(email.value, password.value)
       .then((res) => {
         if (this.authService.isEmailVerified) {
-          this.authService.getCurrentUser(res.user.uid);
-          this.authService.getCurrentUserStats(res.user.uid);
+          this.userService.initCurrentUser(res.user.uid);
+          this.userService.initCurrentUserStats(res.user.uid);
           this.router.navigate(['home']);
         } else {
           this.toastEmailNotVerified();
