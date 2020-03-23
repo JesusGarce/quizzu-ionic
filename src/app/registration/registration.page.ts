@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../shared/authentication-service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthenticationService} from '../shared/authentication-service';
 import {User} from '../shared/user.model';
-import {ToastController} from '@ionic/angular';
+import {ToastService} from '../shared/toast-service';
 
 @Component({
   selector: 'app-registration',
@@ -16,9 +16,9 @@ export class RegistrationPage implements OnInit {
     user: User;
 
   constructor(
-    public authService: AuthenticationService,
-    public router: Router,
-    public toastController: ToastController
+      public authService: AuthenticationService,
+      public router: Router,
+      public toastService: ToastService,
   ) {
       this.password = '';
       this.confirmPassword = '';
@@ -31,7 +31,7 @@ export class RegistrationPage implements OnInit {
   signUp() {
       const {password, confirmPassword} = this;
       if (password !== confirmPassword) {
-          return console.error('Password does not match');
+          this.toastService.create('Passwords are different');
       }
 
       this.authService.RegisterUser(this.user, this.password)
@@ -40,16 +40,8 @@ export class RegistrationPage implements OnInit {
         this.authService.SendVerificationMail();
         this.router.navigate(['verify-email']);
       }).catch((error) => {
-          this.toastError();
+          this.toastService.create('Ups! Something happened: ' + error);
       });
   }
-
-    async toastError() {
-        const toast = await this.toastController.create({
-            message: 'Ups! Something happened',
-            duration: 2000
-        });
-        await toast.present();
-    }
 
 }
