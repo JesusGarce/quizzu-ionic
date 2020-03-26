@@ -8,6 +8,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {ToastService} from './toast-service';
 import {UserService} from './user-service';
+import {MatchService} from './match-service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class AuthenticationService {
       private spinnerLoading: SpinnerLoadingService,
       private toast: ToastService,
       private userService: UserService,
+      private matchService: MatchService
   ) {
     spinnerLoading.show();
     this.ngFireAuth.authState.subscribe(user => {
@@ -33,6 +35,7 @@ export class AuthenticationService {
         // Cargamos los datos del usuario
         this.userService.initCurrentUser(user.uid);
         this.userService.initCurrentUserStats(user.uid);
+        this.matchService.initMatches(user.uid);
         JSON.parse(localStorage.getItem('user'));
         spinnerLoading.hide();
       } else {
@@ -125,6 +128,7 @@ export class AuthenticationService {
   SignOut() {
     return this.ngFireAuth.auth.signOut().then(() => {
       this.userService.removeCurrentUser();
+      this.matchService.removeMatches();
       localStorage.removeItem('user');
       this.router.navigate(['start']);
     });

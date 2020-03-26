@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {MatchService} from '../../shared/match-service';
+import {UserService} from '../../shared/user-service';
 
 @Component({
   selector: 'app-game',
@@ -7,6 +9,30 @@ import { Component } from '@angular/core';
 })
 export class GamePage {
 
-  constructor() {}
+  matchesActive = [];
+  matchesFinished: object[];
+  loaded = false;
+
+  constructor(matchService: MatchService, userService: UserService) {
+    this.matchesActive = matchService.matchesActive;
+    this.matchesFinished = matchService.matchesFinished;
+    this.loaded = true;
+  }
+
+  isWinner(match) {
+    if (match.isFinish && match.localWin) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isLoser(match) {
+    if (match.isFinish && !match.localWin) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

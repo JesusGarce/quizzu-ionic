@@ -10,3 +10,5 @@ export class User {
     level: number;
     friends: string[];
 }
+
+
