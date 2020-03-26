@@ -12,3 +12,51 @@ ion-title {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.title-question {
+  display: flex;
+  justify-content: center;
+}
+
+ion-card {
+  padding-top: 2px;
+  overflow: visible;
+  padding-bottom: 25px;
+}
+
+.card-question {
+  padding-bottom: 2px;
+}
+
+.card-player {
+  display:block;
+  justify-content: center;
+  padding: 5px;
+}
+
+h3 {
+  color: #211f21;
+  justify-content: center;
+  margin:0;
+  padding: 0;
+}
+
+.time-question {
+  position: absolute;
+  padding-left: 18px;
+  padding-right: 18px;
+  align-content: center;
+  background-color: #211f21;
+  border-radius: 50%;
+  display: inline-block;
+  bottom: -25px;
+  margin-left:-29px
+}
+
+h2 {
+  color:white;
+}
+
+.questions {
+  padding-top: 15px;
+}

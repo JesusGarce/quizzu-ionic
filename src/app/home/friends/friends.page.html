@@ -5,18 +5,35 @@
 </ion-header>
 
 <ion-content>
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>Question</ion-card-title>
-  </ion-card-header>
+  <ion-row>
+    <ion-col>
+      <ion-card class="card-player" color="primary">
+        <h3 align="center">Player 1</h3>
+        <ion-card-subtitle align="center">200</ion-card-subtitle>
+      </ion-card>
+    </ion-col>
+    <ion-col>
+      <ion-card class="card-player" color="primary">
+        <h3 align="center">Player 2</h3>
+        <ion-card-subtitle align="center">231</ion-card-subtitle>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-card color="mediumlight" align="center">
+    <ion-card class="card-question" color="secondary">
+      <ion-card-title class="title-question">Question x/15</ion-card-title>
+    </ion-card>
 
   <ion-card-content>
     Keep close to Nature's heart... and break clear away, once in awhile,
     and climb a mountain or spend a week in the woods. Wash your spirit clean.
   </ion-card-content>
+
+    <div class="time-question"><h2>15</h2></div>
 </ion-card>
 
-  <ion-grid fixed="true">
+  <ion-grid class="questions" fixed="true">
     <ion-row>
       <ion-col>
         <ion-button expand="block" size="large">Answer 1</ion-button>
@@ -36,3 +53,4 @@
   </ion-grid>
 
 </ion-content>
+
