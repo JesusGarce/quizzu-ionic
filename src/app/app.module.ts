@@ -23,6 +23,7 @@ import {SpinnerLoadingComponent} from './shared/spinner-loading/spinner-loading.
 import {OverlayModule} from '@angular/cdk/overlay';
 import {ToastService} from './shared/toast-service';
 import {UserService} from './shared/user-service';
+import {MatchService} from './shared/match-service';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -48,6 +49,7 @@ import {UserService} from './shared/user-service';
     AuthenticationService,
     ToastService,
     UserService,
+      MatchService,
     AngularFirestoreModule,
     Facebook,
     { provide: StorageBucket, useValue: 'gs://quizzu-1fd29.appspot.com/' }

@@ -120,6 +120,19 @@ export class UserService {
         });
     }
 
+    getUsername(id) {
+        this.afStore.doc(`users/${id}`).ref.get().then(doc => {
+            if (doc.exists) {
+                console.log('get user; ' + doc.data().username);
+                return doc.data().username;
+            } else {
+                return false;
+            }
+        }).catch(err => {
+            return false;
+        });
+    }
+
     removeCurrentUser() {
         this.currentUser = new User();
     }

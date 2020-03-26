@@ -30,3 +30,18 @@ h2{
     display: flex;
     justify-content: center;
 }
+
+.button-game:disabled,
+.button-game[disabled]{
+  --background: #252326;
+  opacity: 1;
+}
+
+ion-item {
+  margin:0;
+  padding: 0;
+}
+
+.list-md{
+  padding: 0;
+}
