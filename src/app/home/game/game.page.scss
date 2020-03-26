@@ -7,3 +7,26 @@ ion-title {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+ion-card.ion-color .ion-inherit-color, ion-card-header.ion-color .ion-inherit-color {
+  color: #A92EDF;
+  padding-top:5px;
+}
+
+h2{
+  color: #A92EDF;
+}
+
+.local{
+  color: #A92EDF;
+}
+
+.last-games-result{
+  color: #252326;
+}
+
+.new-game-row{
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+}
