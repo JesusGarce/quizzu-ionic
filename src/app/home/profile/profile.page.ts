@@ -14,6 +14,8 @@ export class ProfilePage {
   matchesWon: number;
   matchesDraw: number;
   matchesLost: number;
+  user: any;
+  userStats: any;
 
   constructor(
       private authService: AuthenticationService,
@@ -21,12 +23,15 @@ export class ProfilePage {
       private popoverController: PopoverController,
       private userService: UserService,
   ) {
-    this.matchesWon = userService.currentUserStats.c2level.c2won + userService.currentUserStats.c1level.c1won +
-        userService.currentUserStats.b2level.b2won + userService.currentUserStats.b1level.b1won;
-    this.matchesDraw = userService.currentUserStats.c2level.c2draw + userService.currentUserStats.c1level.c1draw +
-        userService.currentUserStats.b2level.b2draw + userService.currentUserStats.b1level.b1draw;
-    this.matchesLost = userService.currentUserStats.c2level.c2lost + userService.currentUserStats.c1level.c1lost +
-        userService.currentUserStats.b2level.b2lost + userService.currentUserStats.b1level.b1lost;
+    this.user = this.userService.currentUser;
+    this.userStats = this.userService.currentUserStats;
+
+    this.matchesWon = this.userStats.c2level.c2won + this.userStats.c1level.c1won +
+        this.userStats.b2level.b2won + this.userStats.b1level.b1won;
+    this.matchesDraw = this.userStats.c2level.c2draw + this.userStats.c1level.c1draw +
+        this.userStats.b2level.b2draw + this.userStats.b1level.b1draw;
+    this.matchesLost = this.userStats.c2level.c2lost + this.userStats.c1level.c1lost +
+        this.userStats.b2level.b2lost + this.userStats.b1level.b1lost;
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
