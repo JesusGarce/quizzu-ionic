@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {MatchService} from '../../shared/match-service';
 import {UserService} from '../../shared/user-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -13,10 +14,13 @@ export class GamePage {
   matchesFinished: object[];
   loaded = false;
 
-  constructor(matchService: MatchService, userService: UserService) {
+  constructor(private matchService: MatchService,
+              private userService: UserService,
+              private router: Router) {
     this.matchesActive = matchService.matchesActive;
     this.matchesFinished = matchService.matchesFinished;
     this.loaded = true;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   isWinner(match) {
