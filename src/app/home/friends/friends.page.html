@@ -5,52 +5,94 @@
 </ion-header>
 
 <ion-content>
-  <ion-row>
-    <ion-col>
-      <ion-card class="card-player" color="primary">
-        <h3 align="center">Player 1</h3>
-        <ion-card-subtitle align="center">200</ion-card-subtitle>
-      </ion-card>
-    </ion-col>
-    <ion-col>
-      <ion-card class="card-player" color="primary">
-        <h3 align="center">Player 2</h3>
-        <ion-card-subtitle align="center">231</ion-card-subtitle>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-
-  <ion-card color="mediumlight" align="center">
-    <ion-card class="card-question" color="secondary">
-      <ion-card-title class="title-question">Question x/15</ion-card-title>
-    </ion-card>
-
-  <ion-card-content>
-    Keep close to Nature's heart... and break clear away, once in awhile,
-    and climb a mountain or spend a week in the woods. Wash your spirit clean.
-  </ion-card-content>
-
-    <div class="time-question"><h2>15</h2></div>
-</ion-card>
-
-  <ion-grid class="questions" fixed="true">
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" size="large">Answer 1</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block" size="large">Answer 2</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" size="large">Answer 3</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block" size="large">Answer 4</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
+  <ion-card color="mediumlight">
+    <ion-card-title align="center">Friends</ion-card-title>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-col>
+            <h2>Filodobler</h2>
+            <h3>Level B2</h3>
+          </ion-col>
+          <ion-button>
+              New game
+            <ion-icon name="game-controller"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-col>
+            <h2>Filodobler</h2>
+            <h3>Level B2</h3>
+          </ion-col>
+          <ion-button>
+            New game
+            <ion-icon name="game-controller"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-col>
+            <h2>Filodobler</h2>
+            <h3>Level B2</h3>
+          </ion-col>
+          <ion-button>
+            New game
+            <ion-icon name="game-controller"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-col>
+            <h2>Filodobler</h2>
+            <h3>Level B2</h3>
+          </ion-col>
+          <ion-button>
+            New game
+            <ion-icon name="game-controller"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-col>
+            <h2>Filodobler</h2>
+            <h3>Level B2</h3>
+          </ion-col>
+          <ion-button>
+            New game
+            <ion-icon name="game-controller"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+      <!--
+      <ion-list *ngFor="let match of matchesActive">
+        <ion-item>
+          <ion-col>
+            <h2>{{match.awayPlayerName}}</h2>
+            <h3>{{match.level}} level</h3>
+          </ion-col>
+          <ion-button class="button-game" [disabled]="match.turnLocalPlayer">
+            <ion-icon name="game-controller"></ion-icon>
+          </ion-button>
+          <ion-button>
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  -->
+    </ion-card-content>
+  </ion-card>
+  <ion-card color="mediumlight">
+    <ion-card-title align="center">Search a friend</ion-card-title>
+    <ion-card-content>
+      <ion-item lines="full">
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="text" required></ion-input>
+      </ion-item>
+      <ion-button
+              type="submit"
+              expand="block">
+        Search
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
