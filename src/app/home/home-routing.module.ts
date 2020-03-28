@@ -58,6 +58,10 @@ const routes: Routes = [
     path: '',
     redirectTo: 'game',
     pathMatch: 'full'
+  },
+  {
+    path: 'user/:id',
+    loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
   }
 ];
 

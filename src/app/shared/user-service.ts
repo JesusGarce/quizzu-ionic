@@ -175,4 +175,7 @@ export class UserService {
             });
     }
 
+    getUser(id) {
+        return this.afStore.doc(`users/${id}`).ref.get();
+    }
 }
