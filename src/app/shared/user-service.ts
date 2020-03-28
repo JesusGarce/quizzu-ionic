@@ -8,6 +8,7 @@ import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
+import {UserMin} from './user-min.model';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +34,7 @@ export class UserService {
         user.level = 1;
         user.points = 0;
         user.friends = [];
+        user.friendRequests = [];
         user.profile = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=25150dc7-a848-4fce-b900-53f47a9518ee';
         this.createUserStats();
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
@@ -89,7 +91,8 @@ export class UserService {
             firstName: '',
             lastName: '',
             birthDate: new Date(),
-            friends: []
+            friends: [],
+            friendRequests: [],
         };
         this.initCurrentUser(user.uid);
         return userRef.set(JSON.parse(JSON.stringify(userData)), {
@@ -173,6 +176,48 @@ export class UserService {
             )
             .subscribe(url => {
             });
+    }
+
+    acceptFriendRequest(friend) {
+        this.currentUser.friendRequests.filter( p => p.id !== friend.id)
+        this.currentUser.friends.push(friend);
+        return this.afStore.collection('users')
+            .doc(this.currentUser.id)
+            .set(JSON.parse(JSON.stringify(this.currentUser)), {
+                merge: true
+            });
+    }
+
+    sendFriendRequest(friend) {
+        this.afStore.doc(`users/${friend.id}`).ref.get().then(doc => {
+            if (doc.exists) {
+                const friendUser = doc.data();
+                friendUser.friendRequests.push(new UserMin(this.currentUser.id, this.currentUser.username));
+                this.afStore.collection('users')
+                    .doc(friendUser.id)
+                    .set(JSON.parse(JSON.stringify(friendUser)), {
+                        merge: true
+                    });
+            } else {
+                this.toast.create('We can not find the user');
+            }
+        }).catch(err => {
+            this.toast.create('Error getting document:' + err);
+        });
+    }
+
+    removeFriendRequest(friend) {
+        this.currentUser.friendRequests.filter( p => p.id !== friend.id)
+        return this.afStore.collection('users')
+            .doc(this.currentUser.id)
+            .set(JSON.parse(JSON.stringify(this.currentUser)), {
+                merge: true
+            });
+    }
+
+    searchUser(query) {
+        return this.afStore.collection('users').ref.where('username', '>=', query)
+            .get();
     }
 
 }

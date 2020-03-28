@@ -1,3 +1,5 @@
+import {UserMin} from './user-min.model';
+
 export class User {
     id: string;
     username: string;
@@ -8,7 +10,8 @@ export class User {
     profile: string;
     points: number;
     level: number;
-    friends: string[];
+    friends: UserMin[];
+    friendRequests: UserMin[];
 }
 
 

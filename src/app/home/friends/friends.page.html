@@ -6,6 +6,18 @@
 
 <ion-content>
   <ion-card color="mediumlight">
+    <ion-card-title align="center">Search a friend</ion-card-title>
+    <ion-card-content>
+      <ion-buttons>
+        <ion-searchbar animated placeholder="username" type="text" debounce="500" (ionInput)="getItems($event)"></ion-searchbar>
+        <ion-button>Search</ion-button>
+      </ion-buttons>
+      <ion-list *ngIf="isItemAvailable">
+        <ion-item *ngFor="let item of items">{{ item }}</ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card color="mediumlight">
     <ion-card-title align="center">Friends</ion-card-title>
     <ion-card-content>
       <ion-list>
@@ -80,19 +92,47 @@
   -->
     </ion-card-content>
   </ion-card>
+
   <ion-card color="mediumlight">
-    <ion-card-title align="center">Search a friend</ion-card-title>
+    <ion-card-title align="center">Friend requests</ion-card-title>
     <ion-card-content>
-      <ion-item lines="full">
-        <ion-label position="floating">Username</ion-label>
-        <ion-input type="text" required></ion-input>
-      </ion-item>
-      <ion-button
-              type="submit"
-              expand="block">
-        Search
-      </ion-button>
+      <ion-list>
+        <ion-item>
+          <ion-col>
+            <h3>Level B2</h3>
+          </ion-col>
+          <ion-button>
+            <ion-icon name="checkmark"></ion-icon>
+          </ion-button>
+          <ion-button>
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-col>
+            <h3>Filodobler</h3>
+          </ion-col>
+          <ion-button>
+            <ion-icon name="checkmark"></ion-icon>
+          </ion-button>
+          <ion-button>
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-col>
+            <h3>Filodobler</h3>
+          </ion-col>
+          <ion-button>
+            <ion-icon name="checkmark"></ion-icon>
+          </ion-button>
+          <ion-button>
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
+
 </ion-content>
 

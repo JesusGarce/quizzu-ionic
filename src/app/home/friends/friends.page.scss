@@ -60,3 +60,12 @@ ion-col{
   padding: 0;
   margin: 0;
 }
+
+ion-buttons ion-button{
+  --ion-button-round-border-radius: 5px;
+  --ion-button-border-radius: 5px;
+  --ion-border-radius: 5px;
+  --border-radius: 5px;
+  --background: #A92EDF;
+  color:white;
+}
