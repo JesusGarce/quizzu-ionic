@@ -220,4 +220,7 @@ export class UserService {
             .get();
     }
 
+    getUser(id) {
+        return this.afStore.doc(`users/${id}`).ref.get();
+    }
 }
