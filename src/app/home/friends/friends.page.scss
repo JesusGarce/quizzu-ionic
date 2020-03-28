@@ -1,8 +1,3 @@
-.welcome-card img {
-  max-height: 35vh;
-  overflow: hidden;
-}
-
 .img-toolbar {
   max-width: 40%;
   height: auto;
@@ -11,52 +6,57 @@
 ion-title {
   margin-top: 10px;
   margin-bottom: 10px;
+  color: white;
 }
 
-.title-question {
+ion-card.ion-color .ion-inherit-color, ion-card-header.ion-color .ion-inherit-color {
+  color: #A92EDF;
+  padding-top:5px;
+}
+
+h2{
+  color: #A92EDF;
+}
+
+.local{
+  color: #A92EDF;
+}
+
+.last-games-result{
+  color: #252326;
+}
+
+.new-game-row{
+  margin-bottom: 5px;
   display: flex;
   justify-content: center;
 }
 
-ion-card {
-  padding-top: 2px;
-  overflow: visible;
-  padding-bottom: 25px;
-}
-
-.card-question {
-  padding-bottom: 2px;
-}
-
-.card-player {
-  display:block;
-  justify-content: center;
-  padding: 5px;
-}
-
-h3 {
-  color: #211f21;
-  justify-content: center;
+ion-item {
   margin:0;
   padding: 0;
 }
 
-.time-question {
-  position: absolute;
-  padding-left: 18px;
-  padding-right: 18px;
-  align-content: center;
-  background-color: #211f21;
-  border-radius: 50%;
-  display: inline-block;
-  bottom: -25px;
-  margin-left:-29px
+.button-white {
+  --background: #ffffff;
+  color: #A92EDF;
 }
 
-h2 {
-  color:white;
+.h2-white{
+  color: white;
+  padding: 0;
+  margin: 0;
 }
 
-.questions {
-  padding-top: 15px;
+.list-md{
+  padding: 0;
+}
+
+ion-button{
+  font-size: medium;
+}
+
+ion-col{
+  padding: 0;
+  margin: 0;
 }
