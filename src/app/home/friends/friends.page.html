@@ -18,56 +18,15 @@
     </ion-card-content>
   </ion-card>
   <ion-card color="mediumlight">
-    <ion-card-title align="center">Friends</ion-card-title>
+    <ion-card-title align="center">Friends ({{friends.length}})</ion-card-title>
     <ion-card-content>
-      <ion-list>
+      <ion-list *ngFor="let friend of friends">
         <ion-item>
           <ion-col>
-            <h2>Filodobler</h2>
-            <h3>Level B2</h3>
+            <h2 (click)="goToProfilePage(friend)">{{friend.username}}</h2>
           </ion-col>
           <ion-button>
               New game
-            <ion-icon name="game-controller"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-col>
-            <h2>Filodobler</h2>
-            <h3>Level B2</h3>
-          </ion-col>
-          <ion-button>
-            New game
-            <ion-icon name="game-controller"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-col>
-            <h2>Filodobler</h2>
-            <h3>Level B2</h3>
-          </ion-col>
-          <ion-button>
-            New game
-            <ion-icon name="game-controller"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-col>
-            <h2>Filodobler</h2>
-            <h3>Level B2</h3>
-          </ion-col>
-          <ion-button>
-            New game
-            <ion-icon name="game-controller"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-col>
-            <h2>Filodobler</h2>
-            <h3>Level B2</h3>
-          </ion-col>
-          <ion-button>
-            New game
             <ion-icon name="game-controller"></ion-icon>
           </ion-button>
         </ion-item>
@@ -94,39 +53,17 @@
   </ion-card>
 
   <ion-card color="mediumlight">
-    <ion-card-title align="center">Friend requests</ion-card-title>
+    <ion-card-title align="center">Friend requests ({{friendRequests.length}})</ion-card-title>
     <ion-card-content>
-      <ion-list>
+      <ion-list *ngFor="let friendRequest of friendRequests">
         <ion-item>
-          <ion-col>
-            <h3>Level B2</h3>
+          <ion-col (click)="goToProfilePage(friendRequest)">
+            <h3>{{friendRequest.username}}</h3>
           </ion-col>
-          <ion-button>
-            <ion-icon name="checkmark"></ion-icon>
+          <ion-button (click)="acceptRequest(friendRequest)">
+            <ion-icon name="checkmark" ></ion-icon>
           </ion-button>
-          <ion-button>
-            <ion-icon name="close-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-col>
-            <h3>Filodobler</h3>
-          </ion-col>
-          <ion-button>
-            <ion-icon name="checkmark"></ion-icon>
-          </ion-button>
-          <ion-button>
-            <ion-icon name="close-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-col>
-            <h3>Filodobler</h3>
-          </ion-col>
-          <ion-button>
-            <ion-icon name="checkmark"></ion-icon>
-          </ion-button>
-          <ion-button>
+          <ion-button (click)="deleteRequest(friendRequest)">
             <ion-icon name="close-outline"></ion-icon>
           </ion-button>
         </ion-item>

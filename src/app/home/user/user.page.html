@@ -21,29 +21,12 @@
     </ion-row>
     </div>
     <ion-row class="profile-buttons">
-      <ion-button color="primary">Add Friend</ion-button>
+      <ion-button *ngIf="!isFriend && !isPending" color="primary" (click)="sendRequest()">Add Friend</ion-button>
+      <ion-button *ngIf="!isFriend && isPending" color="primary" disabled>Request sent</ion-button>
+      <ion-button *ngIf="isFriend" color="primary" (click)="deleteFriendDialog()">Delete Friend</ion-button>
       <ion-button color="primary">New Game</ion-button>
     </ion-row>
   </ion-card>
+
 </ion-content>
 
-<ion-tabs >
-
-  <ion-tab-bar slot="bottom" color="primary">
-    <ion-tab-button routerLink="/home/friends">
-      <ion-icon name="people"></ion-icon>
-      <ion-label>Friends</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button routerLink="/home/game">
-      <ion-icon name="game-controller"></ion-icon>
-      <ion-label>Play</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button routerLink="/home/profile">
-      <ion-icon name="person"></ion-icon>
-      <ion-label>Profile</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
-
-</ion-tabs>

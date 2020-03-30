@@ -179,7 +179,7 @@ export class UserService {
     }
 
     acceptFriendRequest(friend) {
-        this.currentUser.friendRequests.filter( p => p.id !== friend.id)
+        this.currentUser.friendRequests = this.currentUser.friendRequests.filter( p => p.id !== friend.id);
         this.currentUser.friends.push(friend);
         return this.afStore.collection('users')
             .doc(this.currentUser.id)
@@ -198,6 +198,7 @@ export class UserService {
                     .set(JSON.parse(JSON.stringify(friendUser)), {
                         merge: true
                     });
+                this.toast.create('Friend request sent');
             } else {
                 this.toast.create('We can not find the user');
             }
@@ -207,7 +208,16 @@ export class UserService {
     }
 
     removeFriendRequest(friend) {
-        this.currentUser.friendRequests.filter( p => p.id !== friend.id)
+        this.currentUser.friendRequests = this.currentUser.friendRequests.filter( p => p.id !== friend.id);
+        return this.afStore.collection('users')
+            .doc(this.currentUser.id)
+            .set(JSON.parse(JSON.stringify(this.currentUser)), {
+                merge: true
+            });
+    }
+
+    removeFriend(friend) {
+        this.currentUser.friends = this.currentUser.friends.filter( p => p.id !== friend.id);
         return this.afStore.collection('users')
             .doc(this.currentUser.id)
             .set(JSON.parse(JSON.stringify(this.currentUser)), {
