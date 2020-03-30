@@ -18,6 +18,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'user/:id',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+                import('./user/user.module').then( m => m.UserPageModule)
+          }
+        ]
+      },
+      {
         path: 'game',
         children: [
           {
@@ -58,10 +68,6 @@ const routes: Routes = [
     path: '',
     redirectTo: 'game',
     pathMatch: 'full'
-  },
-  {
-    path: 'user/:id',
-    loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
   }
 ];
 

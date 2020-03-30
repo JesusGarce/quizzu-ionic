@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Match} from './match.model';
 import {Router} from '@angular/router';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
@@ -58,7 +57,6 @@ export class MatchService {
                 data.player1Name, data.player2Points, data.player1Points, data.level, !data.turnPlayer1);
         }
         if (active) {
-            console.log('Active match');
             this.matchesActive.push(match);
         } else {
             this.matchesFinished.push(match);
