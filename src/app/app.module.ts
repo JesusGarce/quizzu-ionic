@@ -24,6 +24,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
 import {ToastService} from './shared/toast-service';
 import {UserService} from './shared/user-service';
 import {MatchService} from './shared/match-service';
+import {SearchModalUserPageModule} from './home/friends/search-modal-user/search-modal-user.module';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -41,6 +42,7 @@ import {MatchService} from './shared/match-service';
     AngularFirestoreModule,
     AngularFireStorageModule,
     OverlayModule,
+      SearchModalUserPageModule,
   ],
   providers: [
     StatusBar,
