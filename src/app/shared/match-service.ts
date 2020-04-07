@@ -6,6 +6,8 @@ import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {ToastService} from './toast-service';
 import {UserService} from './user-service';
 import {MatchShow} from './match-show.model';
+import {UserMin} from './user-min.model';
+import {Match} from './match.model';
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +35,7 @@ export class MatchService {
                 if (matches.empty)
                     return false;
                 matches.forEach( match => {
-                    if ((match.data().player1Id === userId) || (match.data().player2Id === userId)) {
+                    if ((match.data().player1.id === userId) || (match.data().player2.id === userId)) {
                         if ((match.data().leaveId === '') && (match.data().winnerId === '')) {
                             this.createMatchDataShow(match.data(), match.id, userId, true);
                         } else {
@@ -45,18 +47,28 @@ export class MatchService {
         );
     }
 
+    createNewMatch(level, player2) {
+        const match = new Match(level,
+            new UserMin(this.userService.currentUser.id, this.userService.currentUser.username),
+            player2);
+
+        return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match)));
+    }
+
     createMatchDataShow(data, matchId, userId, active) {
         const isFinish = (data.leaveId === '');
         let match;
         // Player 1 is local
-        if (data.player1Id === userId) {
-            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1Name,
-                data.player2Name, data.player1Points, data.player2Points, data.level, data.turnPlayer1);
+        if (data.player1.id === userId) {
+            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
+                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.turnPlayer1);
         } else {
-            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2Name,
-                data.player1Name, data.player2Points, data.player1Points, data.level, !data.turnPlayer1);
+            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
+                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.turnPlayer1);
         }
         if (active) {
+            if (match.awayPlayerName === '')
+                match.awayPlayerName = 'Without opponent';
             this.matchesActive.push(match);
         } else {
             this.matchesFinished.push(match);

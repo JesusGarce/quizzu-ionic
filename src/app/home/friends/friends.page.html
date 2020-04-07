@@ -31,7 +31,7 @@
           <ion-col>
             <h2 class="user" (click)="goToProfilePage(friend)">{{friend.username}}</h2>
           </ion-col>
-          <ion-button>
+          <ion-button (click)="startGameAgainst(friend)">
               New game
             <ion-icon name="game-controller"></ion-icon>
           </ion-button>

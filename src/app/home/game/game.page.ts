@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {MatchService} from '../../shared/match-service';
 import {UserService} from '../../shared/user-service';
 import {Router} from '@angular/router';
+import {UserMin} from '../../shared/user-min.model';
 
 @Component({
   selector: 'app-game',
@@ -21,6 +22,20 @@ export class GamePage {
     this.matchesFinished = matchService.matchesFinished;
     this.loaded = true;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
+
+  goToFriendsPage() {
+    this.router.navigate(['home/friends']);
+  }
+
+  createMatchWithoutOponent() {
+    this.matchService.createNewMatch('b2', new UserMin('', '')).then(
+        res => {
+          console.log('MATCH: ' + res);
+        }, error => {
+          console.log('ERROR: ' + error.toString());
+        }
+    );
   }
 
   isWinner(match) {
