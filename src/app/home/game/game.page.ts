@@ -6,6 +6,7 @@ import {UserMin} from '../../shared/user-min.model';
 import {SearchModalUserPage} from '../friends/search-modal-user/search-modal-user.page';
 import {ModalController} from '@ionic/angular';
 import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page';
+import {MatchShow} from '../../shared/match-show.model';
 
 @Component({
   selector: 'app-game',
@@ -15,8 +16,9 @@ import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page
 export class GamePage {
 
   levelMatch: string;
-  matchesActive = [];
-  matchesFinished: object[];
+  matchesActive: MatchShow[];
+  matchesFinished: MatchShow[];
+  matchesPending: MatchShow[];
   loaded = false;
 
   constructor(private matchService: MatchService,
@@ -25,6 +27,7 @@ export class GamePage {
               private modalController: ModalController) {
     this.matchesActive = matchService.matchesActive;
     this.matchesFinished = matchService.matchesFinished;
+    this.matchesPending = matchService.matchesPendings;
     this.loaded = true;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
@@ -58,6 +61,16 @@ export class GamePage {
     });
 
     return await modal.present();
+  }
+
+  acceptGame(game) {
+    this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
+    this.matchService.acceptMatchPending(game);
+  }
+
+  deleteGame(game) {
+    this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
+    this.matchService.deleteMatchPending(game);
   }
 
   isWinner(match) {

@@ -8,8 +8,9 @@ export class MatchShow {
     awayPlayerPoints: number;
     level: string;
     turnLocalPlayer: boolean;
+    matchAccepted: boolean;
     
-    constructor(id, isFinish, localWin, localPlayerName, awayPlayerName, localPlayerPoints, awayPlayerPoints, level, turnLocalPlayer) {
+    constructor(id, isFinish, localWin, localPlayerName, awayPlayerName, localPlayerPoints, awayPlayerPoints, level, turnLocalPlayer, matchAccepted) {
         this.id = id;
         this.isFinish = isFinish;
         this.localWin = localWin;
@@ -19,5 +20,6 @@ export class MatchShow {
         this.awayPlayerPoints = awayPlayerPoints;
         this.level = level;
         this.turnLocalPlayer = turnLocalPlayer;
+        this.matchAccepted = matchAccepted;
     }
 }
