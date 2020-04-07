@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {AngularFireStorage} from '@angular/fire/storage';
 import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {ToastService} from './toast-service';
 import {UserService} from './user-service';
@@ -15,8 +14,9 @@ import {Match} from './match.model';
 
 export class MatchService {
 
-    matchesActive: object[];
-    matchesFinished: object[];
+    matchesActive: MatchShow[];
+    matchesFinished: MatchShow[];
+    matchesPendings: MatchShow[];
     currentMatch: any;
 
     constructor(
@@ -28,13 +28,15 @@ export class MatchService {
     ) {
         this.matchesActive = [];
         this.matchesFinished = [];
+        this.matchesPendings = [];
     }
 
     initMatches(userId) {
         this.afStore.collection('match').get().subscribe(
             matches => {
-                if (matches.empty)
+                if (matches.empty) {
                     return false;
+                }
                 matches.forEach( match => {
                     if ((match.data().player1.id === userId) || (match.data().player2.id === userId)) {
                         if ((match.data().leaveId === '') && (match.data().winnerId === '')) {
@@ -57,15 +59,53 @@ export class MatchService {
             res => {
                 res.get().then(
                     r => {
-                        console.log(JSON.stringify(r.data()));
                         this.createMatchDataShow(r.data(), r.id, this.userService.currentUser.id, true);
                         this.currentMatch = r.data();
                     }
                 );
             }, error => {
-                console.log('ERROR: ' + error.toString());
+                this.toast.create('ERROR: ' + error.toString());
             }
         );
+    }
+
+    acceptMatchPending(match) {
+        this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
+            if (doc.exists) {
+                const matchAccepted = doc.data();
+                matchAccepted.matchAccepted = true;
+                this.saveMatch(matchAccepted, doc.id).then(
+                    mA => {
+                        this.toast.create('Game accepted');
+                        this.createMatchDataShow(matchAccepted, match.id, this.userService.currentUser.id, true);
+                    }
+                );
+            } else {
+                this.toast.create('We can not find the game. Try again later');
+                return false;
+            }
+        }).catch(err => {
+            this.toast.create('We can not find the game. Try again later');
+            return false;
+        });
+    }
+
+    deleteMatchPending(match) {
+        this.afStore.collection('match')
+            .doc(match.id)
+            .delete().then(
+                r => {
+                    this.toast.create('Game removed successfully');
+                }
+        );
+    }
+
+    saveMatch(match, id) {
+        return this.afStore.collection('match')
+            .doc(id)
+            .set(JSON.parse(JSON.stringify(match)), {
+                merge: true
+            });
     }
 
     createMatchDataShow(data, matchId, userId, active) {
@@ -74,22 +114,29 @@ export class MatchService {
         // Player 1 is local
         if (data.player1.id === userId) {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
-                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.turnPlayer1);
+                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.turnPlayer1, data.matchAccepted);
         } else {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
-                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.turnPlayer1);
+                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.turnPlayer1, data.matchAccepted);
         }
-        if (active) {
-            if (match.awayPlayerName === '')
-                match.awayPlayerName = 'Without opponent';
-            this.matchesActive.push(match);
+        if (!match.matchAccepted && data.player2.username.toLowerCase() === this.userService.getCurrentUsername()) {
+            this.matchesPendings.push(match);
         } else {
-            this.matchesFinished.push(match);
+            if (active) {
+                if (match.awayPlayerName === '') {
+                    match.awayPlayerName = 'Searching opponent...';
+                    match.turnLocalPlayer = false;
+                }
+                this.matchesActive.push(match);
+            } else {
+                this.matchesFinished.push(match);
+            }
         }
     }
 
     removeMatches() {
         this.matchesFinished = [];
         this.matchesActive = [];
+        this.matchesPendings = [];
     }
 }

@@ -5,6 +5,27 @@
 </ion-header>
 
 <ion-content align="center">
+
+    <ion-card *ngIf="matchesPending.length !== 0" color="primary">
+        <ion-card-title><h3 class="h3-white">Requested games</h3></ion-card-title>
+        <ion-card-content>
+        <ion-list *ngFor="let match of matchesPending">
+            <ion-item>
+                <ion-col>
+                    <h2>{{match.awayPlayerName}}</h2>
+                    <h3>{{match.level}} level</h3>
+                </ion-col>
+                <ion-button (click)="acceptGame(match)">
+                    <ion-icon name="checkmark" ></ion-icon>
+                </ion-button>
+                <ion-button (click)="deleteGame(match)">
+                    <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+            </ion-item>
+        </ion-list>
+        </ion-card-content>
+    </ion-card>
+
     <ion-card color="mediumlight">
         <ion-card-title>Active games</ion-card-title>
         <ion-card-content>
