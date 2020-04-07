@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content align="center" >
+  <ion-card color="mediumlight">
+    <ion-card-title><h2>Select level</h2></ion-card-title>
+    <ion-card-content>
+      <ion-grid>
+          <ion-button class="levelButton" expand="block" (click)="closeModal('c2')"><h1>C2</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="closeModal('c1')"><h1>C1</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="closeModal('b2')"><h1>B2</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="closeModal('b1')"><h1>B1</h1></ion-button>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-col text-center>
+    <ion-button expand="block" (click)="closeModal(null)">Close</ion-button>
+  </ion-col>
+</ion-content>
