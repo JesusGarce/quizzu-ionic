@@ -21,8 +21,7 @@ export class Match {
         this.created = new Date();
         this.gameLevel = gameLevel;
         this.player1 = player1;
-        if (player2 != null)
-            this.player2 = player2;
+        this.player2 = player2;
         this.matchAccepted = false;
         this.player1Turn = true;
         this.player1RemainsQuestions = 15;

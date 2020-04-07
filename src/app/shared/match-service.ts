@@ -17,6 +17,7 @@ export class MatchService {
 
     matchesActive: object[];
     matchesFinished: object[];
+    currentMatch: any;
 
     constructor(
         public afStore: AngularFirestore,
@@ -52,7 +53,19 @@ export class MatchService {
             new UserMin(this.userService.currentUser.id, this.userService.currentUser.username),
             player2);
 
-        return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match)));
+        return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match))).then(
+            res => {
+                res.get().then(
+                    r => {
+                        console.log(JSON.stringify(r.data()));
+                        this.createMatchDataShow(r.data(), r.id, this.userService.currentUser.id, true);
+                        this.currentMatch = r.data();
+                    }
+                );
+            }, error => {
+                console.log('ERROR: ' + error.toString());
+            }
+        );
     }
 
     createMatchDataShow(data, matchId, userId, active) {
