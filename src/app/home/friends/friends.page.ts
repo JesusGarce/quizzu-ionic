@@ -5,6 +5,7 @@ import {ToastService} from '../../shared/toast-service';
 import {Router} from '@angular/router';
 import {UserMin} from '../../shared/user-min.model';
 import {SearchModalUserPage} from './search-modal-user/search-modal-user.page';
+import {MatchService} from '../../shared/match-service';
 
 @Component({
   selector: 'app-friends',
@@ -22,7 +23,8 @@ export class FriendsPage implements OnInit  {
       private userService: UserService,
       private toast: ToastService,
       private router: Router,
-      private modalController: ModalController
+      private modalController: ModalController,
+      private matchService: MatchService
   ) {
     this.friendRequests = userService.currentUser.friendRequests;
     this.friends = userService.currentUser.friends;
@@ -42,6 +44,16 @@ export class FriendsPage implements OnInit  {
                 this.items.push(new UserMin(user.data().id, user.data().username));
           }
           this.openModal();
+        }
+    );
+  }
+
+  startGameAgainst(friend) {
+    this.matchService.createNewMatch('b2', friend).then(
+        res => {
+          console.log('MATCH: ' + res);
+        }, error => {
+          console.log('ERROR: ' + error.toString());
         }
     );
   }
