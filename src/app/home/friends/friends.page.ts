@@ -62,6 +62,7 @@ export class FriendsPage implements OnInit  {
           this.toast.create('Now ' + friendRequest.username.toString() + ' is your friend!');
           this.friendRequests = this.userService.currentUser.friendRequests;
           this.friends = this.userService.currentUser.friends;
+          this.userService.acceptFriendRequestOtherUser(friendRequest);
         }, error => {
           this.toast.create('Ups! Something happened, try later.');
         }
