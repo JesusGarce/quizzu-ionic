@@ -4,28 +4,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content align="center">
   <ion-card color="mediumlight">
-    <ion-card-title align="center">Search a friend</ion-card-title>
+    <ion-card-title>Search a friend</ion-card-title>
     <ion-card-content>
       <ion-buttons>
-        <ion-searchbar animated placeholder="username" type="text" debounce="500" (ionInput)="getItems($event)"></ion-searchbar>
-        <ion-button>Search</ion-button>
+        <ion-searchbar animated placeholder="username" type="text" debounce="500" [(ngModel)]="findUser"></ion-searchbar>
+        <ion-button (click)="searchUsers()">Search</ion-button>
       </ion-buttons>
-      <ion-list *ngIf="isItemAvailable">
-        <ion-item *ngFor="let item of items">{{ item }}</ion-item>
-      </ion-list>
     </ion-card-content>
   </ion-card>
   <ion-card color="mediumlight">
-    <ion-card-title align="center">Friends ({{friends.length}})</ion-card-title>
+    <ion-card-title>Friends ({{friends.length}})</ion-card-title>
     <ion-card-content>
+      <div *ngIf="friends.length === 0">
+        <ion-col>
+          <ion-icon class="icon-big" name="beer-outline"></ion-icon>
+          <h2>You don't have any friend</h2>
+          <p>
+            Let's go! Start to play and make new friends!
+          </p>
+        </ion-col>
+      </div>
       <ion-list *ngFor="let friend of friends">
         <ion-item>
           <ion-col>
-            <h2 (click)="goToProfilePage(friend)">{{friend.username}}</h2>
+            <h2 class="user" (click)="goToProfilePage(friend)">{{friend.username}}</h2>
           </ion-col>
-          <ion-button>
+          <ion-button (click)="confirmNewGame(friend)">
               New game
             <ion-icon name="game-controller"></ion-icon>
           </ion-button>
@@ -53,8 +59,17 @@
   </ion-card>
 
   <ion-card color="mediumlight">
-    <ion-card-title align="center">Friend requests ({{friendRequests.length}})</ion-card-title>
+    <ion-card-title>Friend requests ({{friendRequests.length}})</ion-card-title>
     <ion-card-content>
+      <div *ngIf="friendRequests.length === 0">
+        <ion-col>
+          <ion-icon class="icon-big" name="happy-outline"></ion-icon>
+          <h2>You don't have any friend request</h2>
+          <p>
+            Wonderful! No one is waiting for you
+          </p>
+        </ion-col>
+      </div>
       <ion-list *ngFor="let friendRequest of friendRequests">
         <ion-item>
           <ion-col (click)="goToProfilePage(friendRequest)">

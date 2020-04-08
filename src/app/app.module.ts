@@ -24,6 +24,9 @@ import {OverlayModule} from '@angular/cdk/overlay';
 import {ToastService} from './shared/toast-service';
 import {UserService} from './shared/user-service';
 import {MatchService} from './shared/match-service';
+import {SearchModalUserPageModule} from './home/friends/search-modal-user/search-modal-user.module';
+import {SelectLevelModalPage} from './home/game/select-level-modal/select-level-modal.page';
+import {SelectLevelModalPageModule} from './home/game/select-level-modal/select-level-modal.module';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -41,6 +44,8 @@ import {MatchService} from './shared/match-service';
     AngularFirestoreModule,
     AngularFireStorageModule,
     OverlayModule,
+      SearchModalUserPageModule,
+      SelectLevelModalPageModule,
   ],
   providers: [
     StatusBar,

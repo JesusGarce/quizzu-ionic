@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content align="center">
+  <ion-title class="title">Search user ({{modelData.length}})</ion-title>
+  <ion-list>
+    <ion-item class="item" *ngFor="let item of modelData" (click)="goToProfilePage(item)">{{ item.username }}</ion-item>
+  </ion-list>
+
+  <ion-col text-center>
+    <ion-button expand="block" (click)="closeModal()">Close</ion-button>
+  </ion-col>
+</ion-content>

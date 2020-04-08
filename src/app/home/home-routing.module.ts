@@ -68,7 +68,15 @@ const routes: Routes = [
     path: '',
     redirectTo: 'game',
     pathMatch: 'full'
+  },  {
+    path: 'search-modal-user',
+    loadChildren: () => import('./friends/search-modal-user/search-modal-user.module').then( m => m.SearchModalUserPageModule)
+  },
+  {
+    path: 'select-level-modal',
+    loadChildren: () => import('./game/select-level-modal/select-level-modal.module').then( m => m.SelectLevelModalPageModule)
   }
+
 ];
 
 @NgModule({

@@ -1,9 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertController} from '@ionic/angular';
+import {AlertController, ModalController} from '@ionic/angular';
 import {UserService} from '../../shared/user-service';
 import {ToastService} from '../../shared/toast-service';
 import {Router} from '@angular/router';
 import {UserMin} from '../../shared/user-min.model';
+import {SearchModalUserPage} from './search-modal-user/search-modal-user.page';
+import {MatchService} from '../../shared/match-service';
+import {SelectLevelModalPage} from '../game/select-level-modal/select-level-modal.page';
 
 @Component({
   selector: 'app-friends',
@@ -11,45 +14,46 @@ import {UserMin} from '../../shared/user-min.model';
   styleUrls: ['friends.page.scss', '../../app.component.scss']
 })
 export class FriendsPage implements OnInit  {
-  isItemAvailable = false;
-  items: string[];
+  items: UserMin[];
   friendRequests: UserMin[];
   friends: UserMin[];
+  findUser: string;
+  levelMatch: string;
 
   constructor(
       private alertController: AlertController,
       private userService: UserService,
       private toast: ToastService,
-      private router: Router
+      private router: Router,
+      private modalController: ModalController,
+      private matchService: MatchService
   ) {
     this.friendRequests = userService.currentUser.friendRequests;
     this.friends = userService.currentUser.friends;
   }
 
   ngOnInit() {
-    console.log('OnInit');
     this.friendRequests = this.userService.currentUser.friendRequests;
     this.friends = this.userService.currentUser.friends;
   }
 
-  initializeItems() {
-    this.items = ['Ram', 'gopi', 'dravid'];
+  searchUsers() {
+    this.userService.searchUser(this.findUser).then(
+        resp => {
+          this.items = [];
+          for (const user of resp.docs.values()) {
+              if (user.data().id !== this.userService.currentUser.id)
+                this.items.push(new UserMin(user.data().id, user.data().username));
+          }
+          this.openModal();
+        }
+    );
   }
 
-  getItems(ev: any) {
-    // Reset items back to all of the items
-    this.initializeItems();
-
-    // set val to the value of the searchbar
-    const val = ev.target.value;
-
-    // if the value is an empty string don't filter the items
-    if (val && val.trim() !== '') {
-      this.isItemAvailable = true;
-      this.items = this.items.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-      });
-    }
+  startGameAgainst(friend) {
+      if (this.levelMatch !== null) {
+          this.matchService.createNewMatch(this.levelMatch, friend);
+      }
   }
 
   acceptRequest(friendRequest) {
@@ -79,8 +83,8 @@ export class FriendsPage implements OnInit  {
           text: 'No',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+          handler: () => {
+            console.log('Confirm Cancel');
           }
         }, {
           text: 'Yes',
@@ -101,7 +105,20 @@ export class FriendsPage implements OnInit  {
     await alert.present();
   }
 
-  async confirmNewGame() {
+    async openModal() {
+        const modal = await this.modalController.create({
+            component: SearchModalUserPage,
+            componentProps: {
+                users: this.items
+            }
+        });
+
+        modal.onDidDismiss().then((dataReturned) => {});
+
+        return await modal.present();
+    }
+
+  async confirmNewGame(friend) {
     const alert = await this.alertController.create({
       header: 'Confirm',
       message: 'Do you want to <strong>start</strong> a new game?',
@@ -116,7 +133,7 @@ export class FriendsPage implements OnInit  {
         }, {
           text: 'Yes',
           handler: () => {
-            console.log('Confirm Okay');
+            this.chooseLevel(friend);
           }
         }
       ]
@@ -124,4 +141,19 @@ export class FriendsPage implements OnInit  {
 
     await alert.present();
   }
+
+    async chooseLevel(friend) {
+        const modal = await this.modalController.create({
+            component: SelectLevelModalPage,
+        });
+
+        modal.onDidDismiss().then((dataReturned) => {
+            if (dataReturned !== null) {
+                this.levelMatch = dataReturned.data;
+                this.startGameAgainst(friend);
+            }
+        });
+
+        return await modal.present();
+    }
 }

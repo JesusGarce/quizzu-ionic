@@ -31,6 +31,7 @@ export class UserService {
 
     createUser(user, userId) {
         user.id = userId;
+        user.username = user.username.toLowerCase();
         user.level = 1;
         user.points = 0;
         user.friends = [];
@@ -84,7 +85,7 @@ export class UserService {
         const userData: User = {
             id: user.uid,
             email: user.email,
-            username: user.displayName,
+            username: user.displayName.toLowerCase(),
             profile: user.photoURL,
             points: 0,
             level: 1,
@@ -123,10 +124,13 @@ export class UserService {
         });
     }
 
+    getCurrentUsername() {
+        return this.currentUser.username;
+    }
+
     getUsername(id) {
         this.afStore.doc(`users/${id}`).ref.get().then(doc => {
             if (doc.exists) {
-                console.log('get user; ' + doc.data().username);
                 return doc.data().username;
             } else {
                 return false;
@@ -226,7 +230,11 @@ export class UserService {
     }
 
     searchUser(query) {
-        return this.afStore.collection('users').ref.where('username', '>=', query)
+        const queryLC = query.toLowerCase();
+        return this.afStore.collection('users').ref
+            .where('username', '>=', queryLC)
+            .where('username', '<=', queryLC + 'zzz')
+            .limit(10)
             .get();
     }
 
