@@ -44,7 +44,7 @@
                         <h2>{{match.awayPlayerName}}</h2>
                         <h3>{{match.level}} level</h3>
                     </ion-col>
-                    <ion-button class="button-game" [disabled]="match.turnLocalPlayer">
+                    <ion-button class="button-game" (click)="goToMatch(match)" [disabled]="match.turnLocalPlayer">
                         <ion-icon name="game-controller"></ion-icon>
                     </ion-button>
                     <ion-button>

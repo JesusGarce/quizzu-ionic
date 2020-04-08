@@ -73,6 +73,11 @@ export class GamePage {
     this.matchService.deleteMatchPending(game);
   }
 
+  goToMatch(match) {
+    const url = 'home/game/match/' + match.id;
+    this.router.navigate([url]);
+  }
+
   isWinner(match) {
     if (match.isFinish && match.localWin) {
       return true;

@@ -1,55 +1,55 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png"></ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../../assets/quizzu_logo.png"></ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-row>
-        <ion-col>
-            <ion-card class="card-player" color="primary">
-                <h3 align="center">Player 1</h3>
-                <ion-card-subtitle align="center">200</ion-card-subtitle>
-            </ion-card>
-        </ion-col>
-        <ion-col>
-            <ion-card class="card-player" color="primary">
-                <h3 align="center">Player 2</h3>
-                <ion-card-subtitle align="center">231</ion-card-subtitle>
-            </ion-card>
-        </ion-col>
-    </ion-row>
+<ion-content *ngIf="loaded">
+  <ion-row>
+    <ion-col>
+      <ion-card class="card-player" color="primary">
+        <h3 align="center">{{match.player1.username}}</h3>
+        <ion-card-subtitle align="center">{{match.player1Points}}</ion-card-subtitle>
+      </ion-card>
+    </ion-col>
+    <ion-col>
+      <ion-card class="card-player" color="primary">
+        <h3 align="center">{{match.player2.username}}</h3>
+        <ion-card-subtitle align="center">{{match.player2Points}}</ion-card-subtitle>
+      </ion-card>
+    </ion-col>
+  </ion-row>
 
-    <ion-card color="mediumlight" align="center">
-        <ion-card class="card-question" color="secondary">
-            <ion-card-title class="title-question">Question x/15</ion-card-title>
-        </ion-card>
-
-        <ion-card-content>
-            Keep close to Nature's heart... and break clear away, once in awhile,
-            and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content>
-
-        <div class="time-question"><h2>15</h2></div>
+  <ion-card color="mediumlight" align="center">
+    <ion-card class="card-question" color="secondary">
+      <ion-card-title class="title-question">Question {{numberQuestion}}/15</ion-card-title>
     </ion-card>
 
-    <ion-grid class="questions" fixed="true">
-        <ion-row>
-            <ion-col>
-                <ion-button expand="block" size="large">Answer 1</ion-button>
-            </ion-col>
-            <ion-col>
-                <ion-button expand="block" size="large">Answer 2</ion-button>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col>
-                <ion-button expand="block" size="large">Answer 3</ion-button>
-            </ion-col>
-            <ion-col>
-                <ion-button expand="block" size="large">Answer 4</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-card-content>
+      Keep close to Nature's heart... and break clear away, once in awhile,
+      and climb a mountain or spend a week in the woods. Wash your spirit clean.
+    </ion-card-content>
+
+    <div class="time-question"><h2>{{counter}}</h2></div>
+  </ion-card>
+
+  <ion-grid class="questions" fixed="true">
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" size="large">Answer 1</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" size="large">Answer 2</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" size="large">Answer 3</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" size="large">Answer 4</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
