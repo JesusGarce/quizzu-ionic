@@ -5,6 +5,8 @@ import {UserService} from '../../shared/user-service';
 import {SpinnerLoadingService} from '../../shared/spinner-loading/spinner-loading.service';
 import {UserMin} from '../../shared/user-min.model';
 import {AlertController} from '@ionic/angular';
+import {ToastService} from '../../shared/toast-service';
+import {error} from 'util';
 
 @Component({
   selector: 'app-user',
@@ -23,7 +25,8 @@ export class UserPage implements OnInit {
       private userService: UserService,
       private route: ActivatedRoute,
       private spinnerLoading: SpinnerLoadingService,
-      public alertController: AlertController
+      public alertController: AlertController,
+      private toast: ToastService,
   ) {
     this.isFriend = false;
     this.isPending = false;
@@ -45,7 +48,6 @@ export class UserPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('onInitUserPage');
   }
 
   sendRequest() {
@@ -54,7 +56,15 @@ export class UserPage implements OnInit {
   }
 
   deleteFriend() {
-    this.userService.removeFriend(new UserMin(this.user.id, this.user.username));
+    const user = new UserMin(this.user.id, this.user.username);
+    this.userService.removeFriend(user).then(
+        p => {
+          this.toast.create('Friend delete successfully.');
+          this.userService.removeFriendOtherUser(user);
+        }, err => {
+          this.toast.create('Ups! Something happened, try later.');
+        }
+    );
     this.isFriend = false;
   }
 

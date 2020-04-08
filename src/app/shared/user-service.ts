@@ -192,6 +192,22 @@ export class UserService {
             });
     }
 
+    acceptFriendRequestOtherUser(friend) {
+        this.afStore.doc(`users/${friend.id}`).ref.get().then(doc => {
+            if (doc.exists) {
+                const friendUser = doc.data();
+                friendUser.friends.push(new UserMin(this.currentUser.id, this.currentUser.username));
+                this.afStore.collection('users')
+                    .doc(friendUser.id)
+                    .set(JSON.parse(JSON.stringify(friendUser)), {
+                        merge: true
+                    });
+            }
+        }).catch(err => {
+            this.toast.create('Error getting document:' + err);
+        });
+    }
+
     sendFriendRequest(friend) {
         this.afStore.doc(`users/${friend.id}`).ref.get().then(doc => {
             if (doc.exists) {
@@ -227,6 +243,22 @@ export class UserService {
             .set(JSON.parse(JSON.stringify(this.currentUser)), {
                 merge: true
             });
+    }
+
+    removeFriendOtherUser(friend) {
+        this.afStore.doc(`users/${friend.id}`).ref.get().then(doc => {
+            if (doc.exists) {
+                const friendUser = doc.data();
+                friendUser.friends = friendUser.friends.filter(p => p.id !== this.currentUser.id);
+                this.afStore.collection('users')
+                    .doc(friendUser.id)
+                    .set(JSON.parse(JSON.stringify(friendUser)), {
+                        merge: true
+                    });
+            }
+        }).catch(err => {
+            this.toast.create('Error getting document:' + err);
+        });
     }
 
     searchUser(query) {
