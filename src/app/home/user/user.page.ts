@@ -6,7 +6,6 @@ import {SpinnerLoadingService} from '../../shared/spinner-loading/spinner-loadin
 import {UserMin} from '../../shared/user-min.model';
 import {AlertController} from '@ionic/angular';
 import {ToastService} from '../../shared/toast-service';
-import {error} from 'util';
 
 @Component({
   selector: 'app-user',
@@ -30,7 +29,7 @@ export class UserPage implements OnInit {
   ) {
     this.isFriend = false;
     this.isPending = false;
-    this.user = this.userService.getUser(this.route.snapshot.paramMap.get('id')).then(doc => {
+    this.userService.getUser(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();
         this.user = doc.data();

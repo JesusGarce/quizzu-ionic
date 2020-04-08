@@ -128,18 +128,6 @@ export class UserService {
         return this.currentUser.username;
     }
 
-    getUsername(id) {
-        this.afStore.doc(`users/${id}`).ref.get().then(doc => {
-            if (doc.exists) {
-                return doc.data().username;
-            } else {
-                return false;
-            }
-        }).catch(err => {
-            return false;
-        });
-    }
-
     removeCurrentUser() {
         this.currentUser = new User();
     }

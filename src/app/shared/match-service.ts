@@ -50,6 +50,10 @@ export class MatchService {
         );
     }
 
+    getMatch(id) {
+        return this.afStore.doc(`match/${id}`).ref.get();
+    }
+
     createNewMatch(level, player2) {
         const match = new Match(level,
             new UserMin(this.userService.currentUser.id, this.userService.currentUser.username),
