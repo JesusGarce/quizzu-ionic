@@ -75,7 +75,6 @@ export class FriendsPage implements OnInit  {
   }
 
   async deleteRequest(friendRequest) {
-    console.log('delete Request');
     const alert = await this.alertController.create({
       header: 'Confirm',
       message: 'Do you want to <strong>delete</strong> this friend request?',

@@ -3,11 +3,10 @@ import {MatchService} from '../../shared/match-service';
 import {UserService} from '../../shared/user-service';
 import {Router} from '@angular/router';
 import {UserMin} from '../../shared/user-min.model';
-import {SearchModalUserPage} from '../friends/search-modal-user/search-modal-user.page';
-import {ModalController} from '@ionic/angular';
+import {AlertController, ModalController} from '@ionic/angular';
 import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page';
 import {MatchShow} from '../../shared/match-show.model';
-import {CountdownStartPage} from './match/countdown-start/countdown-start.page';
+import {ToastService} from '../../shared/toast-service';
 
 @Component({
   selector: 'app-game',
@@ -24,7 +23,9 @@ export class GamePage {
 
   constructor(private matchService: MatchService,
               private userService: UserService,
+              private alertController: AlertController,
               private router: Router,
+              private toast: ToastService,
               private modalController: ModalController) {
     this.matchesActive = matchService.matchesActive;
     this.matchesFinished = matchService.matchesFinished;
@@ -72,6 +73,33 @@ export class GamePage {
   deleteGame(game) {
     this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
     this.matchService.deleteMatchPending(game);
+  }
+
+  async leftGameStarted(game) {
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message: 'Do you want to <strong>leave</strong> this game?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: 'Yes',
+          handler: () => {
+            this.matchService.leftGameStarted(game).then(
+                resp => {
+                  this.matchesActive = this.matchesActive.filter( p => p.id !== game.id);
+                  this.matchesFinished.push(game);
+              }, error => {}
+            );
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   goToMatch(match) {

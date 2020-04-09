@@ -73,6 +73,26 @@ export class MatchService {
         );
     }
 
+    leftGameStarted(match) {
+        return this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
+            if (doc.exists) {
+                const matchLeft = doc.data();
+                matchLeft.leaveId = this.userService.currentUser.id;
+                this.saveMatch(matchLeft, doc.id).then(
+                    mA => {
+                        this.toast.create('Yo have left this game');
+                    }
+                );
+            } else {
+                this.toast.create('We can not find the game. Try again later');
+                return false;
+            }
+        }).catch(err => {
+            this.toast.create('We can not find the game. Try again later');
+            return false;
+        });
+    }
+
     acceptMatchPending(match) {
         this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
             if (doc.exists) {
@@ -113,7 +133,7 @@ export class MatchService {
     }
 
     createMatchDataShow(data, matchId, userId, active) {
-        const isFinish = (data.leaveId === '');
+        const isFinish = (data.leaveId === '' || data.winnerId === '');
         let match;
         // Player 1 is local
         if (data.player1.id === userId) {
