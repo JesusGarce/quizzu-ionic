@@ -47,7 +47,7 @@
                     <ion-button class="button-game" (click)="goToMatch(match)" [disabled]="match.turnLocalPlayer">
                         <ion-icon name="game-controller"></ion-icon>
                     </ion-button>
-                    <ion-button>
+                    <ion-button (click)="leftGameStarted(match)">
                         <ion-icon name="close-outline"></ion-icon>
                     </ion-button>
                 </ion-item>
