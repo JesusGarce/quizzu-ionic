@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: MatchPage
+  },  {
+    path: 'countdown-start',
+    loadChildren: () => import('./countdown-start/countdown-start.module').then( m => m.CountdownStartPageModule)
   }
+
 ];
 
 @NgModule({

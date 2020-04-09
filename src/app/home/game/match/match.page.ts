@@ -4,6 +4,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../shared/user-service';
 import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loading.service';
 import {MatchService} from '../../../shared/match-service';
+import {CountdownStartPage} from './countdown-start/countdown-start.page';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-match',
@@ -22,6 +24,7 @@ export class MatchPage implements OnInit {
                private userService: UserService,
                private matchService: MatchService,
                private route: ActivatedRoute,
+               private modalController: ModalController,
                private spinnerLoading: SpinnerLoadingService) {
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
@@ -46,8 +49,7 @@ export class MatchPage implements OnInit {
   }
 
   ngOnInit() {
-    this.startTimer();
-
+    this.startCountdown().then();
   }
 
   startTimer() {
@@ -55,6 +57,18 @@ export class MatchPage implements OnInit {
       this.counter --;
       if (this.counter === 0) clearInterval(intervalId);
     }, 1000);
+  }
+
+  async startCountdown() {
+    const modal = await this.modalController.create({
+      component: CountdownStartPage,
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      this.startTimer();
+    });
+
+    return await modal.present();
   }
 
 }

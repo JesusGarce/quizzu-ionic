@@ -7,6 +7,7 @@ import {SearchModalUserPage} from '../friends/search-modal-user/search-modal-use
 import {ModalController} from '@ionic/angular';
 import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page';
 import {MatchShow} from '../../shared/match-show.model';
+import {CountdownStartPage} from './match/countdown-start/countdown-start.page';
 
 @Component({
   selector: 'app-game',

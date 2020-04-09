@@ -27,6 +27,7 @@ import {MatchService} from './shared/match-service';
 import {SearchModalUserPageModule} from './home/friends/search-modal-user/search-modal-user.module';
 import {SelectLevelModalPage} from './home/game/select-level-modal/select-level-modal.page';
 import {SelectLevelModalPageModule} from './home/game/select-level-modal/select-level-modal.module';
+import {CountdownStartPageModule} from './home/game/match/countdown-start/countdown-start.module';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -46,6 +47,7 @@ import {SelectLevelModalPageModule} from './home/game/select-level-modal/select-
     OverlayModule,
       SearchModalUserPageModule,
       SelectLevelModalPageModule,
+      CountdownStartPageModule
   ],
   providers: [
     StatusBar,
