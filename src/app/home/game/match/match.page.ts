@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from '../../../shared/authentication-service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../shared/user-service';
@@ -6,6 +6,7 @@ import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loa
 import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
+import {SearchOpponentPage} from './search-opponent/search-opponent.page';
 
 @Component({
   selector: 'app-match',
@@ -18,6 +19,7 @@ export class MatchPage implements OnInit {
   loaded = false;
   numberQuestion: number;
   counter: any;
+  less5seconds = false;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
@@ -55,6 +57,9 @@ export class MatchPage implements OnInit {
   startTimer() {
     const intervalId = setInterval(() => {
       this.counter --;
+      if (this.counter === 5) {
+        this.less5seconds = true;
+      }
       if (this.counter === 0) clearInterval(intervalId);
     }, 1000);
   }
