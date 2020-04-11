@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFirestore} from '@angular/fire/firestore';
 import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {ToastService} from './toast-service';
 import {UserService} from './user-service';
 import {MatchShow} from './match-show.model';
 import {UserMin} from './user-min.model';
 import {Match} from './match.model';
+import {AlertController, ModalController} from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +25,9 @@ export class MatchService {
         public router: Router,
         private spinnerLoading: SpinnerLoadingService,
         private toast: ToastService,
+        private modalController: ModalController,
         private userService: UserService,
+        private alertController: AlertController
     ) {
         this.matchesActive = [];
         this.matchesFinished = [];
@@ -32,22 +35,37 @@ export class MatchService {
     }
 
     initMatches(userId) {
-        this.afStore.collection('match').get().subscribe(
-            matches => {
-                if (matches.empty) {
+        this.afStore.collection('match').ref
+            .where('player1.id', '==', userId)
+            .get()
+            .then(m => {
+                if (m.empty) {
                     return false;
                 }
-                matches.forEach( match => {
-                    if ((match.data().player1.id === userId) || (match.data().player2.id === userId)) {
-                        if ((match.data().leaveId === '') && (match.data().winnerId === '')) {
-                            this.createMatchDataShow(match.data(), match.id, userId, true);
-                        } else {
-                            this.createMatchDataShow(match.data(), match.id, userId, false);
-                        }
-                    }
-                });
+                this.initMatchesDataShow(m, userId);
+            });
+
+        this.afStore.collection('match').ref
+            .where('player2.id', '==', userId)
+            .get()
+            .then(m => {
+                if (m.empty) {
+                    return false;
+                }
+                this.initMatchesDataShow(m, userId);
+            });
+    }
+
+    private initMatchesDataShow(matches, userId) {
+        matches.forEach( match => {
+            if ((match.data().player1.id === userId) || (match.data().player2.id === userId)) {
+                if ((match.data().leaveId === '') && (match.data().winnerId === '')) {
+                    this.createMatchDataShow(match.data(), match.id, userId, true);
+                } else {
+                    this.createMatchDataShow(match.data(), match.id, userId, false);
+                }
             }
-        );
+        });
     }
 
     getMatch(id) {
@@ -63,8 +81,13 @@ export class MatchService {
             res => {
                 res.get().then(
                     r => {
-                        this.createMatchDataShow(r.data(), r.id, this.userService.currentUser.id, true);
                         this.currentMatch = r.data();
+                        // Si hemos creado una partida sin rival esperamos oponente
+                        if (player2.id === '') {
+                            this.waitingAnotherPlayer(r.id);
+                        } else {
+                            this.createMatchDataShow(r.data(), r.id, this.userService.currentUser.id, true);
+                        }
                     }
                 );
             }, error => {
@@ -73,7 +96,7 @@ export class MatchService {
         );
     }
 
-    leftGameStarted(match) {
+    leaveGameStarted(match) {
         return this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
             if (doc.exists) {
                 const matchLeft = doc.data();
@@ -135,18 +158,18 @@ export class MatchService {
     createMatchDataShow(data, matchId, userId, active) {
         const isFinish = (data.leaveId === '' || data.winnerId === '');
         let match;
-        // Player 1 is local
         if (data.player1.id === userId) {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
-                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.turnPlayer1, data.matchAccepted);
+                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.player1Turn, data.matchAccepted);
         } else {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
-                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.turnPlayer1, data.matchAccepted);
+                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.player1Turn, data.matchAccepted);
         }
         if (!match.matchAccepted && data.player2.username.toLowerCase() === this.userService.getCurrentUsername()) {
             this.matchesPendings.push(match);
         } else {
             if (active) {
+                console.log(match);
                 if (match.awayPlayerName === '') {
                     match.awayPlayerName = 'Searching opponent...';
                     match.turnLocalPlayer = false;
@@ -158,9 +181,63 @@ export class MatchService {
         }
     }
 
+    findFreeMatch(level) {
+        return this.afStore.collection('match')
+            .ref
+            .where('player2.username', '==', '')
+            .where('gameLevel', '==', level)
+            .get();
+    }
+
+    waitingAnotherPlayer(matchId) {
+        return this.afStore.collection('match')
+            .doc(matchId)
+            .valueChanges()
+            .subscribe( match => {
+                this.currentMatch = match;
+                if (this.currentMatch.player2.id !== '' ) {
+                    this.alertOpenMatch(matchId).then();
+                }
+            });
+    }
+
+    async alertOpenMatch(matchId) {
+        const alert = await this.alertController.create({
+            header: 'NEW GAME IS READY',
+            message: 'Opponent found! Do you want to start now?',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.currentUser.id, true);
+                        this.router.navigate(['home/game']).then();
+                        this.closeModal();
+                    }
+                }, {
+                    text: 'Yes',
+                    handler: () => {
+                        const url = 'home/game/match/' + matchId;
+                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.currentUser.id, true);
+                        this.closeModal();
+                        this.router.navigate([url]).then();
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
+
     removeMatches() {
         this.matchesFinished = [];
         this.matchesActive = [];
         this.matchesPendings = [];
+    }
+
+    async closeModal() {
+        if (await this.modalController.getTop() !== undefined)
+            await this.modalController.dismiss();
     }
 }

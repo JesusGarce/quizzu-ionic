@@ -60,3 +60,18 @@ h2 {
 .questions {
   padding-top: 15px;
 }
+
+.blink {
+  font-size: 28px;
+  animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.counter {
+  font-size: x-large;
+}

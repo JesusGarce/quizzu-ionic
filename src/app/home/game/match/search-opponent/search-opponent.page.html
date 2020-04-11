@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../../assets/quizzu_logo.png"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content align="center" class="bg-pink">
+  <lottie-animation-view
+          [options]="lottieConfig"
+          [width]="300"
+          [height]="400"
+          (animCreated)="handleAnimation($event)">
+  </lottie-animation-view>
+
+  <h1 *ngIf="searching">Searching opponent...</h1>
+  <h1 *ngIf="found">Opponent found! Wait...</h1>
+  <h1 *ngIf="creating">Creating game...</h1>
+
+  <ion-col text-center *ngIf="created">
+    <ion-button style="--background:white" expand="block" (click)="exitSearchOpponent()"><h2>Go Home</h2></ion-button>
+  </ion-col>
+</ion-content>

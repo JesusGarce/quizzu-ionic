@@ -76,7 +76,7 @@ export class FriendsPage implements OnInit  {
 
   async deleteRequest(friendRequest) {
     const alert = await this.alertController.create({
-      header: 'Confirm',
+      header: 'Delete friend request',
       message: 'Do you want to <strong>delete</strong> this friend request?',
       buttons: [
         {
@@ -120,7 +120,7 @@ export class FriendsPage implements OnInit  {
 
   async confirmNewGame(friend) {
     const alert = await this.alertController.create({
-      header: 'Confirm',
+      header: 'Start new game',
       message: 'Do you want to <strong>start</strong> a new game?',
       buttons: [
         {

@@ -7,6 +7,7 @@ import {AlertController, ModalController} from '@ionic/angular';
 import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page';
 import {MatchShow} from '../../shared/match-show.model';
 import {ToastService} from '../../shared/toast-service';
+import {SearchOpponentPage} from './match/search-opponent/search-opponent.page';
 
 @Component({
   selector: 'app-game',
@@ -16,6 +17,7 @@ import {ToastService} from '../../shared/toast-service';
 export class GamePage {
 
   levelMatch: string;
+  matchFoundId: string;
   matchesActive: MatchShow[];
   matchesFinished: MatchShow[];
   matchesPending: MatchShow[];
@@ -38,18 +40,6 @@ export class GamePage {
     this.router.navigate(['home/friends']);
   }
 
-  createMatchWithoutOponent() {
-      if (this.levelMatch !== null) {
-        this.matchService.createNewMatch(this.levelMatch, new UserMin('', '')).then(
-            res => {
-              console.log('MATCH: ' + res);
-            }, error => {
-              console.log('ERROR: ' + error.toString());
-            }
-        );
-      }
-  }
-
   async chooseLevel() {
     const modal = await this.modalController.create({
       component: SelectLevelModalPage,
@@ -58,7 +48,25 @@ export class GamePage {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
         this.levelMatch = dataReturned.data;
-        this.createMatchWithoutOponent();
+        this.searchingOpponent();
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async searchingOpponent() {
+    const modal = await this.modalController.create({
+      component: SearchOpponentPage,
+      componentProps: {
+        level: this.levelMatch
+      }
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        this.matchFoundId = dataReturned.data;
+
       }
     });
 
@@ -77,7 +85,7 @@ export class GamePage {
 
   async leftGameStarted(game) {
     const alert = await this.alertController.create({
-      header: 'Confirm',
+      header: 'Do you give up?',
       message: 'Do you want to <strong>leave</strong> this game?',
       buttons: [
         {
@@ -88,7 +96,7 @@ export class GamePage {
         }, {
           text: 'Yes',
           handler: () => {
-            this.matchService.leftGameStarted(game).then(
+            this.matchService.leaveGameStarted(game).then(
                 resp => {
                   this.matchesActive = this.matchesActive.filter( p => p.id !== game.id);
                   this.matchesFinished.push(game);
@@ -123,4 +131,7 @@ export class GamePage {
     }
   }
 
+  youCanPlay(match) {
+    return ((match.turnLocalPlayer) && (match.matchAccepted));
+  }
 }

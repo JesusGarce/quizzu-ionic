@@ -7,10 +7,15 @@ const routes: Routes = [
   {
     path: '',
     component: MatchPage
-  },  {
+  },
+  {
     path: 'countdown-start',
     loadChildren: () => import('./countdown-start/countdown-start.module').then( m => m.CountdownStartPageModule)
+  },  {
+    path: 'search-opponent',
+    loadChildren: () => import('./search-opponent/search-opponent.module').then( m => m.SearchOpponentPageModule)
   }
+
 
 ];
 
