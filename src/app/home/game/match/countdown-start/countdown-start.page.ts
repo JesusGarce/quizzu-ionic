@@ -18,7 +18,7 @@ export class CountdownStartPage implements OnInit {
   }
 
   startTimer() {
-    const intervalId = setInterval(() => {
+    setInterval(() => {
       this.counter --;
       if (this.counter === 0) this.closeModal();
     }, 1000);

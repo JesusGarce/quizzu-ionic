@@ -18,6 +18,7 @@ export class UserService {
     currentUser: any;
     currentUserStats: any;
     downloadURL: Observable<string>;
+    profileDefaultImage = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=25150dc7-a848-4fce-b900-53f47a9518ee';
 
     constructor(
         public afStore: AngularFirestore,
@@ -26,7 +27,6 @@ export class UserService {
         private spinnerLoading: SpinnerLoadingService,
         private toast: ToastService,
     ) {
-
     }
 
     createUser(user, userId) {
@@ -36,8 +36,8 @@ export class UserService {
         user.points = 0;
         user.friends = [];
         user.friendRequests = [];
-        user.profile = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=25150dc7-a848-4fce-b900-53f47a9518ee';
-        this.createUserStats();
+        user.profile = this.profileDefaultImage;
+        this.createUserStats(userId);
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
         userRef.set(JSON.parse(JSON.stringify(user)), {
             merge: true
@@ -48,32 +48,8 @@ export class UserService {
         });
     }
 
-    createUserStats() {
-        this.currentUserStats = new UserStats();
-        this.currentUserStats.c2level = {
-            c2played: 0,
-            c2won: 0,
-            c2draw: 0,
-            c2lost: 0,
-        };
-        this.currentUserStats.c1level = {
-            c1played: 0,
-            c1won: 0,
-            c1draw: 0,
-            c1lost: 0,
-        };
-        this.currentUserStats.b2level = {
-            b2played: 0,
-            b2won: 0,
-            b2draw: 0,
-            b2lost: 0,
-        };
-        this.currentUserStats.b1level = {
-            b1played: 0,
-            b1won: 0,
-            b1draw: 0,
-            b1lost: 0,
-        };
+    createUserStats(userId) {
+        this.currentUserStats = new UserStats(userId);
     }
 
     createUserFromDataGoogle(user) {
@@ -82,19 +58,7 @@ export class UserService {
             merge: true
         });
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
-        const userData: User = {
-            id: user.uid,
-            email: user.email,
-            username: user.displayName.toLowerCase(),
-            profile: user.photoURL,
-            points: 0,
-            level: 1,
-            firstName: '',
-            lastName: '',
-            birthDate: new Date(),
-            friends: [],
-            friendRequests: [],
-        };
+        const userData = new User(user.uid, user.email, user.displayName.toLowerCase(), user.photoURL);
         this.initCurrentUser(user.uid);
         return userRef.set(JSON.parse(JSON.stringify(userData)), {
             merge: true
@@ -124,12 +88,8 @@ export class UserService {
         });
     }
 
-    getCurrentUsername() {
-        return this.currentUser.username;
-    }
-
     removeCurrentUser() {
-        this.currentUser = new User();
+        this.currentUser = '';
     }
 
     goToEditProfile() {
@@ -171,7 +131,7 @@ export class UserService {
     }
 
     acceptFriendRequest(friend) {
-        this.currentUser.friendRequests = this.currentUser.friendRequests.filter( p => p.id !== friend.id);
+        this.filterFriendRequests(friend);
         this.currentUser.friends.push(friend);
         return this.afStore.collection('users')
             .doc(this.currentUser.id)
@@ -216,7 +176,7 @@ export class UserService {
     }
 
     removeFriendRequest(friend) {
-        this.currentUser.friendRequests = this.currentUser.friendRequests.filter( p => p.id !== friend.id);
+        this.filterFriendRequests(friend);
         return this.afStore.collection('users')
             .doc(this.currentUser.id)
             .set(JSON.parse(JSON.stringify(this.currentUser)), {
@@ -260,5 +220,9 @@ export class UserService {
 
     getUser(id) {
         return this.afStore.doc(`users/${id}`).ref.get();
+    }
+
+    filterFriendRequests(friend) {
+        this.currentUser.friendRequests = this.currentUser.friendRequests.filter(p => p.id !== friend.id);
     }
 }

@@ -20,6 +20,7 @@ export class MatchPage implements OnInit {
   numberQuestion: number;
   counter: any;
   less5seconds = false;
+  user: any;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
@@ -28,23 +29,23 @@ export class MatchPage implements OnInit {
                private route: ActivatedRoute,
                private modalController: ModalController,
                private spinnerLoading: SpinnerLoadingService) {
+    this.user = this.userService.currentUser;
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();
         this.match = doc.data();
         this.loaded = true;
         this.counter = 15;
-        if (this.match.player1.id === userService.currentUser.id) {
+        if (this.match.player1.id === this.user.id) {
           this.numberQuestion = 16 - this.match.player1RemainsQuestions;
-        }
-        else {
+        } else {
           this.numberQuestion = 16 - this.match.player2RemainsQuestions;
         }
       } else {
         this.spinnerLoading.hide();
         return false;
       }
-    }).catch(err => {
+    }).catch(() => {
       this.spinnerLoading.hide();
       return false;
     });
@@ -69,7 +70,7 @@ export class MatchPage implements OnInit {
       component: CountdownStartPage,
     });
 
-    modal.onDidDismiss().then((dataReturned) => {
+    modal.onDidDismiss().then(() => {
       this.startTimer();
     });
 

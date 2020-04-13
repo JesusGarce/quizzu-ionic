@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MatchService} from '../../shared/match-service';
 import {UserService} from '../../shared/user-service';
 import {Router} from '@angular/router';
-import {UserMin} from '../../shared/user-min.model';
 import {AlertController, ModalController} from '@ionic/angular';
 import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page';
 import {MatchShow} from '../../shared/match-show.model';
@@ -91,16 +90,16 @@ export class GamePage {
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {}
+          cssClass: 'secondary'
         }, {
           text: 'Yes',
           handler: () => {
             this.matchService.leaveGameStarted(game).then(
-                resp => {
+                () => {
                   this.matchesActive = this.matchesActive.filter( p => p.id !== game.id);
                   this.matchesFinished.push(game);
-              }, error => {}
+                }, () => {
+                }
             );
           }
         }
@@ -116,19 +115,11 @@ export class GamePage {
   }
 
   isWinner(match) {
-    if (match.isFinish && match.localWin) {
-      return true;
-    } else {
-      return false;
-    }
+    return match.isFinish && match.localWin;
   }
 
   isLoser(match) {
-    if (match.isFinish && !match.localWin) {
-      return true;
-    } else {
-      return false;
-    }
+    return match.isFinish && !match.localWin;
   }
 
   youCanPlay(match) {

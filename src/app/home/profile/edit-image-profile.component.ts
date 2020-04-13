@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { PopoverController, NavParams } from '@ionic/angular';
-import {AuthenticationService} from '../../shared/authentication-service';
+import {Component, OnInit} from '@angular/core';
+import {PopoverController} from '@ionic/angular';
 import {UserService} from '../../shared/user-service';
 
 @Component({
@@ -14,7 +13,8 @@ export class EditImageProfileComponent implements OnInit {
         private userService: UserService) {
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     imageSelected(event) {
         this.userService.onProfileUpload(event);

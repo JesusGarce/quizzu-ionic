@@ -1,7 +1,5 @@
-import construct = Reflect.construct;
 
 export class UserStats {
-    id: string;
     user: string;
     c2level: {
         c2played: number
@@ -27,4 +25,28 @@ export class UserStats {
         b1draw: number,
         b1lost: number,
     };
+
+    constructor(user) {
+        this.user = user;
+
+        this.c2level.c2played = 0;
+        this.c2level.c2won = 0;
+        this.c2level.c2draw = 0;
+        this.c2level.c2lost = 0;
+
+        this.c1level.c1played = 0;
+        this.c1level.c1won = 0;
+        this.c1level.c1draw = 0;
+        this.c1level.c1lost = 0;
+
+        this.b2level.b2played = 0;
+        this.b2level.b2won = 0;
+        this.b2level.b2draw = 0;
+        this.b2level.b2lost = 0;
+
+        this.b1level.b1played = 0;
+        this.b1level.b1won = 0;
+        this.b1level.b1draw = 0;
+        this.b1level.b1lost = 0;
+    }
 }

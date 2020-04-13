@@ -19,6 +19,7 @@ export class FriendsPage implements OnInit  {
   friends: UserMin[];
   findUser: string;
   levelMatch: string;
+  user: any;
 
   constructor(
       private alertController: AlertController,
@@ -30,19 +31,18 @@ export class FriendsPage implements OnInit  {
   ) {
     this.friendRequests = userService.currentUser.friendRequests;
     this.friends = userService.currentUser.friends;
+    this.user = userService.currentUser;
+    this.findUser = '';
   }
 
-  ngOnInit() {
-    this.friendRequests = this.userService.currentUser.friendRequests;
-    this.friends = this.userService.currentUser.friends;
-  }
+  ngOnInit() {}
 
   searchUsers() {
     this.userService.searchUser(this.findUser).then(
         resp => {
           this.items = [];
           for (const user of resp.docs.values()) {
-              if (user.data().id !== this.userService.currentUser.id)
+              if (user.data().id !== this.user.id)
                 this.items.push(new UserMin(user.data().id, user.data().username));
           }
           this.openModal();
@@ -58,12 +58,12 @@ export class FriendsPage implements OnInit  {
 
   acceptRequest(friendRequest) {
     this.userService.acceptFriendRequest(friendRequest).then(
-        res => {
+        () => {
           this.toast.create('Now ' + friendRequest.username.toString() + ' is your friend!');
           this.friendRequests = this.userService.currentUser.friendRequests;
           this.friends = this.userService.currentUser.friends;
           this.userService.acceptFriendRequestOtherUser(friendRequest);
-        }, error => {
+        }, () => {
           this.toast.create('Ups! Something happened, try later.');
         }
     );
@@ -71,7 +71,7 @@ export class FriendsPage implements OnInit  {
 
   goToProfilePage(friendRequest) {
     const url = 'home/user/' + friendRequest.id;
-    this.router.navigate([url]);
+    this.router.navigate([url]).then();
   }
 
   async deleteRequest(friendRequest) {
@@ -83,20 +83,16 @@ export class FriendsPage implements OnInit  {
           text: 'No',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
         }, {
           text: 'Yes',
           handler: () => {
             this.userService.removeFriendRequest(friendRequest).then(
-                res => {
+                () => {
               this.toast.create('You has deleted a friend request');
               this.friendRequests = this.userService.currentUser.friendRequests;
-            }, error => {
+                }, () => {
               this.toast.create('Ups! Something happened, try later.');
             });
-            console.log('Confirm Okay');
           }
         }
       ]
@@ -112,9 +108,8 @@ export class FriendsPage implements OnInit  {
                 users: this.items
             }
         });
-
-        modal.onDidDismiss().then((dataReturned) => {});
-
+        modal.onDidDismiss().then(() => {
+        });
         return await modal.present();
     }
 
@@ -127,9 +122,6 @@ export class FriendsPage implements OnInit  {
           text: 'No',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
         }, {
           text: 'Yes',
           handler: () => {

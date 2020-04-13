@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../../../shared/authentication-service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../../shared/user-service';
 import {MatchService} from '../../../../shared/match-service';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
-import {SpinnerLoadingService} from '../../../../shared/spinner-loading/spinner-loading.service';
 import {UserMin} from '../../../../shared/user-min.model';
 
 @Component({
@@ -21,6 +20,7 @@ export class SearchOpponentPage implements OnInit {
   private created = false;
   private found = false;
   private level: string;
+  private user: any;
 
   constructor(private authService: AuthenticationService,
               private router: Router,
@@ -29,13 +29,13 @@ export class SearchOpponentPage implements OnInit {
               private navParams: NavParams,
               private route: ActivatedRoute,
               private modalController: ModalController,
-              private alertController: AlertController,
-              private spinnerLoading: SpinnerLoadingService) {
+              private alertController: AlertController) {
     this.lottieConfig = {
       path: './assets/animations/18143-discord-nearby-animation.json',
       autoplay: true,
       loop: true
     };
+    this.user = this.userService.currentUser;
     this.level = this.navParams.data.level;
     this.doSearch();
   }
@@ -55,27 +55,26 @@ export class SearchOpponentPage implements OnInit {
             this.created = true;
             this.matchService.createNewMatch(this.level, new UserMin('', ''))
                 .then(
-                    match => {
-                    this.showSearching();
-                }, error => {}
-            );
+                    () => {
+                      this.showSearching();
+                    });
           } else {
             let found = false;
             for (const match of matches.docs.values()) {
-              if (match.data().player1.id !== this.userService.currentUser.id) {
+              if (match.data().player1.id !== this.user.id) {
                 found = true;
                 const matchFound = match.data();
-                matchFound.player2 = new UserMin(this.userService.currentUser.id, this.userService.getCurrentUsername());
+                matchFound.player2 = new UserMin(this.user.id, this.user.username);
                 matchFound.matchAccepted = true;
                 this.matchService.saveMatch(matchFound, match.id)
                     .then(
                         () => {
                           this.showFound();
-                          this.matchService.createMatchDataShow(matchFound, match.id, this.userService.currentUser.id, true);
-                          this.delay(300).then(
+                          this.matchService.createMatchDataShow(matchFound, match.id, this.user.id, true);
+                          this.delay(2000).then(
                               () => {
                                 this.checkIfIsCurrentPlayerTurn(matchFound, match.id);
-                          });
+                              });
                         }
                     );
                 break;
@@ -85,9 +84,9 @@ export class SearchOpponentPage implements OnInit {
               this.created = true;
               this.matchService.createNewMatch(this.level, new UserMin('', ''))
                   .then(
-                      match => {
+                      () => {
                         this.showSearching();
-                      }, error => {}
+                      }
                   );
             }
           }
@@ -95,14 +94,25 @@ export class SearchOpponentPage implements OnInit {
     );
   }
 
-  private checkIfIsCurrentPlayerTurn(matchFound, id) {
-    if (matchFound.player1Turn && (matchFound.player1.username === this.userService.getCurrentUsername())) {
-      this.closeModal();
-      const url = 'home/game/match/' + id;
-      this.router.navigate([url]).then();
-    } else {
-      this.closeModal();
-    }
+  async exitSearchOpponent() {
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message: 'Do you want to <strong>close</strong> the search? We will notify you when we find a opponent ',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Yes',
+          handler: () => {
+            this.closeModal();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   private showCreating() {
@@ -131,25 +141,11 @@ export class SearchOpponentPage implements OnInit {
     await this.modalController.dismiss();
   }
 
-  async exitSearchOpponent() {
-    const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Do you want to <strong>close</strong> the search? We will notify you when we find a opponent ',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {}
-        }, {
-          text: 'Yes',
-          handler: () => {
-            this.closeModal();
-          }
-        }
-      ]
-    });
-
-    await alert.present();
+  private checkIfIsCurrentPlayerTurn(matchFound, id) {
+    this.closeModal();
+    if (matchFound.player1Turn && (matchFound.player1.username === this.user.username)) {
+      const url = 'home/game/match/' + id;
+      this.router.navigate([url]).then();
+    }
   }
 }
