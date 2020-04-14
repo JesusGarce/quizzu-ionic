@@ -21,7 +21,13 @@
 
     <ion-row>
       <ion-col> 
-      <ion-button type="submit" (click)="logIn(email, password)" expand="block">Login</ion-button>
+      <ion-button class="login-button" type="submit" (click)="logIn(email, password)" expand="block">Login</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row align="center">
+      <ion-col>
+        <a class="forgot-password" (click)="this.goToForgotPassword()"> Forgot password? </a>
       </ion-col>
     </ion-row>
 
@@ -32,7 +38,7 @@
         <ion-button 
          type="submit" 
          color="google"
-         (click)="authService.GoogleAuth()" 
+         (click)="authService.signInWithGoogleAuth()"
          expand="block">
           <ion-icon name="logo-google"></ion-icon>
           Login with Google

@@ -1,12 +1,14 @@
 <ion-content align="center">
-<ion-card>
-    <hr>
-    <ion-card-title>Upload your new pic</ion-card-title>
-    <input type="file" id="fileLoader" (change)="imageSelected($event)" #fileLoader name="files" title="Load File" hidden />
-    <hr>
-    <ion-button text-center icon-left (click)="presentUploadImage(fileLoader)">
-        <ion-icon name="camera"></ion-icon> Select Image
-    </ion-button>
-    <hr>
-</ion-card>
+    <ion-card>
+        <hr>
+        <ion-card-title>Upload your new pic</ion-card-title>
+        <input #fileLoader (change)="imageSelected($event)" hidden id="fileLoader" name="files" title="Load File"
+               type="file"/>
+        <hr>
+        <ion-button (click)="presentUploadImage(fileLoader)" icon-left text-center>
+            <ion-icon name="camera"></ion-icon>
+            Select Image
+        </ion-button>
+        <hr>
+    </ion-card>
 </ion-content>

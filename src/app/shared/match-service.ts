@@ -19,7 +19,6 @@ export class MatchService {
     matchesFinished: MatchShow[];
     matchesPendings: MatchShow[];
     currentMatch: any;
-    user: any;
 
     constructor(
         public afStore: AngularFirestore,
@@ -33,7 +32,6 @@ export class MatchService {
         this.matchesActive = [];
         this.matchesFinished = [];
         this.matchesPendings = [];
-        this.user = this.userService.currentUser;
     }
 
     initMatches(userId) {
@@ -84,7 +82,7 @@ export class MatchService {
     }
 
     saveMatchShowInArray(match, data, active) {
-        if (!match.matchAccepted && data.player2.username.toLowerCase() === this.user.username) {
+        if (!match.matchAccepted && data.player2.username.toLowerCase() === this.userService.getCurrentUser().username) {
             this.matchesPendings.push(match);
         } else {
             if (active) {
@@ -105,7 +103,7 @@ export class MatchService {
 
     createNewMatch(level, player2) {
         const match = new Match(level,
-            new UserMin(this.user.id, this.user.username),
+            new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username),
             player2);
 
         return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match))).then(
@@ -116,7 +114,7 @@ export class MatchService {
                         if (player2.id === '') {
                             this.waitingAnotherPlayer(r.id);
                         } else {
-                            this.createMatchDataShow(r.data(), r.id, this.user.id, true);
+                            this.createMatchDataShow(r.data(), r.id, this.userService.getCurrentUser().id, true);
                         }
                     }
                 );
@@ -128,10 +126,10 @@ export class MatchService {
         return this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
             if (doc.exists) {
                 const matchLeft = doc.data();
-                matchLeft.leaveId = this.user.id;
+                matchLeft.leaveId = this.userService.getCurrentUser().id;
                 this.saveMatch(matchLeft, doc.id).then(
                     () => {
-                        this.toast.create('Yo have left this game');
+                        this.toast.create('You have left this game');
                     }
                 );
             } else {
@@ -152,7 +150,7 @@ export class MatchService {
                 this.saveMatch(matchAccepted, doc.id).then(
                     () => {
                         this.toast.create('Game accepted');
-                        this.createMatchDataShow(matchAccepted, match.id, this.user.id, true);
+                        this.createMatchDataShow(matchAccepted, match.id, this.userService.getCurrentUser().id, true);
                     }
                 );
             } else {
@@ -213,7 +211,7 @@ export class MatchService {
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
-                        this.createMatchDataShow(this.currentMatch, matchId, this.user.id, true);
+                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.getCurrentUser().id, true);
                         this.router.navigate(['home/game']).then();
                         this.closeModal();
                     }
@@ -221,7 +219,7 @@ export class MatchService {
                     text: 'Yes',
                     handler: () => {
                         const url = 'home/game/match/' + matchId;
-                        this.createMatchDataShow(this.currentMatch, matchId, this.user.id, true);
+                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.getCurrentUser().id, true);
                         this.closeModal();
                         this.router.navigate([url]).then();
                     }

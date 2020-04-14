@@ -35,12 +35,12 @@ export class SearchOpponentPage implements OnInit {
       autoplay: true,
       loop: true
     };
-    this.user = this.userService.currentUser;
     this.level = this.navParams.data.level;
     this.doSearch();
   }
 
   ngOnInit() {
+    this.user = this.userService.currentUser;
   }
 
   handleAnimation(anim: any) {

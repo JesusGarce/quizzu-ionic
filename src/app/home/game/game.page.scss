@@ -9,6 +9,15 @@ ion-title {
   color: white;
 }
 
+ion-card-content {
+    display: block;
+    position: relative;
+    max-height: 200px;
+    overflow-y: scroll;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
 ion-card.ion-color .ion-inherit-color, ion-card-header.ion-color .ion-inherit-color {
   color: #A92EDF;
   padding-top:5px;
@@ -70,3 +79,7 @@ ion-item {
   font-size: 50px;
 }
 
+.list-size{
+  max-height: 350px;
+  overflow-y: scroll;
+}

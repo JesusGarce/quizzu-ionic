@@ -115,11 +115,15 @@ export class GamePage {
   }
 
   isWinner(match) {
-    return match.isFinish && match.localWin;
+    return (match.localPlayerPoints > match.awayPlayerPoints);
   }
 
   isLoser(match) {
-    return match.isFinish && !match.localWin;
+    return (match.localPlayerPoints < match.awayPlayerPoints);
+  }
+
+  isDrawn(match) {
+    return (match.localPlayerPoints === match.awayPlayerPoints);
   }
 
   youCanPlay(match) {

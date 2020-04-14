@@ -18,11 +18,11 @@ export class RegistrationPage implements OnInit {
   constructor(
       public authService: AuthenticationService,
       public router: Router,
-      public toastService: ToastService,
+      public toast: ToastService,
   ) {
       this.password = '';
       this.confirmPassword = '';
-      this.user = new User();
+      this.user = new User('', '', '', '');
   }
 
   ngOnInit() {
@@ -31,16 +31,15 @@ export class RegistrationPage implements OnInit {
   signUp() {
       const {password, confirmPassword} = this;
       if (password !== confirmPassword) {
-          this.toastService.create('Passwords are different');
+          this.toast.create('Passwords are different');
       }
 
-      this.authService.RegisterUser(this.user, this.password)
-      .then((res) => {
-        // Do something here
-        this.authService.SendVerificationMail();
+      this.authService.registerUser(this.user, this.password)
+      .then(() => {
+        this.authService.sendVerificationMail();
         this.router.navigate(['verify-email']);
       }).catch((error) => {
-          this.toastService.create('Ups! Something happened: ' + error);
+          this.toast.create('Ups! Something happened: ' + error);
       });
   }
 

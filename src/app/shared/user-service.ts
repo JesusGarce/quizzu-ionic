@@ -225,4 +225,8 @@ export class UserService {
     filterFriendRequests(friend) {
         this.currentUser.friendRequests = this.currentUser.friendRequests.filter(p => p.id !== friend.id);
     }
+
+    getCurrentUser() {
+        return this.currentUser;
+    }
 }
