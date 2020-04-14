@@ -14,6 +14,8 @@ export class HomePage {
       private authService: AuthenticationService,
       private userService: UserService,
       private matchService: MatchService
-  ) {}
+  ) {
+    console.log('IS LOGGED IN: ' + this.authService.isLoggedIn);
+  }
 
 }

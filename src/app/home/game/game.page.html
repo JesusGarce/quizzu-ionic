@@ -85,13 +85,18 @@
                         </ion-row>
                     </ion-col>
                     <div *ngIf="isWinner(match)">
-                        <h2 class="last-games-result">HAS WON!
+                        <h2 class="last-games-result">VICTORY!
                             <ion-icon name="trophy-outline"></ion-icon>
                         </h2>
                     </div>
                     <div *ngIf="isLoser(match)">
-                        <h2 class="last-games-result">HAS LOST!
+                        <h2 class="last-games-result">DEFEAT!
                             <ion-icon name="skull-outline"></ion-icon>
+                        </h2>
+                    </div>
+                    <div *ngIf="isDrawn(match)">
+                        <h2 class="last-games-result">DRAW!
+                            <ion-icon name="hourglass-outline"></ion-icon>
                         </h2>
                     </div>
                 </ion-item>

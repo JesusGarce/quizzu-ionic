@@ -68,13 +68,42 @@ export class MatchService {
         });
     }
 
+    createMatchDataShow(data, matchId, userId, active) {
+        const isFinish = (data.leaveId === '' || data.winnerId === '');
+        let match;
+        if (data.player1.id === userId) {
+            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
+                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.player1Turn, data.matchAccepted);
+        } else {
+            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
+                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.player1Turn, data.matchAccepted);
+        }
+        this.saveMatchShowInArray(match, data, active);
+    }
+
+    saveMatchShowInArray(match, data, active) {
+        if (!match.matchAccepted && data.player2.username.toLowerCase() === this.userService.getCurrentUser().username) {
+            this.matchesPendings.push(match);
+        } else {
+            if (active) {
+                if (match.awayPlayerName === '') {
+                    match.awayPlayerName = 'Searching opponent...';
+                    match.turnLocalPlayer = false;
+                }
+                this.matchesActive.push(match);
+            } else {
+                this.matchesFinished.push(match);
+            }
+        }
+    }
+
     getMatch(id) {
         return this.afStore.doc(`match/${id}`).ref.get();
     }
 
     createNewMatch(level, player2) {
         const match = new Match(level,
-            new UserMin(this.userService.currentUser.id, this.userService.currentUser.username),
+            new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username),
             player2);
 
         return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match))).then(
@@ -82,16 +111,13 @@ export class MatchService {
                 res.get().then(
                     r => {
                         this.currentMatch = r.data();
-                        // Si hemos creado una partida sin rival esperamos oponente
                         if (player2.id === '') {
                             this.waitingAnotherPlayer(r.id);
                         } else {
-                            this.createMatchDataShow(r.data(), r.id, this.userService.currentUser.id, true);
+                            this.createMatchDataShow(r.data(), r.id, this.userService.getCurrentUser().id, true);
                         }
                     }
                 );
-            }, error => {
-                this.toast.create('ERROR: ' + error.toString());
             }
         );
     }
@@ -100,17 +126,17 @@ export class MatchService {
         return this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
             if (doc.exists) {
                 const matchLeft = doc.data();
-                matchLeft.leaveId = this.userService.currentUser.id;
+                matchLeft.leaveId = this.userService.getCurrentUser().id;
                 this.saveMatch(matchLeft, doc.id).then(
-                    mA => {
-                        this.toast.create('Yo have left this game');
+                    () => {
+                        this.toast.create('You have left this game');
                     }
                 );
             } else {
                 this.toast.create('We can not find the game. Try again later');
                 return false;
             }
-        }).catch(err => {
+        }).catch(() => {
             this.toast.create('We can not find the game. Try again later');
             return false;
         });
@@ -122,16 +148,16 @@ export class MatchService {
                 const matchAccepted = doc.data();
                 matchAccepted.matchAccepted = true;
                 this.saveMatch(matchAccepted, doc.id).then(
-                    mA => {
+                    () => {
                         this.toast.create('Game accepted');
-                        this.createMatchDataShow(matchAccepted, match.id, this.userService.currentUser.id, true);
+                        this.createMatchDataShow(matchAccepted, match.id, this.userService.getCurrentUser().id, true);
                     }
                 );
             } else {
                 this.toast.create('We can not find the game. Try again later');
                 return false;
             }
-        }).catch(err => {
+        }).catch(() => {
             this.toast.create('We can not find the game. Try again later');
             return false;
         });
@@ -141,9 +167,9 @@ export class MatchService {
         this.afStore.collection('match')
             .doc(match.id)
             .delete().then(
-                r => {
-                    this.toast.create('Game removed successfully');
-                }
+            () => {
+                this.toast.create('Game removed successfully');
+            }
         );
     }
 
@@ -153,32 +179,6 @@ export class MatchService {
             .set(JSON.parse(JSON.stringify(match)), {
                 merge: true
             });
-    }
-
-    createMatchDataShow(data, matchId, userId, active) {
-        const isFinish = (data.leaveId === '' || data.winnerId === '');
-        let match;
-        if (data.player1.id === userId) {
-            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
-                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.player1Turn, data.matchAccepted);
-        } else {
-            match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
-                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.player1Turn, data.matchAccepted);
-        }
-        if (!match.matchAccepted && data.player2.username.toLowerCase() === this.userService.getCurrentUsername()) {
-            this.matchesPendings.push(match);
-        } else {
-            if (active) {
-                console.log(match);
-                if (match.awayPlayerName === '') {
-                    match.awayPlayerName = 'Searching opponent...';
-                    match.turnLocalPlayer = false;
-                }
-                this.matchesActive.push(match);
-            } else {
-                this.matchesFinished.push(match);
-            }
-        }
     }
 
     findFreeMatch(level) {
@@ -203,7 +203,7 @@ export class MatchService {
 
     async alertOpenMatch(matchId) {
         const alert = await this.alertController.create({
-            header: 'NEW GAME IS READY',
+            header: 'New game is ready',
             message: 'Opponent found! Do you want to start now?',
             buttons: [
                 {
@@ -211,7 +211,7 @@ export class MatchService {
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
-                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.currentUser.id, true);
+                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.getCurrentUser().id, true);
                         this.router.navigate(['home/game']).then();
                         this.closeModal();
                     }
@@ -219,7 +219,7 @@ export class MatchService {
                     text: 'Yes',
                     handler: () => {
                         const url = 'home/game/match/' + matchId;
-                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.currentUser.id, true);
+                        this.createMatchDataShow(this.currentMatch, matchId, this.userService.getCurrentUser().id, true);
                         this.closeModal();
                         this.router.navigate([url]).then();
                     }

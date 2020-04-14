@@ -78,3 +78,12 @@ ion-buttons ion-button{
   color: #A92EDF;
   font-size: 50px;
 }
+
+ion-card-content {
+  display: block;
+  position: relative;
+  max-height: 350px;
+  overflow-y: scroll;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}

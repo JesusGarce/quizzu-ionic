@@ -6,6 +6,7 @@ import {SpinnerLoadingService} from '../../shared/spinner-loading/spinner-loadin
 import {UserMin} from '../../shared/user-min.model';
 import {AlertController} from '@ionic/angular';
 import {ToastService} from '../../shared/toast-service';
+import {User} from '../../shared/user.model';
 
 @Component({
   selector: 'app-user',
@@ -17,6 +18,7 @@ export class UserPage implements OnInit {
   loaded = false;
   isFriend: boolean;
   isPending: boolean;
+  currentUser: User;
 
   constructor(
       private authService: AuthenticationService,
@@ -29,6 +31,7 @@ export class UserPage implements OnInit {
   ) {
     this.isFriend = false;
     this.isPending = false;
+    this.currentUser = this.userService.currentUser;
     this.userService.getUser(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();
@@ -39,7 +42,7 @@ export class UserPage implements OnInit {
         this.spinnerLoading.hide();
         return false;
       }
-    }).catch(err => {
+    }).catch(() => {
       this.spinnerLoading.hide();
       return false;
     });
@@ -57,10 +60,10 @@ export class UserPage implements OnInit {
   deleteFriend() {
     const user = new UserMin(this.user.id, this.user.username);
     this.userService.removeFriend(user).then(
-        p => {
+        () => {
           this.toast.create('Friend delete successfully.');
           this.userService.removeFriendOtherUser(user);
-        }, err => {
+        }, () => {
           this.toast.create('Ups! Something happened, try later.');
         }
     );
@@ -68,13 +71,13 @@ export class UserPage implements OnInit {
   }
 
   private checkCase() {
-    if (this.user.id === this.userService.currentUser.id)
+    if (this.user.id === this.currentUser.id)
       this.router.navigate(['/home/profile']);
 
-    if (this.user.friendRequests.find(friend => friend.id === this.userService.currentUser.id) !== undefined)
+    if (this.user.friendRequests.find(friend => friend.id === this.currentUser.id) !== undefined)
       this.isPending = true;
 
-    if (this.userService.currentUser.friends.find(friend => friend.id === this.user.id) !== undefined)
+    if (this.currentUser.friends.find(friend => friend.id === this.user.id) !== undefined)
         this.isFriend = true;
   }
 
@@ -86,8 +89,7 @@ export class UserPage implements OnInit {
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {}
+          cssClass: 'secondary'
         }, {
           text: 'Yes',
           handler: () => {

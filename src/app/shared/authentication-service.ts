@@ -32,27 +32,19 @@ export class AuthenticationService {
       if (user) {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
-        // Cargamos los datos del usuario
-        this.userService.initCurrentUser(user.uid);
-        this.userService.initCurrentUserStats(user.uid);
-        this.matchService.initMatches(user.uid);
-        JSON.parse(localStorage.getItem('user'));
-        spinnerLoading.hide();
+        this.initUser(user.uid);
       } else {
         localStorage.setItem('user', null);
-        JSON.parse(localStorage.getItem('user'));
-        spinnerLoading.hide();
       }
+      spinnerLoading.hide();
     });
   }
 
-  // Login in with email/password
-  SignIn(email, password) {
+  signInWithEmailAndPassword(email, password) {
     return this.ngFireAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  // Register user with email/password
-  RegisterUser(user, password) {
+  registerUser(user, password) {
     return this.ngFireAuth.auth.createUserWithEmailAndPassword(user.email, password).
         then(result => {
       this.userService.createUser(user, result.user.uid);
@@ -61,16 +53,14 @@ export class AuthenticationService {
     });
   }
 
-  // Email verification when new user register
-  SendVerificationMail() {
+  sendVerificationMail() {
     return this.ngFireAuth.auth.currentUser.sendEmailVerification()
     .then(() => {
       this.router.navigate(['verify-email']);
     });
   }
 
-  // Recover password
-  PasswordRecover(passwordResetEmail) {
+  passwordRecover(passwordResetEmail) {
     return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail)
     .then(() => {
       this.toast.create('Password reset email has been sent, please check your inbox.');
@@ -79,25 +69,16 @@ export class AuthenticationService {
     });
   }
 
-  // Returns true when user is looged in
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
     return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
-  // Returns true when user's email is verified
-  get isEmailVerified(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return (user.emailVerified !== false) ? true : false;
+  signInWithGoogleAuth() {
+    return this.authGoogleLogin(new auth.GoogleAuthProvider());
   }
 
-  // Sign in with Gmail
-  GoogleAuth() {
-    return this.AuthLogin(new auth.GoogleAuthProvider());
-  }
-  
-  // Sign in with Facebook
-  FacebookAuth(res: FacebookLoginResponse) {
+  facebookAuth(res: FacebookLoginResponse) {
     this.spinnerLoading.show();
     const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
     this.ngFireAuth.auth.signInWithCredential(credential)
@@ -109,8 +90,7 @@ export class AuthenticationService {
         });
   }
 
-  // Auth providers
-  AuthLogin(provider) {
+  authGoogleLogin(provider) {
     this.spinnerLoading.show();
     return this.ngFireAuth.auth.signInWithPopup(provider)
     .then((result) => {
@@ -121,11 +101,11 @@ export class AuthenticationService {
         this.spinnerLoading.hide();
       });
     }).catch((error) => {
-      window.alert(error);
+          this.toast.create('Ups! Something happened' + error);
     });
   }
 
-  SignOut() {
+  signOut() {
     return this.ngFireAuth.auth.signOut().then(() => {
       this.userService.removeCurrentUser();
       this.matchService.removeMatches();
@@ -137,11 +117,16 @@ export class AuthenticationService {
   checkCurrentPassword(password) {
     const credentials = firebase.auth.EmailAuthProvider.credential(
         this.userData.email, password);
-
     return this.userData.reauthenticateWithCredential(credentials);
   }
 
   setPassword(password) {
     return this.userData.updatePassword(password);
+  }
+
+  initUser(uid) {
+    this.userService.initCurrentUser(uid);
+    this.userService.initCurrentUserStats(uid);
+    this.matchService.initMatches(uid);
   }
 }
