@@ -6,7 +6,7 @@ import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loa
 import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
-import {SearchOpponentPage} from './search-opponent/search-opponent.page';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-match',
@@ -21,6 +21,8 @@ export class MatchPage implements OnInit {
   counter: any;
   less5seconds = false;
   user: any;
+  words: string[];
+  correctWord: string;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
@@ -28,12 +30,14 @@ export class MatchPage implements OnInit {
                private matchService: MatchService,
                private route: ActivatedRoute,
                private modalController: ModalController,
-               private spinnerLoading: SpinnerLoadingService) {
+               private spinnerLoading: SpinnerLoadingService,
+               private http: HttpClient) {
     this.user = this.userService.currentUser;
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();
         this.match = doc.data();
+        this.initializeWords(this.match.gameLevel);
         this.loaded = true;
         this.counter = 15;
         if (this.match.player1.id === this.user.id) {
@@ -77,4 +81,32 @@ export class MatchPage implements OnInit {
     return await modal.present();
   }
 
+  initializeWords(level) {
+    this.words = [];
+    const url = 'assets/docs/wordlist_' + level + '.json';
+    this.http.get(url, {responseType: 'json'})
+        .subscribe(data => {
+          this.findFourRandomWords(data);
+        });
+  }
+
+  findFourRandomWords(wordlist) {
+    const arrayNumbers = [];
+    const correctWord = this.randomWord(1, 4);
+    while (arrayNumbers.length < 4) {
+      const randomNumber = this.randomWord(0, wordlist.length);
+      if (!arrayNumbers.includes(randomNumber)) {
+        arrayNumbers.push(randomNumber);
+        this.words.push(wordlist.words[randomNumber]);
+        if (correctWord === arrayNumbers.length) {
+          this.correctWord = wordlist.words[randomNumber];
+          console.log('Correct word: ' + this.correctWord);
+        }
+      }
+    }
+  }
+
+  randomWord(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
 }
