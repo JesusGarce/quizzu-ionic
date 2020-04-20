@@ -3,6 +3,18 @@
   overflow: hidden;
 }
 
+ion-button {
+  &.btnFalse {
+    --background: #F22929;
+  }
+}
+
+ion-button {
+  &.btnOK {
+    --background: #55F229;
+  }
+}
+
 .img-toolbar {
   max-width: 40%;
   height: auto;
