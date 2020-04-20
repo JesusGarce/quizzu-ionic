@@ -26,8 +26,7 @@
     </ion-card>
 
     <ion-card-content>
-      Keep close to Nature's heart... and break clear away, once in awhile,
-      and climb a mountain or spend a week in the woods. Wash your spirit clean.
+      {{question}}
     </ion-card-content>
 
     <div class="time-question"><h2 [class.blink]="less5seconds" >{{counter}}</h2></div>
@@ -36,18 +35,18 @@
   <ion-grid class="questions" fixed="true">
     <ion-row>
       <ion-col>
-        <ion-button expand="block" size="large">{{words[0]}}</ion-button>
+        <ion-button expand="block" size="large" (click)="checkAnswer(1)">{{words[0]}}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" size="large">{{words[1]}}</ion-button>
+        <ion-button expand="block" size="large" (click)="checkAnswer(2)">{{words[1]}}</ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" size="large">{{words[2]}}</ion-button>
+        <ion-button expand="block" size="large" (click)="checkAnswer(3)">{{words[2]}}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" size="large">{{words[3]}}</ion-button>
+        <ion-button expand="block" size="large" (click)="checkAnswer(4)">{{words[3]}}</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

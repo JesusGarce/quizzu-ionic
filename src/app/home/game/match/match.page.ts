@@ -7,6 +7,9 @@ import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import {MatchWordsApiService} from './wordsApi/match-wordsapi-service';
+import {ToastService} from '../../../shared/toast-service';
+import {Word} from './wordsApi/word.model';
 
 @Component({
   selector: 'app-match',
@@ -22,21 +25,27 @@ export class MatchPage implements OnInit {
   less5seconds = false;
   user: any;
   words: string[];
+  wordsButton: boolean[];
   correctWord: string;
+  correctWordPosition: number;
+  question: string;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
                private userService: UserService,
                private matchService: MatchService,
+               private matchWordsApiService: MatchWordsApiService,
                private route: ActivatedRoute,
                private modalController: ModalController,
                private spinnerLoading: SpinnerLoadingService,
+               private toast: ToastService,
                private http: HttpClient) {
     this.user = this.userService.currentUser;
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();
         this.match = doc.data();
+        this.wordsButton = [];
         this.initializeWords(this.match.gameLevel);
         this.loaded = true;
         this.counter = 15;
@@ -92,21 +101,42 @@ export class MatchPage implements OnInit {
 
   findFourRandomWords(wordlist) {
     const arrayNumbers = [];
-    const correctWord = this.randomWord(1, 4);
+    this.correctWordPosition = this.randomWord(1, 4);
     while (arrayNumbers.length < 4) {
       const randomNumber = this.randomWord(0, wordlist.length);
       if (!arrayNumbers.includes(randomNumber)) {
         arrayNumbers.push(randomNumber);
         this.words.push(wordlist.words[randomNumber]);
-        if (correctWord === arrayNumbers.length) {
+        if (this.correctWordPosition === arrayNumbers.length) {
           this.correctWord = wordlist.words[randomNumber];
-          console.log('Correct word: ' + this.correctWord);
+          this.getQuestion();
         }
       }
+    }
+  }
+
+  getQuestion() {
+    this.matchWordsApiService.getDefinition(this.correctWord)
+        .subscribe((data: Word) => {
+          this.question = data.definitions[0].definition;
+        });
+  }
+
+  checkAnswer(answer) {
+    console.log(answer);
+    console.log(this.correctWordPosition);
+    if (this.correctWordPosition === answer) {
+      this.toast.create('CORRECT ANSWER! You are a GOAT');
+      this.wordsButton[answer] = true;
+    } else {
+      this.toast.create('BAD ANSWER, correct answer: ' + this.correctWord);
+      this.wordsButton[answer] = false;
+      this.wordsButton[this.correctWordPosition] = true;
     }
   }
 
   randomWord(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+
 }
