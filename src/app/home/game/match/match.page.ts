@@ -25,10 +25,13 @@ export class MatchPage implements OnInit {
   less5seconds = false;
   user: any;
   words: string[];
-  wordsButton: boolean[];
+  wordsButtonOK: boolean[];
+  wordsButtonFail: boolean[];
   correctWord: string;
   correctWordPosition: number;
+  answerDone = false;
   question: string;
+  interval: any;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
@@ -45,15 +48,7 @@ export class MatchPage implements OnInit {
       if (doc.exists) {
         this.spinnerLoading.hide();
         this.match = doc.data();
-        this.wordsButton = [];
-        this.initializeWords(this.match.gameLevel);
-        this.loaded = true;
-        this.counter = 15;
-        if (this.match.player1.id === this.user.id) {
-          this.numberQuestion = 16 - this.match.player1RemainsQuestions;
-        } else {
-          this.numberQuestion = 16 - this.match.player2RemainsQuestions;
-        }
+        this.initData();
       } else {
         this.spinnerLoading.hide();
         return false;
@@ -64,17 +59,30 @@ export class MatchPage implements OnInit {
     });
   }
 
+  initData() {
+    this.wordsButtonOK = [];
+    this.wordsButtonFail = [];
+    this.initializeWords(this.match.gameLevel);
+    this.loaded = true;
+    this.counter = 15;
+    if (this.match.player1.id === this.user.id) {
+      this.numberQuestion = 16 - this.match.player1RemainsQuestions;
+    } else {
+      this.numberQuestion = 16 - this.match.player2RemainsQuestions;
+    }
+  }
+
   ngOnInit() {
     this.startCountdown().then();
   }
 
   startTimer() {
-    const intervalId = setInterval(() => {
+    this.interval = setInterval(() => {
       this.counter --;
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) clearInterval(intervalId);
+      if (this.counter === 0) clearInterval(this.interval);
     }, 1000);
   }
 
@@ -123,15 +131,13 @@ export class MatchPage implements OnInit {
   }
 
   checkAnswer(answer) {
-    console.log(answer);
-    console.log(this.correctWordPosition);
+    this.answerDone = true;
+    clearInterval(this.interval);
     if (this.correctWordPosition === answer) {
-      this.toast.create('CORRECT ANSWER! You are a GOAT');
-      this.wordsButton[answer] = true;
+      this.wordsButtonOK[answer] = true;
     } else {
-      this.toast.create('BAD ANSWER, correct answer: ' + this.correctWord);
-      this.wordsButton[answer] = false;
-      this.wordsButton[this.correctWordPosition] = true;
+      this.wordsButtonFail[answer] = true;
+      this.wordsButtonOK[this.correctWordPosition] = true;
     }
   }
 

@@ -35,18 +35,30 @@
   <ion-grid class="questions" fixed="true">
     <ion-row>
       <ion-col>
-        <ion-button expand="block" size="large" (click)="checkAnswer(1)">{{words[0]}}</ion-button>
+        <ion-button expand="block" size="large"
+                    [disabled]="answerDone"
+                    [class.btnOK]='wordsButtonOK[1]' [class.btnFalse]='wordsButtonFail[1]'
+                    (click)="checkAnswer(1)">{{words[0]}}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" size="large" (click)="checkAnswer(2)">{{words[1]}}</ion-button>
+        <ion-button expand="block" size="large"
+                    [disabled]="answerDone"
+                    [class.btnOK]='wordsButtonOK[2]' [class.btnFalse]='wordsButtonFail[2]'
+                    (click)="checkAnswer(2)">{{words[1]}}</ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" size="large" (click)="checkAnswer(3)">{{words[2]}}</ion-button>
+        <ion-button expand="block" size="large"
+                    [disabled]="answerDone"
+                    [class.btnOK]='wordsButtonOK[3]' [class.btnFalse]='wordsButtonFail[3]'
+                    (click)="checkAnswer(3)">{{words[2]}}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" size="large" (click)="checkAnswer(4)">{{words[3]}}</ion-button>
+        <ion-button expand="block" size="large"
+                    [disabled]="answerDone"
+                    [class.btnOK]='wordsButtonOK[4]' [class.btnFalse]='wordsButtonFail[4]'
+                    (click)="checkAnswer(4)">{{words[3]}}</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
