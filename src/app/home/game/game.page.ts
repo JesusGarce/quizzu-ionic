@@ -110,6 +110,8 @@ export class GamePage {
   }
 
   goToMatch(match) {
+    const matchToChange = this.matchesActive.filter( p => p.id === match.id).pop();
+    matchToChange.turnLocalPlayer = !matchToChange.turnLocalPlayer;
     const url = 'home/game/match/' + match.id;
     this.router.navigate([url]);
   }

@@ -181,6 +181,24 @@ export class MatchService {
             });
     }
 
+    saveResultsTurn(match, matchId, counter, correct) {
+        if (match.player1Turn) {
+            match.player1RemainsQuestions --;
+            match.player1Points = match.player1Points + this.getTurnPoints(counter, correct);
+        } else {
+            match.player2RemainsQuestions --;
+            match.player2Points = match.player2Points + this.getTurnPoints(counter, correct);
+        }
+        match.player1Turn = !match.player1Turn;
+        return this.saveMatch(match, matchId);
+    }
+
+    getTurnPoints(counter, correct) {
+        if (!correct)
+            return 0;
+        return Math.round(50 * ((100 + (counter * 1)) / 100));
+    }
+
     findFreeMatch(level) {
         return this.afStore.collection('match')
             .ref

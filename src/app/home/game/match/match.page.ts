@@ -10,7 +10,6 @@ import { HttpClient } from '@angular/common/http';
 import {MatchWordsApiService} from './wordsapi-service/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
 import {Word} from './wordsapi-service/word.model';
-import {Match} from '../../../shared/match.model';
 
 @Component({
   selector: 'app-match',
@@ -61,6 +60,13 @@ export class MatchPage implements OnInit {
   }
 
   initData() {
+    if (!(this.match.player1Turn && (this.match.player1.id === this.user.id)) &&
+        !(!this.match.player1Turn && (this.match.player2.id === this.user.id))) {
+      this.toast.create('Is not your turn yet, you have to wait until your opponent plays');
+      this.modalController.dismiss().then();
+      this.router.navigate(['home/game']).then();
+    }
+
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
     this.initializeWords(this.match.gameLevel);
@@ -138,17 +144,23 @@ export class MatchPage implements OnInit {
     this.answerDone = true;
     if (this.correctWordPosition !== answer)
       this.wordsButtonFail[answer] = true;
-    this.updateResults();
-  }
-
-  updateResults() {
-    console.log(this.match);
-    this.match.player1Turn = !this.match.player1Turn;
-    console.log(this.match);
+    this.matchService.saveResultsTurn(this.match, this.route.snapshot.paramMap.get('id'),
+        this.counter, this.correctWordPosition === answer).then(
+            resp => {
+                this.delay(2000).then(
+                  () => {
+                    this.router.navigate(['home/game']);
+                  });
+            }).catch(() => {
+                this.toast.create('We can not save the question. Try later');
+            });
   }
 
   randomWord(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
+  async delay(ms: number) {
+    await new Promise(resolve => setTimeout(() => resolve(), ms)).then();
+  }
 }
