@@ -15,6 +15,11 @@ ion-button {
   }
 }
 
+ion-button:disabled,
+ion-button[disabled]{
+  opacity: 1;
+}
+
 .img-toolbar {
   max-width: 40%;
   height: auto;
