@@ -7,9 +7,10 @@ import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import {MatchWordsApiService} from './wordsApi/match-wordsapi-service';
+import {MatchWordsApiService} from './wordsapi-service/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
-import {Word} from './wordsApi/word.model';
+import {Word} from './wordsapi-service/word.model';
+import {Match} from '../../../shared/match.model';
 
 @Component({
   selector: 'app-match',
@@ -82,7 +83,7 @@ export class MatchPage implements OnInit {
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) clearInterval(this.interval);
+      if (this.counter === 0) this.checkAnswer(this.correctWordPosition);
     }, 1000);
   }
 
@@ -131,14 +132,19 @@ export class MatchPage implements OnInit {
   }
 
   checkAnswer(answer) {
-    this.answerDone = true;
     clearInterval(this.interval);
-    if (this.correctWordPosition === answer) {
-      this.wordsButtonOK[answer] = true;
-    } else {
+    this.less5seconds = false;
+    this.wordsButtonOK[this.correctWordPosition] = true;
+    this.answerDone = true;
+    if (this.correctWordPosition !== answer)
       this.wordsButtonFail[answer] = true;
-      this.wordsButtonOK[this.correctWordPosition] = true;
-    }
+    this.updateResults();
+  }
+
+  updateResults() {
+    console.log(this.match);
+    this.match.player1Turn = !this.match.player1Turn;
+    console.log(this.match);
   }
 
   randomWord(min, max) {
