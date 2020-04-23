@@ -174,11 +174,25 @@ export class MatchService {
     }
 
     saveMatch(match, id) {
+        this.currentMatch = match;
+        console.log(match);
         return this.afStore.collection('match')
             .doc(id)
             .set(JSON.parse(JSON.stringify(match)), {
                 merge: true
             });
+    }
+
+    checkIfMatchIsFinished(match) {
+        return ((match.player1RemainsQuestions === 0) && (match.player2RemainsQuestions === 0));
+    }
+
+    finishMatch(match) {
+        if (match.player1Points > match.player2Points)
+            match.winnerId = match.player1.id;
+        else if (match.player1Points < match.player2Points)
+            match.winnerId = match.player2.id;
+        return match;
     }
 
     saveResultsTurn(match, matchId, counter, correct) {
@@ -190,6 +204,12 @@ export class MatchService {
             match.player2Points = match.player2Points + this.getTurnPoints(counter, correct);
         }
         match.player1Turn = !match.player1Turn;
+        if (this.checkIfMatchIsFinished(match)) {
+            match = this.finishMatch(match);
+            this.userService.updateUserStats(match, match.player1.id);
+            this.userService.updateUserStats(match, match.player2.id);
+            this.toast.create('GAME FINISHED; WINNER: ' + match.winnerId);
+        }
         return this.saveMatch(match, matchId);
     }
 
@@ -208,12 +228,15 @@ export class MatchService {
     }
 
     waitingAnotherPlayer(matchId) {
+        console.log('Waiting another player...');
         return this.afStore.collection('match')
             .doc(matchId)
             .valueChanges()
             .subscribe( match => {
                 this.currentMatch = match;
-                if (this.currentMatch.player2.id !== '' ) {
+                if (this.currentMatch.player2.id !== '' &&
+                    this.currentMatch.player1RemainsQuestions === 15 &&
+                    this.currentMatch.player2RemainsQuestions === 15) {
                     this.alertOpenMatch(matchId).then();
                 }
             });

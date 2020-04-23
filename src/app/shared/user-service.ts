@@ -9,6 +9,7 @@ import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
 import {UserMin} from './user-min.model';
+import {error} from 'util';
 
 @Injectable({
     providedIn: 'root'
@@ -103,6 +104,75 @@ export class UserService {
             .set(JSON.parse(JSON.stringify(editUser)), {
                 merge: true
             });
+    }
+
+    setUserStats(userStats, userId) {
+        return this.afStore.collection('user-stats')
+            .doc(userId)
+            .set(JSON.parse(JSON.stringify(userStats)), {
+                merge: true
+            });
+    }
+
+    updateUserStats(match, playerId) {
+        this.getUserStats(playerId).then(
+            doc => {
+                let userStats = doc.data();
+                userStats = this.updateUserStatsByLevel(match, userStats, playerId);
+                console.log(userStats);
+                this.setUserStats(userStats, playerId).then(
+                    () => {
+                        console.log('User stats update successfully');
+                    }
+                );
+            }
+        ).catch(
+            (err) => {
+                this.toast.create('Something bad happened. Try later' + err);
+            }
+        );
+    }
+
+    updateUserStatsByLevel(match, userStats, userId) {
+        switch (match.gameLevel) {
+            case 'b1':
+                userStats.b1level.b1played = userStats.b1level.b1played + 1;
+                if (match.winnerId === userId)
+                    userStats.b1level.b1won = userStats.b1level.b1won + 1;
+                else if (match.winnerId !== '')
+                    userStats.b1level.b1lost = userStats.b1level.b1lost + 1;
+                else
+                    userStats.b1level.b1draw = userStats.b1level.b1draw + 1;
+                break;
+            case 'b2':
+                userStats.b2level.b2played = userStats.b2level.b2played + 1;
+                if (match.winnerId === userId)
+                    userStats.b2level.b2won = userStats.b2level.b2won + 1;
+                else if (match.winnerId !== '')
+                    userStats.b2level.b2lost = userStats.b2level.b2lost + 1;
+                else
+                    userStats.b2level.b2draw = userStats.b2level.b2draw + 1;
+                break;
+            case 'c1':
+                userStats.c1level.c1played = userStats.c1level.c1played + 1;
+                if (match.winnerId === userId)
+                    userStats.c1level.c1won = userStats.c1level.c1won + 1;
+                else if (match.winnerId !== '')
+                    userStats.c1level.c1lost = userStats.c1level.c1lost + 1;
+                else
+                    userStats.c1level.c1draw = userStats.c1level.c1draw + 1;
+                break;
+            case 'c2':
+                userStats.c2level.c2played = userStats.c2level.c2played + 1;
+                if (match.winnerId === userId)
+                    userStats.c2level.c2won = userStats.c2level.c2won + 1;
+                else if (match.winnerId !== '')
+                    userStats.c2level.c2lost = userStats.c2level.c2lost + 1;
+                else
+                    userStats.c2level.c2draw = userStats.c2level.c2draw + 1;
+                break;
+        }
+        return userStats;
     }
 
     onProfileUpload(event) {
@@ -220,6 +290,10 @@ export class UserService {
 
     getUser(id) {
         return this.afStore.doc(`users/${id}`).ref.get();
+    }
+
+    getUserStats(id) {
+        return this.afStore.doc(`user-stats/${id}`).ref.get();
     }
 
     filterFriendRequests(friend) {
