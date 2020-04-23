@@ -146,10 +146,10 @@ export class MatchPage implements OnInit {
       this.wordsButtonFail[answer] = true;
     this.matchService.saveResultsTurn(this.match, this.route.snapshot.paramMap.get('id'),
         this.counter, this.correctWordPosition === answer).then(
-            resp => {
+            () => {
                 this.delay(2000).then(
                   () => {
-                    this.router.navigate(['home/game']);
+                    this.router.navigate(['home/game']).then();
                   });
             }).catch(() => {
                 this.toast.create('We can not save the question. Try later');
