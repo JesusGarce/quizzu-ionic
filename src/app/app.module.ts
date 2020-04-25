@@ -31,6 +31,7 @@ import {SelectLevelModalPageModule} from './home/game/select-level-modal/select-
 import {CountdownStartPageModule} from './home/game/match/countdown-start/countdown-start.module';
 import {SearchOpponentPageModule} from './home/game/match/search-opponent/search-opponent.module';
 import {MatchWordsApiService} from './home/game/match/wordsapi-service/match-wordsapi-service';
+import {FinishMatchPageModule} from './home/game/match/finish-match/finish-match.module';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -53,6 +54,7 @@ import {MatchWordsApiService} from './home/game/match/wordsapi-service/match-wor
       SelectLevelModalPageModule,
       CountdownStartPageModule,
       SearchOpponentPageModule,
+      FinishMatchPageModule,
     HttpClientModule,
   ],
   providers: [

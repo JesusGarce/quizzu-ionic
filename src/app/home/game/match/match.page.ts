@@ -10,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
 import {MatchWordsApiService} from './wordsapi-service/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
 import {Word} from './wordsapi-service/word.model';
+import {SearchOpponentPage} from './search-opponent/search-opponent.page';
+import {FinishMatchPage} from './finish-match/finish-match.page';
 
 @Component({
   selector: 'app-match',
@@ -149,7 +151,10 @@ export class MatchPage implements OnInit {
             () => {
                 this.delay(2000).then(
                   () => {
-                    this.router.navigate(['home/game']).then();
+                    if (this.matchService.checkIfMatchIsFinished(this.match))
+                      this.finishGame().then();
+                    else
+                      this.router.navigate(['home/game']).then();
                   });
             }).catch(() => {
                 this.toast.create('We can not save the question. Try later');
@@ -162,5 +167,29 @@ export class MatchPage implements OnInit {
 
   async delay(ms: number) {
     await new Promise(resolve => setTimeout(() => resolve(), ms)).then();
+  }
+
+  getStateFinishMatch() {
+    if (this.match.winnerId === this.user.id)
+      return 'victory';
+    else if (this.match.winnerId !== '')
+      return 'defeat';
+    else
+      return 'draw';
+  }
+
+  async finishGame() {
+    this.match = this.matchService.getCurrentMatch();
+    const modal = await this.modalController.create({
+      component: FinishMatchPage,
+      componentProps: {
+        state: this.getStateFinishMatch(),
+        match: this.match
+      }
+    });
+
+    modal.onDidDismiss().then(() => {});
+
+    return await modal.present();
   }
 }

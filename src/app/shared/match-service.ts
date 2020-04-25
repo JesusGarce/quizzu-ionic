@@ -175,7 +175,6 @@ export class MatchService {
 
     saveMatch(match, id) {
         this.currentMatch = match;
-        console.log(match);
         return this.afStore.collection('match')
             .doc(id)
             .set(JSON.parse(JSON.stringify(match)), {
@@ -267,8 +266,11 @@ export class MatchService {
                 }
             ]
         });
-
         await alert.present();
+    }
+
+    getCurrentMatch() {
+        return this.currentMatch;
     }
 
     removeMatches() {

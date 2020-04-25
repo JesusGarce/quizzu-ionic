@@ -31,7 +31,7 @@ export class SearchOpponentPage implements OnInit {
               private modalController: ModalController,
               private alertController: AlertController) {
     this.lottieConfig = {
-      path: './assets/animations/18143-discord-nearby-animation.json',
+      path: './assets/animations/loading_perchick.json',
       autoplay: true,
       loop: true
     };

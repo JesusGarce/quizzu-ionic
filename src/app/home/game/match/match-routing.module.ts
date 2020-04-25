@@ -14,6 +14,10 @@ const routes: Routes = [
   },  {
     path: 'search-opponent',
     loadChildren: () => import('./search-opponent/search-opponent.module').then( m => m.SearchOpponentPageModule)
+  },
+  {
+    path: 'finish-match',
+    loadChildren: () => import('./finish-match/finish-match.module').then( m => m.FinishMatchPageModule)
   }
 
 
