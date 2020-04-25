@@ -51,7 +51,6 @@
     "@angular-devkit/schematics": "~8.1.2",
     "@angular/cli": "~8.1.2",
     "@angular/compiler": "~8.1.2",
-    "@angular/compiler-cli": "~8.1.2",
     "@angular/language-service": "~8.1.2",
     "@ionic/angular-toolkit": "^2.1.1",
     "@ionic/lab": "^2.0.18",
