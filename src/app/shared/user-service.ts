@@ -119,7 +119,6 @@ export class UserService {
             doc => {
                 let userStats = doc.data();
                 userStats = this.updateUserStatsByLevel(match, userStats, playerId);
-                console.log(userStats);
                 this.setUserStats(userStats, playerId).then(
                     () => {
                         console.log('User stats update successfully');

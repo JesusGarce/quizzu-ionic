@@ -11,6 +11,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+  "engines": {
+    "node": "10.15.3"
+  },
   "private": true,
   "dependencies": {
     "@angular/cdk": "~8.1.2",
@@ -31,6 +34,7 @@
     "cordova-ios": "^5.1.1",
     "cordova-plugin-facebook4": "^6.4.0",
     "core-js": "^2.5.4",
+    "express": "^4.17.1",
     "firebase": "^7.6.2",
     "ionic-angular": "latest",
     "ng-lottie": "^0.3.2",
