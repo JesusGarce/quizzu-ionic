@@ -41,14 +41,27 @@ ion-card {
   padding-bottom: 25px;
 }
 
+ion-card-subtitle {
+  font-size: x-large;
+}
+
 .card-question {
   padding-bottom: 2px;
 }
 
 .card-player {
-  display:block;
-  justify-content: center;
+  padding: 0px;
+}
+
+.player {
   padding: 5px;
+}
+
+.player-name {
+  color: #211f21;
+  margin:0;
+  padding: 0;
+  font-size: large;
 }
 
 h3 {
@@ -129,4 +142,10 @@ h4 {
   font-weight: lighter;
   font-size: 2.5em;
   text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+ion-avatar {
+  max-width: 25%;
+  max-height: 25%;
+  padding: 5px;
 }

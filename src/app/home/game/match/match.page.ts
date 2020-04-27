@@ -91,7 +91,7 @@ export class MatchPage implements OnInit {
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) this.checkAnswer(9);
+      if (this.counter === 0) this.checkAnswer(5);
     }, 1000);
   }
 

@@ -6,7 +6,7 @@
 
 <ion-content align="center">
   <ion-card color="mediumlight">
-    <ion-card-title>Search a friend</ion-card-title>
+    <ion-card-title><h3 class="h3-title">Search a friend</h3></ion-card-title>
     <ion-card-content>
       <ion-buttons>
         <ion-searchbar animated placeholder="username" type="text" [(ngModel)]="findUser"></ion-searchbar>
@@ -15,7 +15,7 @@
     </ion-card-content>
   </ion-card>
   <ion-card color="mediumlight">
-    <ion-card-title>Friends ({{friends.length}})</ion-card-title>
+    <ion-card-title><h3 class="h3-title">Friends ({{friends.length}})</h3></ion-card-title>
     <ion-card-content>
       <div *ngIf="friends.length === 0">
         <ion-col>
@@ -41,7 +41,7 @@
   </ion-card>
 
   <ion-card color="mediumlight">
-    <ion-card-title>Friend requests ({{friendRequests.length}})</ion-card-title>
+    <ion-card-title><h3 class="h3-title">Friend requests ({{friendRequests.length}})</h3></ion-card-title>
     <ion-card-content>
       <div *ngIf="friendRequests.length === 0">
         <ion-col>

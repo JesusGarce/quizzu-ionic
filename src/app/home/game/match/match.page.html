@@ -9,14 +9,28 @@
   <ion-row>
     <ion-col>
       <ion-card class="card-player" color="primary">
-        <h3 align="center">{{match.player1.username}}</h3>
-        <ion-card-subtitle align="center">{{match.player1Points}}</ion-card-subtitle>
+        <ion-row>
+          <ion-avatar>
+            <img src="https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault%20(1).png?alt=media&token=7e45db2f-39d7-45cd-a93e-4483bb18ebd5">
+          </ion-avatar>
+          <div align="center" class="player">
+            <h3 class="player-name">{{match.player1.username}}</h3>
+            <ion-card-subtitle>{{match.player1Points}}</ion-card-subtitle>
+          </div>
+        </ion-row>
       </ion-card>
     </ion-col>
     <ion-col>
       <ion-card class="card-player" color="primary">
-        <h3 align="center">{{match.player2.username}}</h3>
-        <ion-card-subtitle align="center">{{match.player2Points}}</ion-card-subtitle>
+        <ion-row>
+          <ion-avatar>
+            <img src="https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault%20(1).png?alt=media&token=7e45db2f-39d7-45cd-a93e-4483bb18ebd5">
+          </ion-avatar>
+          <div align="center" class="player">
+            <h3 class="player-name">{{match.player2.username}}</h3>
+            <ion-card-subtitle>{{match.player2Points}}</ion-card-subtitle>
+          </div>
+        </ion-row>
       </ion-card>
     </ion-col>
   </ion-row>
