@@ -101,6 +101,8 @@
                     </div>
                 </ion-item>
             </ion-list>
+            <ion-button *ngIf="matchesFinished.length !== 0" (click)="deleteMatchesFinished()">Delete history <ion-icon name="trash-outline"></ion-icon></ion-button>
         </ion-card-content>
     </ion-card>
+
 </ion-content>
