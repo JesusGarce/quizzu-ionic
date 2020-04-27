@@ -53,7 +53,7 @@ export class SearchOpponentPage implements OnInit {
           if (matches.empty) {
             this.showCreating();
             this.created = true;
-            this.matchService.createNewMatch(this.level, new UserMin('', ''))
+            this.matchService.createNewMatch(this.level, new UserMin('', '', ''))
                 .then(
                     () => {
                       this.showSearching();
