@@ -64,7 +64,7 @@ export class SearchOpponentPage implements OnInit {
               if (match.data().player1.id !== this.user.id) {
                 found = true;
                 const matchFound = match.data();
-                matchFound.player2 = new UserMin(this.user.id, this.user.username);
+                matchFound.player2 = new UserMin(this.user.id, this.user.username, this.user.profile);
                 matchFound.matchAccepted = true;
                 this.matchService.saveMatch(matchFound, match.id)
                     .then(
@@ -82,7 +82,7 @@ export class SearchOpponentPage implements OnInit {
             }
             if (!found) {
               this.created = true;
-              this.matchService.createNewMatch(this.level, new UserMin('', ''))
+              this.matchService.createNewMatch(this.level, new UserMin('', '', ''))
                   .then(
                       () => {
                         this.showSearching();

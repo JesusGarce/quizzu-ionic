@@ -43,7 +43,7 @@ export class FriendsPage implements OnInit  {
           this.items = [];
           for (const user of resp.docs.values()) {
               if (user.data().id !== this.user.id)
-                this.items.push(new UserMin(user.data().id, user.data().username));
+                this.items.push(new UserMin(user.data().id, user.data().username, user.data().profile));
           }
           this.openModal();
         }

@@ -53,12 +53,12 @@ export class UserPage implements OnInit {
   }
 
   sendRequest() {
-    this.userService.sendFriendRequest(new UserMin(this.user.id, this.user.username));
+    this.userService.sendFriendRequest(new UserMin(this.user.id, this.user.username, this.user.profile));
     this.isPending = true;
   }
 
   deleteFriend() {
-    const user = new UserMin(this.user.id, this.user.username);
+    const user = new UserMin(this.user.id, this.user.username, this.user.profile);
     this.userService.removeFriend(user).then(
         () => {
           this.toast.create('Friend delete successfully.');

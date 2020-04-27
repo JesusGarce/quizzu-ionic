@@ -9,7 +9,6 @@ import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
 import {UserMin} from './user-min.model';
-import {error} from 'util';
 
 @Injectable({
     providedIn: 'root'
@@ -213,7 +212,7 @@ export class UserService {
         this.afStore.doc(`users/${friend.id}`).ref.get().then(doc => {
             if (doc.exists) {
                 const friendUser = doc.data();
-                friendUser.friends.push(new UserMin(this.currentUser.id, this.currentUser.username));
+                friendUser.friends.push(new UserMin(this.currentUser.id, this.currentUser.username, this.currentUser.profile));
                 this.afStore.collection('users')
                     .doc(friendUser.id)
                     .set(JSON.parse(JSON.stringify(friendUser)), {
@@ -229,7 +228,7 @@ export class UserService {
         this.afStore.doc(`users/${friend.id}`).ref.get().then(doc => {
             if (doc.exists) {
                 const friendUser = doc.data();
-                friendUser.friendRequests.push(new UserMin(this.currentUser.id, this.currentUser.username));
+                friendUser.friendRequests.push(new UserMin(this.currentUser.id, this.currentUser.username, this.currentUser.profile));
                 this.afStore.collection('users')
                     .doc(friendUser.id)
                     .set(JSON.parse(JSON.stringify(friendUser)), {

@@ -8,10 +8,10 @@
 
   <ion-row>
     <ion-col>
-      <ion-card class="card-player" color="primary">
-        <ion-row>
+      <ion-card align="center" class="card-player" color="primary">
+        <ion-row class="player-row">
           <ion-avatar>
-            <img src="https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault%20(1).png?alt=media&token=7e45db2f-39d7-45cd-a93e-4483bb18ebd5">
+            <img src="{{match.player1.profile}}">
           </ion-avatar>
           <div align="center" class="player">
             <h3 class="player-name">{{match.player1.username}}</h3>
@@ -21,10 +21,10 @@
       </ion-card>
     </ion-col>
     <ion-col>
-      <ion-card class="card-player" color="primary">
-        <ion-row>
+      <ion-card align="center" class="card-player" color="primary">
+        <ion-row class="player-row">
           <ion-avatar>
-            <img src="https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault%20(1).png?alt=media&token=7e45db2f-39d7-45cd-a93e-4483bb18ebd5">
+            <img src="{{match.player2.profile}}">
           </ion-avatar>
           <div align="center" class="player">
             <h3 class="player-name">{{match.player2.username}}</h3>

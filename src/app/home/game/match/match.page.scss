@@ -50,7 +50,8 @@ ion-card-subtitle {
 }
 
 .card-player {
-  padding: 0px;
+  padding: 0;
+  justify-content: center;
 }
 
 .player {
@@ -62,6 +63,10 @@ ion-card-subtitle {
   margin:0;
   padding: 0;
   font-size: large;
+}
+
+.player-row {
+  justify-content: center;
 }
 
 h3 {
