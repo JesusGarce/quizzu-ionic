@@ -92,3 +92,41 @@ h2 {
 .counter {
   font-size: x-large;
 }
+
+.achievement-container {
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+h5 {
+  color: #A92EDF;
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-size: 1.4em;
+  text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+h4 {
+  color: #252326;
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-size: 1.65em;
+  text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+.answer-h3{
+  color: #A92EDF;
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-size: 2.5em;
+  text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}

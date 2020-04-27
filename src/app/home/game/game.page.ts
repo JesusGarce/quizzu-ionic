@@ -45,7 +45,8 @@ export class GamePage {
     });
 
     modal.onDidDismiss().then((dataReturned) => {
-      if (dataReturned !== null) {
+      if (dataReturned.data !== null) {
+        console.log(dataReturned.data);
         this.levelMatch = dataReturned.data;
         this.searchingOpponent();
       }
