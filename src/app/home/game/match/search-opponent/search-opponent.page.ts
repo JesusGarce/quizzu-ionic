@@ -96,7 +96,7 @@ export class SearchOpponentPage implements OnInit {
 
   async exitSearchOpponent() {
     const alert = await this.alertController.create({
-      header: 'Confirm',
+      header: 'Close waiting',
       message: 'Do you want to <strong>close</strong> the search? We will notify you when we find a opponent ',
       buttons: [
         {

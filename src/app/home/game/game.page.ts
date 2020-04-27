@@ -84,6 +84,7 @@ export class GamePage {
   }
 
   async leftGameStarted(game) {
+    console.log(game);
     const alert = await this.alertController.create({
       header: 'Do you give up?',
       message: 'Do you want to <strong>leave</strong> this game?',
@@ -99,15 +100,19 @@ export class GamePage {
                 () => {
                   this.matchesActive = this.matchesActive.filter( p => p.id !== game.id);
                   this.matchesFinished.push(game);
-                }, () => {
-                }
-            );
+                });
           }
         }
       ]
     });
 
     await alert.present();
+  }
+
+  deleteMatchesFinished() {
+    this.matchService.deleteMatchesFinished();
+    this.matchesFinished = [];
+    this.toast.create('Delete match history');
   }
 
   goToMatch(match) {

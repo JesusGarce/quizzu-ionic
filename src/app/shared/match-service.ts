@@ -103,8 +103,8 @@ export class MatchService {
 
     createNewMatch(level, player2) {
         const match = new Match(level,
-            new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username, this.userService.getCurrentUser().profile),
-            player2);
+            new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username,
+                this.userService.getCurrentUser().profile), player2);
 
         return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match))).then(
             res => {
@@ -123,23 +123,29 @@ export class MatchService {
     }
 
     leaveGameStarted(match) {
-        return this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
-            if (doc.exists) {
-                const matchLeft = doc.data();
-                matchLeft.leaveId = this.userService.getCurrentUser().id;
-                this.saveMatch(matchLeft, doc.id).then(
-                    () => {
-                        this.toast.create('You have left this game');
-                    }
-                );
-            } else {
+        if (match.matchAccepted) {
+            return this.afStore.doc(`match/${match.id}`).ref.get().then(doc => {
+                if (doc.exists) {
+                    const matchLeft = doc.data();
+                    matchLeft.leaveId = this.userService.getCurrentUser().id;
+                    this.saveMatch(matchLeft, doc.id).then(
+                        () => {
+                            this.toast.create('You have left this game');
+                        }
+                    );
+                } else {
+                    this.toast.create('We can not find the game. Try again later');
+                    return false;
+                }
+            }).catch(() => {
                 this.toast.create('We can not find the game. Try again later');
                 return false;
-            }
-        }).catch(() => {
-            this.toast.create('We can not find the game. Try again later');
-            return false;
-        });
+            });
+        } else {
+            return this.deleteMatchPending(match).then(
+                () => {return true;}
+            );
+        }
     }
 
     acceptMatchPending(match) {
@@ -164,13 +170,10 @@ export class MatchService {
     }
 
     deleteMatchPending(match) {
-        this.afStore.collection('match')
+        return this.afStore.collection('match')
             .doc(match.id)
-            .delete().then(
-            () => {
-                this.toast.create('Game removed successfully');
-            }
-        );
+            .delete()
+            .then( resp => {});
     }
 
     saveMatch(match, id) {
@@ -267,6 +270,16 @@ export class MatchService {
             ]
         });
         await alert.present();
+    }
+
+    deleteMatchesFinished() {
+        for (const match of this.matchesFinished) {
+            this.afStore.collection('match')
+                .doc(match.id)
+                .delete()
+                .then();
+        }
+        this.matchesFinished = [];
     }
 
     getCurrentMatch() {
