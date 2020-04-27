@@ -103,7 +103,7 @@ export class MatchService {
 
     createNewMatch(level, player2) {
         const match = new Match(level,
-            new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username),
+            new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username, this.userService.getCurrentUser().profile),
             player2);
 
         return this.afStore.collection('match').add(JSON.parse(JSON.stringify(match))).then(
