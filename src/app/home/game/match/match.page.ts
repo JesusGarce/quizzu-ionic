@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../../shared/authentication-service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../shared/user-service';
@@ -10,7 +10,6 @@ import { HttpClient } from '@angular/common/http';
 import {MatchWordsApiService} from './wordsapi-service/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
 import {Word} from './wordsapi-service/word.model';
-import {SearchOpponentPage} from './search-opponent/search-opponent.page';
 import {FinishMatchPage} from './finish-match/finish-match.page';
 
 @Component({
@@ -34,6 +33,8 @@ export class MatchPage implements OnInit {
   answerDone = false;
   question: string;
   interval: any;
+  displayAnswer = false;
+  answer: number;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
@@ -68,7 +69,6 @@ export class MatchPage implements OnInit {
       this.modalController.dismiss().then();
       this.router.navigate(['home/game']).then();
     }
-
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
     this.initializeWords(this.match.gameLevel);
@@ -91,7 +91,7 @@ export class MatchPage implements OnInit {
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) this.checkAnswer(this.correctWordPosition);
+      if (this.counter === 0) this.checkAnswer(9);
     }, 1000);
   }
 
@@ -143,13 +143,16 @@ export class MatchPage implements OnInit {
     clearInterval(this.interval);
     this.less5seconds = false;
     this.wordsButtonOK[this.correctWordPosition] = true;
+    this.answer = answer;
     this.answerDone = true;
     if (this.correctWordPosition !== answer)
       this.wordsButtonFail[answer] = true;
     this.matchService.saveResultsTurn(this.match, this.route.snapshot.paramMap.get('id'),
         this.counter, this.correctWordPosition === answer).then(
             () => {
-                this.delay(2000).then(
+              this.displayAnswer = true;
+
+              this.delay(5000).then(
                   () => {
                     if (this.matchService.checkIfMatchIsFinished(this.match))
                       this.finishGame().then();
@@ -167,6 +170,10 @@ export class MatchPage implements OnInit {
 
   async delay(ms: number) {
     await new Promise(resolve => setTimeout(() => resolve(), ms)).then();
+  }
+
+  isAnswerCorrect() {
+    return this.correctWordPosition === this.answer;
   }
 
   getStateFinishMatch() {

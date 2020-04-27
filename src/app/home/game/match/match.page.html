@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content *ngIf="loaded">
+
   <ion-row>
     <ion-col>
       <ion-card class="card-player" color="primary">
@@ -62,5 +63,24 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <div *ngIf="displayAnswer" class="achievement-container">
+
+    <div *ngIf="isAnswerCorrect()" class="medal">
+      <img src="../../../../assets/perchick_happy.png" width="200" height="200" />
+    </div>
+
+    <div *ngIf="!isAnswerCorrect()" class="medal">
+      <img src="../../../../assets/perchick_sad.png" width="200" height="200" />
+    </div>
+
+    <div class="message">
+      <h3 class="answer-h3" align="center" *ngIf="isAnswerCorrect()"> CORRECT! </h3>
+      <h3 class="answer-h3" align="center" *ngIf="!isAnswerCorrect()"> INCORRECT! </h3>
+      <h4 align="center"> Answer was {{this.correctWord}} </h4>
+      <h5 align="center">+ {{this.matchService.getTurnPoints(counter, isAnswerCorrect())}} POINTS</h5>
+    </div>
+
+  </div>
 
 </ion-content>
