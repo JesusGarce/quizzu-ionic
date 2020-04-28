@@ -53,13 +53,13 @@
         <ion-button expand="block" size="large"
                     [disabled]="answerDone"
                     [class.btnOK]='wordsButtonOK[1]' [class.btnFalse]='wordsButtonFail[1]'
-                    (click)="checkAnswer(1)">{{words[0]}}</ion-button>
+                    (click)="doingAnswer(1)">{{words[0]}}</ion-button>
       </ion-col>
       <ion-col>
         <ion-button expand="block" size="large"
                     [disabled]="answerDone"
                     [class.btnOK]='wordsButtonOK[2]' [class.btnFalse]='wordsButtonFail[2]'
-                    (click)="checkAnswer(2)">{{words[1]}}</ion-button>
+                    (click)="doingAnswer(2)">{{words[1]}}</ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -67,32 +67,32 @@
         <ion-button expand="block" size="large"
                     [disabled]="answerDone"
                     [class.btnOK]='wordsButtonOK[3]' [class.btnFalse]='wordsButtonFail[3]'
-                    (click)="checkAnswer(3)">{{words[2]}}</ion-button>
+                    (click)="doingAnswer(3)">{{words[2]}}</ion-button>
       </ion-col>
       <ion-col>
         <ion-button expand="block" size="large"
                     [disabled]="answerDone"
                     [class.btnOK]='wordsButtonOK[4]' [class.btnFalse]='wordsButtonFail[4]'
-                    (click)="checkAnswer(4)">{{words[3]}}</ion-button>
+                    (click)="doingAnswer(4)">{{words[3]}}</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <div *ngIf="displayAnswer" class="achievement-container">
 
-    <div *ngIf="isAnswerCorrect()" class="medal">
+    <div *ngIf="isCorrectAnswer()" class="medal">
       <img src="../../../../assets/perchick_happy.png" width="200" height="200" />
     </div>
 
-    <div *ngIf="!isAnswerCorrect()" class="medal">
+    <div *ngIf="!isCorrectAnswer()" class="medal">
       <img src="../../../../assets/perchick_sad.png" width="200" height="200" />
     </div>
 
     <div class="message">
-      <h3 class="answer-h3" align="center" *ngIf="isAnswerCorrect()"> CORRECT! </h3>
-      <h3 class="answer-h3" align="center" *ngIf="!isAnswerCorrect()"> INCORRECT! </h3>
+      <h3 class="answer-h3" align="center" *ngIf="isCorrectAnswer()"> CORRECT! </h3>
+      <h3 class="answer-h3" align="center" *ngIf="!isCorrectAnswer()"> INCORRECT! </h3>
       <h4 align="center"> Answer was {{this.correctWord}} </h4>
-      <h5 align="center">+ {{this.matchService.getTurnPoints(counter, isAnswerCorrect())}} POINTS</h5>
+      <h5 align="center">+ {{this.matchService.getTurnPoints(counter, isCorrectAnswer())}} POINTS</h5>
     </div>
 
   </div>

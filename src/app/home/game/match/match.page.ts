@@ -18,7 +18,6 @@ import {FinishMatchPage} from './finish-match/finish-match.page';
   styleUrls: ['./match.page.scss', '../../../app.component.scss'],
 })
 export class MatchPage implements OnInit {
-
   match: any;
   loaded = false;
   numberQuestion: number;
@@ -62,13 +61,17 @@ export class MatchPage implements OnInit {
     });
   }
 
-  initData() {
+  checkIfIsPlayerTurn() {
     if (!(this.match.player1Turn && (this.match.player1.id === this.user.id)) &&
         !(!this.match.player1Turn && (this.match.player2.id === this.user.id))) {
       this.toast.create('Is not your turn yet, you have to wait until your opponent plays');
       this.modalController.dismiss().then();
       this.router.navigate(['home/game']).then();
     }
+  }
+
+  initData() {
+    this.checkIfIsPlayerTurn();
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
     this.initializeWords(this.match.gameLevel);
@@ -91,7 +94,7 @@ export class MatchPage implements OnInit {
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) this.checkAnswer(null);
+      if (this.counter === 0) this.doingAnswer(null);
     }, 1000);
   }
 
@@ -141,16 +144,20 @@ export class MatchPage implements OnInit {
           });
   }
 
-  checkAnswer(answer) {
+  doingAnswer(answer) {
+    this.answer = answer;
+    this.answerDone = true;
     clearInterval(this.interval);
     this.less5seconds = false;
     this.wordsButtonOK[this.correctWordPosition] = true;
-    this.answer = answer;
-    this.answerDone = true;
-    if (this.correctWordPosition !== answer)
-      this.wordsButtonFail[answer] = true;
+    this.checkAnswer();
+  }
+
+  checkAnswer() {
+    if (!this.isCorrectAnswer())
+      this.wordsButtonFail[this.answer] = true;
     this.matchService.saveResultsTurn(this.match, this.route.snapshot.paramMap.get('id'),
-        this.counter, this.correctWordPosition === answer).then(
+        this.counter, this.isCorrectAnswer()).then(
             () => {
               this.displayAnswer = true;
 
@@ -174,7 +181,7 @@ export class MatchPage implements OnInit {
     await new Promise(resolve => setTimeout(() => resolve(), ms)).then();
   }
 
-  isAnswerCorrect() {
+  isCorrectAnswer() {
     return this.correctWordPosition === this.answer;
   }
 

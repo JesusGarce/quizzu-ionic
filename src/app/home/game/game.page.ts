@@ -46,7 +46,6 @@ export class GamePage {
 
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned.data !== null) {
-        console.log(dataReturned.data);
         this.levelMatch = dataReturned.data;
         this.searchingOpponent();
       }
@@ -66,7 +65,6 @@ export class GamePage {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
         this.matchFoundId = dataReturned.data;
-
       }
     });
 
@@ -86,7 +84,7 @@ export class GamePage {
   async leftGameStarted(game) {
     console.log(game);
     const alert = await this.alertController.create({
-      header: 'Do you give up?',
+      header: 'Do you want to give up?',
       message: 'Do you want to <strong>leave</strong> this game?',
       buttons: [
         {
@@ -112,7 +110,7 @@ export class GamePage {
   deleteMatchesFinished() {
     this.matchService.deleteMatchesFinished();
     this.matchesFinished = [];
-    this.toast.create('Delete match history');
+    this.toast.create('Match history deleted successfully');
   }
 
   goToMatch(match) {
