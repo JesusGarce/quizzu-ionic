@@ -90,3 +90,18 @@ ion-item {
   max-height: 350px;
   overflow-y: scroll;
 }
+
+.game-result{
+  background-color: #cfcfcf;
+  margin-right: 10px;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.result-local {
+  color: #A92EDF;
+}
+
+.result-away {
+  color: #252326;
+}
