@@ -23,8 +23,8 @@ export class SearchModalUserPage implements OnInit {
 
   goToProfilePage(friendRequest) {
     const url = 'home/user/' + friendRequest.id;
-    this.router.navigate([url]);
-    this.closeModal();
+    this.router.navigate([url]).then();
+    this.closeModal().then();
   }
 
   async closeModal() {

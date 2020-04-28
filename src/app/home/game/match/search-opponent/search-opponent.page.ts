@@ -5,6 +5,7 @@ import {UserService} from '../../../../shared/user-service';
 import {MatchService} from '../../../../shared/match-service';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
 import {UserMin} from '../../../../shared/user-min.model';
+import {Messages} from '../../../../shared/messages';
 
 @Component({
   selector: 'app-search-opponent',
@@ -96,8 +97,8 @@ export class SearchOpponentPage implements OnInit {
 
   async exitSearchOpponent() {
     const alert = await this.alertController.create({
-      header: 'Close waiting',
-      message: 'Do you want to <strong>close</strong> the search? We will notify you when we find a opponent ',
+      header: Messages.CLOSE_SEARCHING_TITLE,
+      message: Messages.CLOSE_SEARCHING,
       buttons: [
         {
           text: 'No',

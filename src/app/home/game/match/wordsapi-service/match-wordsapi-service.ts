@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {SpinnerLoadingService} from '../../../../shared/spinner-loading/spinner-loading.service';
 import {ToastService} from '../../../../shared/toast-service';
-import {UserService} from '../../../../shared/user-service';
 import {AlertController, ModalController} from '@ionic/angular';
 import {MatchService} from '../../../../shared/match-service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -13,8 +11,6 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 })
 
 export class MatchWordsApiService {
-    word: string;
-    definition: string;
     match: any;
 
     url: string;
@@ -43,9 +39,6 @@ export class MatchWordsApiService {
             .set('Access-Control-Allow-Origin', '*')
             .set('x-rapidapi-host', this.host)
             .set('x-rapidapi-key', this.key);
-
-        console.log('Holi' + word);
-        console.log('URL: ' + this.url + word + '/definitions');
 
         return this.http.get(this.url + word + '/definitions', { 'headers': headers });
     }

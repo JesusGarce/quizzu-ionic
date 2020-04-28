@@ -7,6 +7,7 @@ import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page
 import {MatchShow} from '../../shared/match-show.model';
 import {ToastService} from '../../shared/toast-service';
 import {SearchOpponentPage} from './match/search-opponent/search-opponent.page';
+import {Messages} from '../../shared/messages';
 
 @Component({
   selector: 'app-game',
@@ -46,7 +47,6 @@ export class GamePage {
 
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned.data !== null) {
-        console.log(dataReturned.data);
         this.levelMatch = dataReturned.data;
         this.searchingOpponent();
       }
@@ -66,7 +66,6 @@ export class GamePage {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
         this.matchFoundId = dataReturned.data;
-
       }
     });
 
@@ -86,8 +85,8 @@ export class GamePage {
   async leftGameStarted(game) {
     console.log(game);
     const alert = await this.alertController.create({
-      header: 'Do you give up?',
-      message: 'Do you want to <strong>leave</strong> this game?',
+      header: Messages.GIVE_UP_MATCH_TITLE,
+      message: Messages.GIVE_UP_MATCH,
       buttons: [
         {
           text: 'No',
@@ -112,7 +111,7 @@ export class GamePage {
   deleteMatchesFinished() {
     this.matchService.deleteMatchesFinished();
     this.matchesFinished = [];
-    this.toast.create('Delete match history');
+    this.toast.create(Messages.HISTORY_DELETED);
   }
 
   goToMatch(match) {

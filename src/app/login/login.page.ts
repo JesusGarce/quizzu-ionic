@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../shared/authentication-service';
-import {ToastController} from '@ionic/angular';
 import {Facebook, FacebookLoginResponse} from '@ionic-native/facebook/ngx';
 import {UserService} from '../shared/user-service';
 import {ToastService} from '../shared/toast-service';
+import {Messages} from '../shared/messages';
 
 @Component({
   selector: 'app-login',
@@ -32,10 +32,10 @@ export class LoginPage implements OnInit {
           this.userService.initCurrentUserStats(res.user.uid);
           this.router.navigate(['home']);
         } else {
-          this.toast.create('You should verify your e-mail');
+          this.toast.create(Messages.VERIFY_EMAIL);
         }
       }).catch(() => {
-        this.toast.create('Ups! Something happened');
+        this.toast.create(Messages.ERROR);
       });
   }
 
@@ -45,7 +45,7 @@ export class LoginPage implements OnInit {
           this.authService.facebookAuth(response);
           console.log(response.authResponse.accessToken);
         }).catch((error) => {
-          this.toast.create('Error: ' + error);
+          this.toast.create(Messages.ERROR + ': ' + error);
     });
   }
 

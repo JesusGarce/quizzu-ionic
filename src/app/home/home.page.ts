@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AuthenticationService} from '../shared/authentication-service';
 import {UserService} from '../shared/user-service';
 import {MatchService} from '../shared/match-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +14,11 @@ export class HomePage {
   constructor(
       private authService: AuthenticationService,
       private userService: UserService,
-      private matchService: MatchService
+      private matchService: MatchService,
+      private router: Router
   ) {
-    console.log('IS LOGGED IN: ' + this.authService.isLoggedIn);
+    if (!this.authService.isLoggedIn)
+      this.router.navigate(['start']).then();
   }
 
 }

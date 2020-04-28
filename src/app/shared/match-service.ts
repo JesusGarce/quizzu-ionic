@@ -8,6 +8,7 @@ import {MatchShow} from './match-show.model';
 import {UserMin} from './user-min.model';
 import {Match} from './match.model';
 import {AlertController, ModalController} from '@ionic/angular';
+import {Messages} from './messages';
 
 @Injectable({
     providedIn: 'root'
@@ -130,15 +131,15 @@ export class MatchService {
                     matchLeft.leaveId = this.userService.getCurrentUser().id;
                     this.saveMatch(matchLeft, doc.id).then(
                         () => {
-                            this.toast.create('You have left this game');
+                            this.toast.create(Messages.LEFT_GAME);
                         }
                     );
                 } else {
-                    this.toast.create('We can not find the game. Try again later');
+                    this.toast.create(Messages.ERROR_FIND_GAME);
                     return false;
                 }
             }).catch(() => {
-                this.toast.create('We can not find the game. Try again later');
+                this.toast.create(Messages.ERROR_FIND_GAME);
                 return false;
             });
         } else {
@@ -155,16 +156,16 @@ export class MatchService {
                 matchAccepted.matchAccepted = true;
                 this.saveMatch(matchAccepted, doc.id).then(
                     () => {
-                        this.toast.create('Game accepted');
+                        this.toast.create(Messages.ACCEPTED_GAME);
                         this.createMatchDataShow(matchAccepted, match.id, this.userService.getCurrentUser().id, true);
                     }
                 );
             } else {
-                this.toast.create('We can not find the game. Try again later');
+                this.toast.create(Messages.ERROR_FIND_GAME);
                 return false;
             }
         }).catch(() => {
-            this.toast.create('We can not find the game. Try again later');
+            this.toast.create(Messages.ERROR_FIND_GAME);
             return false;
         });
     }
@@ -210,7 +211,6 @@ export class MatchService {
             match = this.finishMatch(match);
             this.userService.updateUserStats(match, match.player1.id);
             this.userService.updateUserStats(match, match.player2.id);
-            this.toast.create('GAME FINISHED; WINNER: ' + match.winnerId);
         }
         return this.saveMatch(match, matchId);
     }
@@ -230,7 +230,6 @@ export class MatchService {
     }
 
     waitingAnotherPlayer(matchId) {
-        console.log('Waiting another player...');
         return this.afStore.collection('match')
             .doc(matchId)
             .valueChanges()
@@ -246,8 +245,8 @@ export class MatchService {
 
     async alertOpenMatch(matchId) {
         const alert = await this.alertController.create({
-            header: 'New game is ready',
-            message: 'Opponent found! Do you want to start now?',
+            header: Messages.NEW_GAME_TITLE,
+            message: Messages.NEW_GAME,
             buttons: [
                 {
                     text: 'No',
