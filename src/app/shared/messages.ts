@@ -22,6 +22,7 @@ export abstract class Messages {
     static readonly ACCEPTED_GAME: string = 'Game accepted';
     static readonly NEW_GAME_TITLE: string = 'New game is ready';
     static readonly NEW_GAME: string = 'Opponent found! Do you want to start now?';
+    static readonly VERIFY_EMAIL: string = 'You should verify your e-mail';
 
     static readonly ERROR_SAVE_QUESTION: string = 'We can not save the question. Try later';
     static readonly ERROR_FIND_GAME: string = 'We can not find the game. Try again later';

@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from '../shared/authentication-service';
 import {User} from '../shared/user.model';
 import {ToastService} from '../shared/toast-service';
+import {Messages} from '../shared/messages';
 
 @Component({
   selector: 'app-registration',
@@ -31,15 +32,15 @@ export class RegistrationPage implements OnInit {
   signUp() {
       const {password, confirmPassword} = this;
       if (password !== confirmPassword) {
-          this.toast.create('Passwords are different');
+          this.toast.create(Messages.PROFILE_DIFFERENT_PASSWORDS);
       }
 
       this.authService.registerUser(this.user, this.password)
       .then(() => {
         this.authService.sendVerificationMail();
         this.router.navigate(['verify-email']);
-      }).catch((error) => {
-          this.toast.create('Ups! Something happened: ' + error);
+      }).catch(() => {
+          this.toast.create(Messages.ERROR);
       });
   }
 
