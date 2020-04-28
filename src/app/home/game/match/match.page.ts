@@ -91,7 +91,7 @@ export class MatchPage implements OnInit {
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) return null;
+      if (this.counter === 0) this.checkAnswer(null);
     }, 1000);
   }
 
@@ -126,17 +126,19 @@ export class MatchPage implements OnInit {
         this.words.push(wordlist.words[randomNumber]);
         if (this.correctWordPosition === arrayNumbers.length) {
           this.correctWord = wordlist.words[randomNumber];
-          this.getQuestion();
+          this.getQuestion(wordlist);
         }
       }
     }
   }
 
-  getQuestion() {
-    this.matchWordsApiService.getDefinition(this.correctWord)
-        .subscribe((data: Word) => {
-          this.question = data.definitions[0].definition;
-        });
+  getQuestion(wordlist) {
+      this.matchWordsApiService.getDefinition(this.correctWord)
+          .subscribe((data: Word) => {
+            this.question = data.definitions[0].definition;
+          }, error => {
+            this.initializeWords(wordlist);
+          });
   }
 
   checkAnswer(answer) {
