@@ -9,6 +9,7 @@ import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {ToastService} from './toast-service';
 import {UserService} from './user-service';
 import {MatchService} from './match-service';
+import {Messages} from './messages';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +50,7 @@ export class AuthenticationService {
         then(result => {
       this.userService.createUser(user, result.user.uid);
     }).catch((error) => {
-      this.toast.create('Something bad happened: ' + error);
+      this.toast.create(Messages.ERROR);
     });
   }
 
@@ -63,7 +64,7 @@ export class AuthenticationService {
   passwordRecover(passwordResetEmail) {
     return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail)
     .then(() => {
-      this.toast.create('Password reset email has been sent, please check your inbox.');
+      this.toast.create(Messages.PASSWORD_CHANGE_REQUEST_SENT);
     }).catch((error) => {
           this.toast.create(error);
     });
@@ -101,7 +102,7 @@ export class AuthenticationService {
         this.spinnerLoading.hide();
       });
     }).catch((error) => {
-          this.toast.create('Ups! Something happened' + error);
+          this.toast.create(Messages.ERROR);
     });
   }
 

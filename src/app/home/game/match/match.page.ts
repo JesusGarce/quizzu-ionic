@@ -11,6 +11,8 @@ import {MatchWordsApiService} from './wordsapi-service/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
 import {Word} from './wordsapi-service/word.model';
 import {FinishMatchPage} from './finish-match/finish-match.page';
+import {Constants} from '../../../shared/constants';
+import {Messages} from '../../../shared/messages';
 
 @Component({
   selector: 'app-match',
@@ -64,10 +66,14 @@ export class MatchPage implements OnInit {
   checkIfIsPlayerTurn() {
     if (!(this.match.player1Turn && (this.match.player1.id === this.user.id)) &&
         !(!this.match.player1Turn && (this.match.player2.id === this.user.id))) {
-      this.toast.create('Is not your turn yet, you have to wait until your opponent plays');
+      this.toast.create(Messages.IS_NOT_YOUR_TURN);
       this.modalController.dismiss().then();
       this.router.navigate(['home/game']).then();
     }
+  }
+
+  ngOnInit() {
+    this.startCountdown().then();
   }
 
   initData() {
@@ -76,16 +82,12 @@ export class MatchPage implements OnInit {
     this.wordsButtonFail = [];
     this.initializeWords(this.match.gameLevel);
     this.loaded = true;
-    this.counter = 15;
+    this.counter = Constants.TIME_QUESTION;
     if (this.match.player1.id === this.user.id) {
       this.numberQuestion = 16 - this.match.player1RemainsQuestions;
     } else {
       this.numberQuestion = 16 - this.match.player2RemainsQuestions;
     }
-  }
-
-  ngOnInit() {
-    this.startCountdown().then();
   }
 
   startTimer() {
@@ -121,8 +123,8 @@ export class MatchPage implements OnInit {
 
   findFourRandomWords(wordlist) {
     const arrayNumbers = [];
-    this.correctWordPosition = this.randomWord(1, 4);
-    while (arrayNumbers.length < 4) {
+    this.correctWordPosition = this.randomWord(1, Constants.QUESTIONS);
+    while (arrayNumbers.length < Constants.QUESTIONS) {
       const randomNumber = this.randomWord(0, wordlist.length);
       if (!arrayNumbers.includes(randomNumber)) {
         arrayNumbers.push(randomNumber);
@@ -169,7 +171,7 @@ export class MatchPage implements OnInit {
                       this.router.navigate(['home/game']).then();
                   });
             }).catch(() => {
-                this.toast.create('We can not save the question. Try later');
+                this.toast.create(Messages.ERROR_SAVE_QUESTION);
             });
   }
 
@@ -187,11 +189,11 @@ export class MatchPage implements OnInit {
 
   getStateFinishMatch() {
     if (this.match.winnerId === this.user.id)
-      return 'victory';
+      return Constants.RESULT_GAME_VICTORY;
     else if (this.match.winnerId !== '')
-      return 'defeat';
+      return Constants.RESULT_GAME_DEFEAT;
     else
-      return 'draw';
+      return Constants.RESULT_GAME_DRAW;
   }
 
   async finishGame() {

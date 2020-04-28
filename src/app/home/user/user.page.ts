@@ -7,6 +7,7 @@ import {UserMin} from '../../shared/user-min.model';
 import {AlertController} from '@ionic/angular';
 import {ToastService} from '../../shared/toast-service';
 import {User} from '../../shared/user.model';
+import {Messages} from '../../shared/messages';
 
 @Component({
   selector: 'app-user',
@@ -49,8 +50,7 @@ export class UserPage implements OnInit {
 
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   sendRequest() {
     this.userService.sendFriendRequest(new UserMin(this.user.id, this.user.username, this.user.profile));
@@ -61,10 +61,10 @@ export class UserPage implements OnInit {
     const user = new UserMin(this.user.id, this.user.username, this.user.profile);
     this.userService.removeFriend(user).then(
         () => {
-          this.toast.create('Friend delete successfully.');
+          this.toast.create(Messages.FRIEND_DELETED);
           this.userService.removeFriendOtherUser(user);
         }, () => {
-          this.toast.create('Ups! Something happened, try later.');
+          this.toast.create(Messages.ERROR);
         }
     );
     this.isFriend = false;
@@ -83,8 +83,8 @@ export class UserPage implements OnInit {
 
   async deleteFriendDialog() {
     const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Do you want to <strong>delete</strong> this friend?',
+      header: Messages.DELETE_FRIEND_TITLE,
+      message: Messages.DELETE_FRIEND,
       buttons: [
         {
           text: 'No',

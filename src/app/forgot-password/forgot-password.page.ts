@@ -16,7 +16,6 @@ export class ForgotPasswordPage implements OnInit {
   ngOnInit() {}
 
   forgotPassword(email) {
-    console.log(email.value);
     this.authService.passwordRecover(email.value).then(
         () => {
           this.router.navigate(['/login']);

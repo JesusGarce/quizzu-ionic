@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loading.service';
 import {ToastService} from '../../../shared/toast-service';
 import {UserService} from '../../../shared/user-service';
+import {Messages} from '../../../shared/messages';
 
 @Component({
     selector: 'app-edit-profile',
@@ -33,11 +34,11 @@ export class EditProfilePage implements OnInit {
         this.spinnerLoading.show();
         this.userService.setCurrentUser(this.user).then(
             () => {
-                this.toastService.create('Your profile has changed successfully.');
+                this.toastService.create(Messages.PROFILE_CHANGED);
                 this.spinnerLoading.hide();
                 this.router.navigate(['home/profile']);
             }, () => {
-                this.toastService.create('Ups! Something bad happened. Try later.');
+                this.toastService.create(Messages.ERROR);
                 this.spinnerLoading.hide();
             }
         );
@@ -45,10 +46,10 @@ export class EditProfilePage implements OnInit {
 
     changePassword() {
         if (this.password.length < 8) {
-            return this.toastService.create('Password should have 8 characters or more.');
+            return this.toastService.create(Messages.PROFILE_PASSWORD_LENGTH_ERROR);
         }
         if (this.password !== this.confirmPassword) {
-            return this.toastService.create('Passwords are not the same');
+            return this.toastService.create(Messages.PROFILE_DIFFERENT_PASSWORDS);
         }
 
         this.spinnerLoading.show();
@@ -56,7 +57,7 @@ export class EditProfilePage implements OnInit {
             () => {
                 this.authService.setPassword(this.password).then(
                     () => {
-                        this.toastService.create('Password has been changed successfully');
+                        this.toastService.create(Messages.PROFILE_PASSWORD_CHANGED);
                         this.spinnerLoading.hide();
                         this.router.navigate(['home/profile']);
                     }
@@ -65,10 +66,10 @@ export class EditProfilePage implements OnInit {
             error => {
                 this.spinnerLoading.hide();
                 if (error.code === 'auth/wrong-password') {
-                    this.toastService.create('Current password is incorrect. Try again');
+                    this.toastService.create(Messages.PROFILE_PASSWORD_INCORRECT);
                 }
                 if (error.code === 'auth/too-many-request') {
-                    this.toastService.create('Too many requests. Wait a few minutes to try it again.');
+                    this.toastService.create(Messages.PROFILE_PASSWORD_TOO_MANY_REQUESTS);
                 }
             });
     }

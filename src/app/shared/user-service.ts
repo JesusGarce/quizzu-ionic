@@ -9,6 +9,7 @@ import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
 import {UserMin} from './user-min.model';
+import {Messages} from './messages';
 
 @Injectable({
     providedIn: 'root'
@@ -70,10 +71,10 @@ export class UserService {
             if (doc.exists) {
                 this.currentUser = doc.data();
             } else {
-                this.toast.create('We can not find the user');
+                this.toast.create(Messages.USER_NOT_FOUND);
             }
         }).catch(err => {
-            this.toast.create('Error getting document:' + err);
+            this.toast.create(Messages.ERROR);
         });
     }
 
@@ -84,7 +85,7 @@ export class UserService {
             } else {
             }
         }).catch(err => {
-            this.toast.create('Error getting document:' + err);
+            this.toast.create(Messages.ERROR);
         });
     }
 
@@ -119,14 +120,12 @@ export class UserService {
                 let userStats = doc.data();
                 userStats = this.updateUserStatsByLevel(match, userStats, playerId);
                 this.setUserStats(userStats, playerId).then(
-                    () => {
-                        console.log('User stats update successfully');
-                    }
+                    () => {}
                 );
             }
         ).catch(
             (err) => {
-                this.toast.create('Something bad happened. Try later' + err);
+                this.toast.create(Messages.ERROR);
             }
         );
     }
@@ -220,7 +219,7 @@ export class UserService {
                     });
             }
         }).catch(err => {
-            this.toast.create('Error getting document:' + err);
+            this.toast.create(Messages.ERROR);
         });
     }
 
@@ -234,12 +233,12 @@ export class UserService {
                     .set(JSON.parse(JSON.stringify(friendUser)), {
                         merge: true
                     });
-                this.toast.create('Friend request sent');
+                this.toast.create(Messages.FRIEND_REQUEST_SENT);
             } else {
-                this.toast.create('We can not find the user');
+                this.toast.create(Messages.USER_NOT_FOUND);
             }
         }).catch(err => {
-            this.toast.create('Error getting document:' + err);
+            this.toast.create(Messages.ERROR);
         });
     }
 
@@ -273,7 +272,7 @@ export class UserService {
                     });
             }
         }).catch(err => {
-            this.toast.create('Error getting document:' + err);
+            this.toast.create(Messages.ERROR);
         });
     }
 

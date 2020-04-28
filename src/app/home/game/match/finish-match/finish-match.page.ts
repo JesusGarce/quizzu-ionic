@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../../shared/user-service';
 import {MatchService} from '../../../../shared/match-service';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
+import {Constants} from '../../../../shared/constants';
 
 @Component({
   selector: 'app-finish-match',
@@ -34,14 +35,14 @@ export class FinishMatchPage implements OnInit {
   }
 
   configLottie() {
-    if (this.state === 'victory') {
+    if (this.state === Constants.RESULT_GAME_VICTORY) {
       this.showVictory();
       this.lottieConfig = {
         path: './assets/animations/victory_perchick.json',
         autoplay: true,
         loop: true
       };
-    } else if (this.state === 'defeat') {
+    } else if (this.state === Constants.RESULT_GAME_DEFEAT) {
       this.showDefeat();
       this.lottieConfig = {
         path: './assets/animations/defeat_perchick.json',
