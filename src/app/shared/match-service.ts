@@ -144,7 +144,9 @@ export class MatchService {
             });
         } else {
             return this.deleteMatchPending(match).then(
-                () => {return true;}
+                () => {
+                    return true;
+                }
             );
         }
     }
