@@ -83,7 +83,6 @@ export class GamePage {
   }
 
   async leftGameStarted(game) {
-    console.log(game);
     const alert = await this.alertController.create({
       header: Messages.GIVE_UP_MATCH_TITLE,
       message: Messages.GIVE_UP_MATCH,

@@ -13,6 +13,7 @@ import {Word} from './wordsapi-service/word.model';
 import {FinishMatchPage} from './finish-match/finish-match.page';
 import {Constants} from '../../../shared/constants';
 import {Messages} from '../../../shared/messages';
+import {PointsService} from './points.service';
 
 @Component({
   selector: 'app-match',
@@ -41,6 +42,7 @@ export class MatchPage implements OnInit {
                private router: Router,
                private userService: UserService,
                private matchService: MatchService,
+               private pointsService: PointsService,
                private matchWordsApiService: MatchWordsApiService,
                private route: ActivatedRoute,
                private modalController: ModalController,
@@ -162,7 +164,9 @@ export class MatchPage implements OnInit {
         this.counter, this.isCorrectAnswer()).then(
             () => {
               this.displayAnswer = true;
-
+              if (this.isCorrectAnswer()) {
+                this.pointsService.increaseUserPointsByTurn(this.match).then();
+              }
               this.delay(5000).then(
                   () => {
                     if (this.matchService.checkIfMatchIsFinished(this.match))
@@ -198,6 +202,8 @@ export class MatchPage implements OnInit {
 
   async finishGame() {
     this.match = this.matchService.getCurrentMatch();
+    if (this.getStateFinishMatch() !== Constants.RESULT_GAME_DEFEAT)
+      this.pointsService.increaseUserPointsByFinishMatch(this.match, this.getStateFinishMatch()).then();
     const modal = await this.modalController.create({
       component: FinishMatchPage,
       componentProps: {
