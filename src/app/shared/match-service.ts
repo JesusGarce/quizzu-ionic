@@ -74,10 +74,12 @@ export class MatchService {
         let match;
         if (data.player1.id === userId) {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
-                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.player1Turn, data.matchAccepted);
+                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.player1Turn, data.matchAccepted,
+                data.player1RemainsQuestions, data.player2RemainsQuestions);
         } else {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
-                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.player1Turn, data.matchAccepted);
+                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.player1Turn, data.matchAccepted,
+                data.player1RemainsQuestions, data.player2RemainsQuestions);
         }
         this.saveMatchShowInArray(match, data, active);
     }
@@ -189,7 +191,7 @@ export class MatchService {
     }
 
     checkIfMatchIsFinished(match) {
-        return ((match.player1RemainsQuestions === 0) && (match.player2RemainsQuestions === 0));
+        return ((match.player1RemainsQuestions < 1) && (match.player2RemainsQuestions < 1));
     }
 
     finishMatch(match) {
@@ -200,15 +202,18 @@ export class MatchService {
         return match;
     }
 
-    saveResultsTurn(match, matchId, counter, correct) {
+    saveResultsTurn(match, matchId, counter, correct, consecutives) {
+        console.log('SAVE RESULT');
+        console.log(match);
         if (match.player1Turn) {
             match.player1RemainsQuestions --;
-            match.player1Points = match.player1Points + this.getTurnPoints(counter, correct);
+            match.player1Points = match.player1Points + this.getTurnPoints(counter, correct, consecutives);
         } else {
             match.player2RemainsQuestions --;
-            match.player2Points = match.player2Points + this.getTurnPoints(counter, correct);
+            match.player2Points = match.player2Points + this.getTurnPoints(counter, correct, consecutives);
         }
-        match.player1Turn = !match.player1Turn;
+        if (!correct && !this.oppositePlayerFinish(match))
+            match.player1Turn = !match.player1Turn;
         if (this.checkIfMatchIsFinished(match)) {
             match = this.finishMatch(match);
             this.userService.updateUserStats(match, match.player1.id);
@@ -217,10 +222,17 @@ export class MatchService {
         return this.saveMatch(match, matchId);
     }
 
-    getTurnPoints(counter, correct) {
+    oppositePlayerFinish(match) {
+        if (match.player1Turn)
+            return (match.player2RemainsQuestions === 0);
+        else
+            return (match.player1RemainsQuestions === 0);
+    }
+
+    getTurnPoints(counter, correct, consecutives) {
         if (!correct)
             return 0;
-        return Math.round(50 * ((100 + (counter * 1)) / 100));
+        return Math.round(50 * ((100 + (counter * 1)) / 100) * ((100 + (consecutives * 25)) / 100));
     }
 
     findFreeMatch(level) {
