@@ -10,6 +10,7 @@ import {Constants} from '../../../shared/constants';
 
 export class PointsService {
     user: any;
+    nextLevel: number;
 
     constructor(
         public router: Router,
@@ -30,6 +31,7 @@ export class PointsService {
         else if (match.gameLevel === 'b1')
             this.user.points = this.user.points + Constants.POINTS_QUESTION_CORRECT_B1;
         this.toast.create('+ ' + (this.user.points - userInitPoints) + ' points. Congratulations!');
+        this.checkIncreaseLevel();
         return this.userService.setCurrentUser(this.user);
     }
 
@@ -59,8 +61,24 @@ export class PointsService {
             else if (state === Constants.RESULT_GAME_DRAW)
                 this.user.points = this.user.points + Constants.POINTS_MATCH_DRAW_B1;
         }
+        this.checkIncreaseLevel();
         this.toast.create('+ ' + (this.user.points - userInitPoints) + ' points. Congratulations!');
         return this.userService.setCurrentUser(this.user);
+    }
+
+    checkIncreaseLevel() {
+        this.getNextLevel(Constants.LEVEL_BASE, 1);
+        if (this.user.level !== this.nextLevel - 1) {
+            this.toast.create('CONGRATULATIONS! Your level has increased to ' + (this.nextLevel - 1));
+            this.user.level = this.nextLevel - 1;
+        }
+    }
+
+    getNextLevel(points, level) {
+        if (points < this.user.points)
+            this.getNextLevel(points + ((100 * (level)) * Math.log(points) * (level)), level + 1);
+        else
+            this.nextLevel = level;
     }
 
 }
