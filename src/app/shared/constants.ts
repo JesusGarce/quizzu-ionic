@@ -19,4 +19,5 @@ export abstract class Constants {
     static readonly POINTS_MATCH_VICTORY_B1: number = 50;
     static readonly POINTS_MATCH_DRAW_B1: number = 25;
 
+    static readonly LEVEL_BASE: number = 200;
 }
