@@ -37,6 +37,7 @@ export class MatchPage implements OnInit {
   interval: any;
   displayAnswer = false;
   answer: number;
+  consecutives: number;
 
   constructor( private authService: AuthenticationService,
                private router: Router,
@@ -54,6 +55,7 @@ export class MatchPage implements OnInit {
       if (doc.exists) {
         this.spinnerLoading.hide();
         this.match = doc.data();
+        this.consecutives = 0;
         this.initData();
       } else {
         this.spinnerLoading.hide();
@@ -74,16 +76,28 @@ export class MatchPage implements OnInit {
     }
   }
 
+  checkIfRemainsQuestions() {
+    if ((this.match.player1Turn && (this.match.player1RemainsQuestions < 1)) ||
+        (!this.match.player1Turn && (this.match.player2RemainsQuestions < 1))) {
+      this.toast.create(Messages.NOT_REMAIN_QUESTIONS);
+      this.modalController.dismiss().then();
+      this.router.navigate(['home/game']).then();
+    }
+  }
+
   ngOnInit() {
     this.startCountdown().then();
   }
 
   initData() {
     this.checkIfIsPlayerTurn();
+    this.checkIfRemainsQuestions();
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
     this.initializeWords(this.match.gameLevel);
     this.loaded = true;
+    this.answerDone = false;
+    this.displayAnswer = false;
     this.counter = Constants.TIME_QUESTION;
     if (this.match.player1.id === this.user.id) {
       this.numberQuestion = 16 - this.match.player1RemainsQuestions;
@@ -157,23 +171,29 @@ export class MatchPage implements OnInit {
     this.checkAnswer();
   }
 
+  closeQuestion() {
+    if (this.matchService.checkIfMatchIsFinished(this.match))
+      this.finishGame().then();
+    else if (this.isCorrectAnswer()) {
+      this.ngOnInit();
+      this.initData();
+    } else {
+      this.router.navigate(['home/game']).then();
+    }
+  }
+
   checkAnswer() {
     if (!this.isCorrectAnswer())
       this.wordsButtonFail[this.answer] = true;
+    else
+      this.consecutives ++;
     this.matchService.saveResultsTurn(this.match, this.route.snapshot.paramMap.get('id'),
-        this.counter, this.isCorrectAnswer()).then(
+        this.counter, this.isCorrectAnswer(), this.consecutives).then(
             () => {
               this.displayAnswer = true;
               if (this.isCorrectAnswer()) {
                 this.pointsService.increaseUserPointsByTurn(this.match).then();
               }
-              this.delay(5000).then(
-                  () => {
-                    if (this.matchService.checkIfMatchIsFinished(this.match))
-                      this.finishGame().then();
-                    else
-                      this.router.navigate(['home/game']).then();
-                  });
             }).catch(() => {
                 this.toast.create(Messages.ERROR_SAVE_QUESTION);
             });

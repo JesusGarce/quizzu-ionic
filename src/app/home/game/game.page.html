@@ -29,7 +29,7 @@
     <ion-card color="mediumlight">
         <ion-card-title><h3 class="h3-title">Active games</h3></ion-card-title>
         <ion-card-content>
-            <div *ngIf="matchesActive.length === 0">
+            <div *ngIf="matchService.matchesActive.length === 0">
                 <ion-col>
                     <ion-icon class="icon-big" name="rocket-outline"></ion-icon>
                     <h2>You aren't playing any match</h2>
@@ -38,7 +38,7 @@
                     </p>
                 </ion-col>
             </div>
-            <ion-list *ngFor="let match of matchesActive">
+            <ion-list *ngFor="let match of matchService.matchesActive">
                 <ion-item>
                     <ion-col>
                         <h2>{{match.awayPlayerName}}</h2>
