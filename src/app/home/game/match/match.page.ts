@@ -79,7 +79,7 @@ export class MatchPage implements OnInit {
   checkIfRemainsQuestions() {
     if ((this.match.player1Turn && (this.match.player1RemainsQuestions < 1)) ||
         (!this.match.player1Turn && (this.match.player2RemainsQuestions < 1))) {
-      this.toast.create('You have done all your questions, now you should wait until your opponent finish.');
+      this.toast.create(Messages.NOT_REMAIN_QUESTIONS);
       this.modalController.dismiss().then();
       this.router.navigate(['home/game']).then();
     }

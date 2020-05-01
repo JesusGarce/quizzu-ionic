@@ -7,7 +7,7 @@ export class ToastService {
     constructor(public toastCtrl: ToastController) {
     }
 
-    create(message, ok = false, duration = 2000) {
+    create(message, ok = false, duration = 3000) {
         this.toastCtrl.create({
             message,
             duration: ok ? null : duration,

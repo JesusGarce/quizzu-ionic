@@ -1,5 +1,6 @@
 export abstract class Messages {
     static readonly IS_NOT_YOUR_TURN: string = 'Is not your turn yet, you have to wait until your opponent plays';
+    static readonly NOT_REMAIN_QUESTIONS: string = 'You have done all your questions, now you should wait until your opponent finish.';
     static readonly CLOSE_SEARCHING_TITLE: string = 'Close searching';
     static readonly CLOSE_SEARCHING: string = 'Do you want to <strong>close</strong> the search? ' +
         'We will notify you when we find a opponent';

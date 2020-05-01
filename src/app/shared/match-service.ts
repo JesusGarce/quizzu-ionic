@@ -60,7 +60,7 @@ export class MatchService {
     private initMatchesDataShow(matches, userId) {
         matches.forEach( match => {
             if ((match.data().player1.id === userId) || (match.data().player2.id === userId)) {
-                if ((match.data().leaveId === '') && (match.data().winnerId === '')) {
+                if (!this.checkIfMatchIsFinished(match.data())) {
                     this.createMatchDataShow(match.data(), match.id, userId, true);
                 } else {
                     this.createMatchDataShow(match.data(), match.id, userId, false);
@@ -70,7 +70,7 @@ export class MatchService {
     }
 
     createMatchDataShow(data, matchId, userId, active) {
-        const isFinish = (data.leaveId === '' || data.winnerId === '');
+        const isFinish = this.checkIfMatchIsFinished(data);
         let match;
         if (data.player1.id === userId) {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
@@ -203,8 +203,6 @@ export class MatchService {
     }
 
     saveResultsTurn(match, matchId, counter, correct, consecutives) {
-        console.log('SAVE RESULT');
-        console.log(match);
         if (match.player1Turn) {
             match.player1RemainsQuestions --;
             match.player1Points = match.player1Points + this.getTurnPoints(counter, correct, consecutives);
@@ -212,21 +210,29 @@ export class MatchService {
             match.player2RemainsQuestions --;
             match.player2Points = match.player2Points + this.getTurnPoints(counter, correct, consecutives);
         }
-        if (!correct && !this.oppositePlayerFinish(match))
+        if (!correct && !this.oppositePlayerFinish(match) || (this.playerFinish(match)))
             match.player1Turn = !match.player1Turn;
         if (this.checkIfMatchIsFinished(match)) {
             match = this.finishMatch(match);
             this.userService.updateUserStats(match, match.player1.id);
             this.userService.updateUserStats(match, match.player2.id);
         }
+        this.updateMatchInList(match, matchId);
         return this.saveMatch(match, matchId);
+    }
+
+    playerFinish(match) {
+        if (match.player1Turn)
+            return (match.player1RemainsQuestions < 1);
+        else
+            return (match.player2RemainsQuestions < 1);
     }
 
     oppositePlayerFinish(match) {
         if (match.player1Turn)
-            return (match.player2RemainsQuestions === 0);
+            return (match.player2RemainsQuestions < 1);
         else
-            return (match.player1RemainsQuestions === 0);
+            return (match.player1RemainsQuestions < 1);
     }
 
     getTurnPoints(counter, correct, consecutives) {
@@ -308,5 +314,10 @@ export class MatchService {
     async closeModal() {
         if (await this.modalController.getTop() !== undefined)
             await this.modalController.dismiss();
+    }
+
+    updateMatchInList(match, matchId) {
+        this.matchesActive = this.matchesActive.filter(p => p.id !== matchId);
+        this.createMatchDataShow(match, matchId, this.userService.getCurrentUser().id, true);
     }
 }
