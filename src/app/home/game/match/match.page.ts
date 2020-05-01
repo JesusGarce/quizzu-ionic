@@ -129,6 +129,7 @@ export class MatchPage implements OnInit {
   }
 
   initializeWords(level) {
+    console.log('Initialize words: ' + level);
     this.words = [];
     const url = 'assets/docs/wordlist_' + level + '.json';
     this.http.get(url, {responseType: 'json'})
@@ -158,7 +159,8 @@ export class MatchPage implements OnInit {
           .subscribe((data: Word) => {
             this.question = data.definitions[0].definition;
           }, error => {
-            this.initializeWords(wordlist);
+            console.log('Error: ' + error);
+            this.initializeWords(this.match.gameLevel);
           });
   }
 
