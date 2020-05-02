@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title align="center" class="ion-text-center">
+            <img class="img-toolbar" src="../../../assets/quizzu_logo.png">
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content align="center">
+
+    <ion-card color="mediumlight">
+        <ion-card-title><h3 class="h3-title">Notifications</h3></ion-card-title>
+        <ion-card-content>
+            <div>
+                <ion-col>
+                    <ion-icon class="icon-big" name="notifications-off-outline"></ion-icon>
+                    <h2 class="no-notifications">You don't have any notification</h2>
+                    <p>
+                        Go to home and play to interact with people
+                    </p>
+                </ion-col>
+            </div>
+            <ion-list>
+                <ion-item>
+                    <ion-avatar item-start>
+                      <ion-icon class="icon-notification" name="alert-circle-outline"></ion-icon>
+                    </ion-avatar>
+                    <ion-col>
+                        <h2 class="no-notifications">Cher</h2>
+                        <p>Ugh. As if.</p>
+                    </ion-col>
+                    <ion-button><ion-icon name="trash"></ion-icon></ion-button>
+                </ion-item>
+            </ion-list>
+          <ion-col text-center>
+            <ion-button (click)="clearNotifications()" >Remove all <ion-icon name="trash"></ion-icon></ion-button>
+          </ion-col>
+        </ion-card-content>
+    </ion-card>
+
+
+    <ion-col text-center>
+        <ion-button (click)="closeNotifications()" expand="block">Close</ion-button>
+    </ion-col>
+</ion-content>

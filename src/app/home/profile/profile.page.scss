@@ -62,3 +62,23 @@ ion-col {
   color: #A92EDF;
   font-size: medium;
 }
+
+.button-notification {
+  position: absolute;
+  display: inline-block;
+  font-size: large;
+  right: 0.5em;
+  --border-radius: 30px;
+  --padding-bottom: 13px;
+  --padding-top: 13px;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  height: auto;
+  top: 10%;
+}
+
+.button-notification:disabled,
+.button-notification[disabled]{
+  --background: #252326;
+  opacity: 1;
+}

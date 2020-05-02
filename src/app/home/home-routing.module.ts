@@ -80,7 +80,11 @@ const routes: Routes = [
   {
     path: 'game/match/:id',
     loadChildren: () => import('./game/match/match.module').then( m => m.MatchPageModule)
+  },  {
+    path: 'notifications',
+    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
   }
+
 
 ];
 

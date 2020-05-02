@@ -8,6 +8,7 @@ import {MatchShow} from '../../shared/match-show.model';
 import {ToastService} from '../../shared/toast-service';
 import {SearchOpponentPage} from './match/search-opponent/search-opponent.page';
 import {Messages} from '../../shared/messages';
+import {NotificationsPage} from '../notifications/notifications.page';
 
 @Component({
   selector: 'app-game',
@@ -134,5 +135,15 @@ export class GamePage {
 
   youCanPlay(match) {
     return ((match.turnLocalPlayer) && (match.matchAccepted));
+  }
+
+  async openNotifications() {
+    const modal = await this.modalController.create({
+      component: NotificationsPage,
+      componentProps: {}
+    });
+    modal.onDidDismiss().then(() => {
+    });
+    return await modal.present();
   }
 }

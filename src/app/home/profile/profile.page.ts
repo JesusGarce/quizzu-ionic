@@ -2,8 +2,9 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from '../../shared/authentication-service';
 import {Router} from '@angular/router';
 import {EditImageProfileComponent} from './edit-image-profile.component';
-import {PopoverController} from '@ionic/angular';
+import {ModalController, PopoverController} from '@ionic/angular';
 import {UserService} from '../../shared/user-service';
+import {NotificationsPage} from '../notifications/notifications.page';
 
 @Component({
     selector: 'app-profile',
@@ -22,6 +23,7 @@ export class ProfilePage {
         private router: Router,
         private popoverController: PopoverController,
         private userService: UserService,
+        private modalController: ModalController
     ) {
         this.user = this.userService.currentUser;
         this.userStats = this.userService.currentUserStats;
@@ -45,6 +47,16 @@ export class ProfilePage {
             this.router.navigate(['/home/profile']);
         });
         return await popover.present();
+    }
+
+    async openNotifications() {
+        const modal = await this.modalController.create({
+            component: NotificationsPage,
+            componentProps: {}
+        });
+        modal.onDidDismiss().then(() => {
+        });
+        return await modal.present();
     }
 
 }
