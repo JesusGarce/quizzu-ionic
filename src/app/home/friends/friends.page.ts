@@ -7,6 +7,7 @@ import {UserMin} from '../../shared/user-min.model';
 import {SearchModalUserPage} from './search-modal-user/search-modal-user.page';
 import {MatchService} from '../../shared/match-service';
 import {SelectLevelModalPage} from '../game/select-level-modal/select-level-modal.page';
+import {NotificationsPage} from '../notifications/notifications.page';
 
 @Component({
   selector: 'app-friends',
@@ -146,6 +147,16 @@ export class FriendsPage implements OnInit  {
             }
         });
 
+        return await modal.present();
+    }
+
+    async openNotifications() {
+        const modal = await this.modalController.create({
+            component: NotificationsPage,
+            componentProps: {}
+        });
+        modal.onDidDismiss().then(() => {
+        });
         return await modal.present();
     }
 }

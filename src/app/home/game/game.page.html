@@ -1,11 +1,13 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png"></ion-title>
+        <ion-title align="center" class="ion-text-center">
+            <img class="img-toolbar" src="../../../assets/quizzu_logo.png">
+            <ion-button class="button-notification" (click)="openNotifications()">0</ion-button>
+        </ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content align="center">
-
     <ion-card *ngIf="matchesPending.length !== 0" color="primary">
         <ion-card-title><h3 class="h3-white">Requested games</h3></ion-card-title>
         <ion-card-content>
@@ -107,7 +109,7 @@
                     </div>
                 </ion-item>
             </ion-list>
-            <ion-button *ngIf="matchesFinished.length !== 0" (click)="deleteMatchesFinished()">Delete history <ion-icon name="trash-outline"></ion-icon></ion-button>
+            <ion-button *ngIf="matchesFinished.length !== 0" (click)="deleteMatchesFinished()">Delete history <ion-icon name="trash"></ion-icon></ion-button>
         </ion-card-content>
     </ion-card>
 
