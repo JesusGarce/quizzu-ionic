@@ -8,6 +8,7 @@ import {SearchModalUserPage} from './search-modal-user/search-modal-user.page';
 import {MatchService} from '../../shared/match-service';
 import {SelectLevelModalPage} from '../game/select-level-modal/select-level-modal.page';
 import {NotificationsPage} from '../notifications/notifications.page';
+import {NotificationService} from '../../shared/notification-service';
 
 @Component({
   selector: 'app-friends',
@@ -28,7 +29,8 @@ export class FriendsPage implements OnInit  {
       private toast: ToastService,
       private router: Router,
       private modalController: ModalController,
-      private matchService: MatchService
+      private matchService: MatchService,
+      private notificationService: NotificationService,
   ) {
     this.friendRequests = userService.currentUser.friendRequests;
     this.friends = userService.currentUser.friends;

@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {ModalController, NavParams} from '@ionic/angular';
 import {NotificationService} from '../../shared/notification-service';
 import {UserService} from '../../shared/user-service';
+import {Notification} from '../../shared/notification.model';
 
 @Component({
   selector: 'app-notifications',
@@ -14,19 +15,20 @@ export class NotificationsPage implements OnInit {
   constructor(private router: Router,
               private modalController: ModalController,
               private notificationService: NotificationService,
-              private userService: UserService,
-              private navParams: NavParams) { }
+              private userService: UserService) {}
 
-  ngOnInit() {
-    this.notificationService.getNotificationsByUserId(this.userService.getCurrentUser().id);
-  }
+  ngOnInit() {}
 
   async closeNotifications() {
     await this.modalController.dismiss();
   }
 
   clearNotifications() {
+    this.notificationService.deleteAllNotificationsByUser();
+  }
 
+  deleteNotification(id) {
+    this.notificationService.deleteNotification(id).then();
   }
 
 }

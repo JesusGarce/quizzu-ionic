@@ -9,6 +9,7 @@ import {ToastService} from '../../shared/toast-service';
 import {SearchOpponentPage} from './match/search-opponent/search-opponent.page';
 import {Messages} from '../../shared/messages';
 import {NotificationsPage} from '../notifications/notifications.page';
+import {NotificationService} from '../../shared/notification-service';
 
 @Component({
   selector: 'app-game',
@@ -29,7 +30,8 @@ export class GamePage {
               private alertController: AlertController,
               private router: Router,
               private toast: ToastService,
-              private modalController: ModalController) {
+              private modalController: ModalController,
+              private notificationService: NotificationService) {
     this.matchesActive = matchService.matchesActive;
     this.matchesFinished = matchService.matchesFinished;
     this.matchesPending = matchService.matchesPendings;

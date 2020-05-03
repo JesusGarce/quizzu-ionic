@@ -11,7 +11,7 @@
     <ion-card color="mediumlight">
         <ion-card-title><h3 class="h3-title">Notifications</h3></ion-card-title>
         <ion-card-content>
-            <div>
+            <div *ngIf="this.notificationService.notificationList.length === 0">
                 <ion-col>
                     <ion-icon class="icon-big" name="notifications-off-outline"></ion-icon>
                     <h2 class="no-notifications">You don't have any notification</h2>
@@ -20,20 +20,22 @@
                     </p>
                 </ion-col>
             </div>
-            <ion-list>
+            <ion-list *ngFor="let notification of this.notificationService.notificationList">
                 <ion-item>
                     <ion-avatar item-start>
                       <ion-icon class="icon-notification" name="alert-circle-outline"></ion-icon>
                     </ion-avatar>
                     <ion-col>
-                        <h2 class="no-notifications">Cher</h2>
-                        <p>Ugh. As if.</p>
+                        <h2 class="no-notifications">{{notification.title}}</h2>
+                        <p>{{notification.message}}</p>
                     </ion-col>
-                    <ion-button><ion-icon name="trash"></ion-icon></ion-button>
+                    <ion-button (click)="deleteNotification(notification.id)"><ion-icon name="trash"></ion-icon></ion-button>
                 </ion-item>
             </ion-list>
           <ion-col text-center>
-            <ion-button (click)="clearNotifications()" >Remove all <ion-icon name="trash"></ion-icon></ion-button>
+            <ion-button *ngIf="this.notificationService.notificationList.length !== 0" (click)="clearNotifications()" >
+                Remove all <ion-icon name="trash"></ion-icon>
+            </ion-button>
           </ion-col>
         </ion-card-content>
     </ion-card>
