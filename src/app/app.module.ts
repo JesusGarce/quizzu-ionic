@@ -33,6 +33,7 @@ import {SearchOpponentPageModule} from './home/game/match/search-opponent/search
 import {MatchWordsApiService} from './home/game/match/wordsapi-service/match-wordsapi-service';
 import {FinishMatchPageModule} from './home/game/match/finish-match/finish-match.module';
 import {NotificationsPageModule} from './home/notifications/notifications.module';
+import {NotificationService} from './shared/notification-service';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -68,6 +69,7 @@ import {NotificationsPageModule} from './home/notifications/notifications.module
     UserService,
       MatchService,
       MatchWordsApiService,
+      NotificationService,
     AngularFirestoreModule,
     Facebook,
     { provide: StorageBucket, useValue: 'gs://quizzu-1fd29.appspot.com/' }
