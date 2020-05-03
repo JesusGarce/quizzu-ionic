@@ -75,6 +75,10 @@ export class AuthenticationService {
     return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
+  getLoggedData() {
+    return JSON.parse(localStorage.getItem('user'));
+  }
+
   signInWithGoogleAuth() {
     return this.authGoogleLogin(new auth.GoogleAuthProvider());
   }

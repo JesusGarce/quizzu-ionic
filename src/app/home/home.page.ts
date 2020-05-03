@@ -3,6 +3,7 @@ import {AuthenticationService} from '../shared/authentication-service';
 import {UserService} from '../shared/user-service';
 import {MatchService} from '../shared/match-service';
 import {Router} from '@angular/router';
+import {NotificationService} from '../shared/notification-service';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +16,13 @@ export class HomePage {
       private authService: AuthenticationService,
       private userService: UserService,
       private matchService: MatchService,
+      private notificationService: NotificationService,
       private router: Router
   ) {
     if (!this.authService.isLoggedIn)
       this.router.navigate(['start']).then();
+
+    this.notificationService.getNotificationsByUserId(authService.getLoggedData().uid);
   }
 
 }

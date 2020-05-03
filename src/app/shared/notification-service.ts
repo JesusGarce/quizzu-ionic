@@ -51,7 +51,10 @@ export class NotificationService {
         return this.afStore.collection('notifications').add(JSON.parse(JSON.stringify(notification))).then(
             res => {
                 res.get().then(
-                    r => {}
+                    r => {
+                        notification.setId(r.id);
+                        this.notificationList.push(notification);
+                    }
                 );
             }
         );
@@ -61,16 +64,29 @@ export class NotificationService {
         return this.afStore.collection('notifications')
             .doc(id)
             .delete()
-            .then( resp => {});
+            .then( () => {
+                this.notificationList = this.notificationList.filter( n => n.id !== id);
+            });
     }
 
-    deleteAllNotificationsByUser(userId) {
+    deleteAllNotificationsByUser() {
         for (const notification of this.notificationList) {
-            return this.afStore.collection('notifications')
+            console.log(notification);
+            this.afStore.collection('notifications')
                 .doc(notification.id)
                 .delete()
-                .then( resp => {});
+                .then( () => {
+                    this.notificationList = this.notificationList.filter( n => n.id !== notification.id);
+                });
         }
+    }
+
+    getNotificationList() {
+        return this.notificationList;
+    }
+
+    getNotificationListLength() {
+        return this.notificationList.length;
     }
 
 }

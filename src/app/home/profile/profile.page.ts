@@ -5,6 +5,7 @@ import {EditImageProfileComponent} from './edit-image-profile.component';
 import {ModalController, PopoverController} from '@ionic/angular';
 import {UserService} from '../../shared/user-service';
 import {NotificationsPage} from '../notifications/notifications.page';
+import {NotificationService} from '../../shared/notification-service';
 
 @Component({
     selector: 'app-profile',
@@ -23,7 +24,8 @@ export class ProfilePage {
         private router: Router,
         private popoverController: PopoverController,
         private userService: UserService,
-        private modalController: ModalController
+        private modalController: ModalController,
+        private notificationService: NotificationService,
     ) {
         this.user = this.userService.currentUser;
         this.userStats = this.userService.currentUserStats;
