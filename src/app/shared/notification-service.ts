@@ -6,9 +6,7 @@ import {ToastService} from './toast-service';
 import {UserService} from './user-service';
 import {AlertController, ModalController} from '@ionic/angular';
 import {Notification} from './notification.model';
-import {Messages} from './messages';
-import {Match} from './match.model';
-import {UserMin} from './user-min.model';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Injectable({
     providedIn: 'root'
@@ -20,11 +18,7 @@ export class NotificationService {
     constructor(
         public afStore: AngularFirestore,
         public router: Router,
-        private spinnerLoading: SpinnerLoadingService,
-        private toast: ToastService,
-        private modalController: ModalController,
-        private userService: UserService,
-        private alertController: AlertController
+        private localNotifications: LocalNotifications
     ) {
         this.notificationList = [];
     }
@@ -39,7 +33,6 @@ export class NotificationService {
                 }
                 for (const not of notifications.docs.values()) {
                     this.notificationList.push(new Notification(not.id, not.data().title, not.data().message, not.data().userId));
-                    console.log(not.data());
                 }
                 return this.notificationList;
             });
@@ -77,11 +70,19 @@ export class NotificationService {
         return query.onSnapshot(querySnapshot => {
             for (const not of querySnapshot.docs.values()) {
                 if (this.notificationList.find( n => n.id === not.id) === undefined) {
-                    console.log(not.data());
                     this.notificationList.push(new Notification(not.id, not.data().title, not.data().message, not.data().userId));
+                    this.createLocalNotification(not.data().message);
                 }
             }
         }, err => {});
+    }
+
+    createLocalNotification(message) {
+        this.localNotifications.schedule({
+            id: 1,
+            text: message,
+            data: { secret: 'secret' }
+        });
     }
 
     getNotificationList() {
