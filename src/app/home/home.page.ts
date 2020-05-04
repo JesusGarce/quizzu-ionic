@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../shared/authentication-service';
 import {UserService} from '../shared/user-service';
 import {MatchService} from '../shared/match-service';
@@ -21,9 +21,6 @@ export class HomePage {
   ) {
     if (!this.authService.isLoggedIn)
       this.router.navigate(['start']).then();
-
-    this.notificationService.getNotificationsByUserId(authService.getLoggedData().uid);
-    this.notificationService.listeningNotification(authService.getLoggedData().uid);
   }
 
 }

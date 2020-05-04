@@ -1,7 +1,9 @@
 <ion-header>
     <ion-toolbar>
         <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png">
-            <ion-button class="button-notification" (click)="openNotifications()" [disabled]="this.notificationService.getNotificationListLength() === 0">
+            <ion-button class="button-notification" (click)="openNotifications()"
+                        [disabled]="this.notificationService.getNotificationListLength() === 0"
+                        *ngIf="this.userService.isNotificationsEnabled()">
                 {{notificationService.notificationList.length}}
             </ion-button>
         </ion-title>
@@ -200,5 +202,19 @@
             </ion-grid>
         </ion-card-content>
 
+    </ion-card>
+
+    <ion-card class="stats" color="mediumlight">
+        <ion-card-header class="stats-title">
+            <ion-card-title>Settings</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item color="mediumlight">
+                    <ion-label><h2>Notifications</h2></ion-label>
+                    <ion-toggle [(ngModel)]="notificationsEnabled" (ionChange)="changeNotifications()"></ion-toggle>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
     </ion-card>
 </ion-content>

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from '../../shared/authentication-service';
 import {Router} from '@angular/router';
 import {EditImageProfileComponent} from './edit-image-profile.component';
-import {ModalController, PopoverController} from '@ionic/angular';
+import {AlertController, ModalController, PopoverController} from '@ionic/angular';
 import {UserService} from '../../shared/user-service';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
@@ -18,6 +18,7 @@ export class ProfilePage {
     matchesLost: number;
     user: any;
     userStats: any;
+    notificationsEnabled: boolean;
 
     constructor(
         private authService: AuthenticationService,
@@ -26,9 +27,11 @@ export class ProfilePage {
         private userService: UserService,
         private modalController: ModalController,
         private notificationService: NotificationService,
+        private alertController: AlertController,
     ) {
         this.user = this.userService.currentUser;
         this.userStats = this.userService.currentUserStats;
+        this.notificationsEnabled = this.userService.isNotificationsEnabled();
 
         this.matchesWon = this.userStats.c2level.c2won + this.userStats.c1level.c1won +
             this.userStats.b2level.b2won + this.userStats.b1level.b1won;
@@ -59,6 +62,34 @@ export class ProfilePage {
         modal.onDidDismiss().then(() => {
         });
         return await modal.present();
+    }
+
+    async changeNotifications() {
+        if (this.userService.isNotificationsEnabled()) {
+            const alert = await this.alertController.create({
+                header: 'Disable notifications',
+                message: 'Do you want to <strong>disable</strong> the notifications?',
+                buttons: [
+                    {
+                        text: 'No',
+                        role: 'cancel',
+                        cssClass: 'secondary',
+                        handler: () => {
+                            this.notificationsEnabled = true;
+                        }
+                    }, {
+                        text: 'Yes',
+                        handler: () => {
+                            this.userService.setNotificationsEnabled();
+                        }
+                    }
+                ]
+            });
+
+            await alert.present();
+        } else {
+            this.userService.setNotificationsEnabled();
+        }
     }
 
 }

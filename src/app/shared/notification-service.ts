@@ -1,12 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
-import {ToastService} from './toast-service';
-import {UserService} from './user-service';
-import {AlertController, ModalController} from '@ionic/angular';
 import {Notification} from './notification.model';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +14,7 @@ export class NotificationService {
     constructor(
         public afStore: AngularFirestore,
         public router: Router,
-        private localNotifications: LocalNotifications
+        private localNotifications: LocalNotifications,
     ) {
         this.notificationList = [];
     }
@@ -36,12 +32,22 @@ export class NotificationService {
                 }
                 return this.notificationList;
             });
+
     }
 
     createNotification(title, message, userId) {
         const notification = new Notification('', title, message, userId);
-
-        return this.afStore.collection('notifications').add(JSON.parse(JSON.stringify(notification))).then();
+        console.log(notification);
+        return this.afStore.doc(`users/${userId}`).ref.get().then(user => {
+            if (user.exists) {
+                const userData = user.data();
+                console.log('Create notification');
+                console.log(userData.notifEnabled);
+                if (userData.notifEnabled) {
+                    this.afStore.collection('notifications').add(JSON.parse(JSON.stringify(notification))).then();
+                }
+            }
+        });
     }
 
     deleteNotification(id) {
