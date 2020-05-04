@@ -9,6 +9,7 @@ import {UserMin} from './user-min.model';
 import {Match} from './match.model';
 import {AlertController, ModalController} from '@ionic/angular';
 import {Messages} from './messages';
+import {NotificationService} from './notification-service';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +29,8 @@ export class MatchService {
         private toast: ToastService,
         private modalController: ModalController,
         private userService: UserService,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private notificationService: NotificationService,
     ) {
         this.matchesActive = [];
         this.matchesFinished = [];
@@ -210,8 +212,10 @@ export class MatchService {
             match.player2RemainsQuestions --;
             match.player2Points = match.player2Points + this.getTurnPoints(counter, correct, consecutives);
         }
-        if (!correct && !this.oppositePlayerFinish(match) || (this.playerFinish(match)))
+        if (!correct && !this.oppositePlayerFinish(match) || (this.playerFinish(match))) {
             match.player1Turn = !match.player1Turn;
+            this.sendNotificationTurn(match);
+        }
         if (this.checkIfMatchIsFinished(match)) {
             match = this.finishMatch(match);
             this.userService.updateUserStats(match, match.player1.id);
@@ -219,6 +223,13 @@ export class MatchService {
         }
         this.updateMatchInList(match, matchId);
         return this.saveMatch(match, matchId);
+    }
+
+    sendNotificationTurn(match) {
+        if (match.player1Turn)
+            this.notificationService.createNotification(Messages.NOTIFICATION_TURN_TITLE, Messages.NOTIFICATION_TURN_MESSAGE, match.player1.id).then();
+        else
+            this.notificationService.createNotification(Messages.NOTIFICATION_TURN_TITLE, Messages.NOTIFICATION_TURN_MESSAGE, match.player2.id).then();
     }
 
     playerFinish(match) {
