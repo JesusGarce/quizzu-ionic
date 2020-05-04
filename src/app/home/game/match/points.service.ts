@@ -3,6 +3,8 @@ import {Router} from '@angular/router';
 import {UserService} from '../../../shared/user-service';
 import {ToastService} from '../../../shared/toast-service';
 import {Constants} from '../../../shared/constants';
+import {NotificationService} from '../../../shared/notification-service';
+import {Messages} from '../../../shared/messages';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +18,7 @@ export class PointsService {
         public router: Router,
         private userService: UserService,
         private toast: ToastService,
+        private notificationService: NotificationService,
     ) {
         this.user = this.userService.getCurrentUser();
     }
@@ -69,7 +72,8 @@ export class PointsService {
     checkIncreaseLevel() {
         this.getNextLevel(Constants.LEVEL_BASE, 1);
         if (this.user.level !== this.nextLevel - 1) {
-            this.toast.create('CONGRATULATIONS! Your level has increased to ' + (this.nextLevel - 1));
+            this.notificationService.createNotification(Messages.NOTIFICATION_LEVEL_TITLE,
+                Messages.NOTIFICATION_LEVEL_MESSAGE + (this.nextLevel - 1), this.user.id).then();
             this.user.level = this.nextLevel - 1;
         }
     }
