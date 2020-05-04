@@ -10,6 +10,7 @@ export class User {
     profile: string;
     points: number;
     level: number;
+    notifEnabled: boolean;
     friends: UserMin[];
     friendRequests: UserMin[];
 
@@ -23,6 +24,7 @@ export class User {
         this.birthDate = new Date();
         this.points = 0;
         this.level = 1;
+        this.notifEnabled = true;
         this.friends = [];
         this.friendRequests = [];
     }

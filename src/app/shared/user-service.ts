@@ -40,6 +40,7 @@ export class UserService {
         user.friends = [];
         user.friendRequests = [];
         user.profile = this.profileDefaultImage;
+        user.notifEnabled = true;
         this.createUserStats(userId);
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
         userRef.set(JSON.parse(JSON.stringify(user)), {
@@ -72,12 +73,20 @@ export class UserService {
         this.afStore.doc(`users/${uid}`).ref.get().then(doc => {
             if (doc.exists) {
                 this.currentUser = doc.data();
+                if (this.isNotificationsEnabled()) {
+                    this.initNotificationSystem();
+                }
             } else {
                 this.toast.create(Messages.USER_NOT_FOUND);
             }
         }).catch(err => {
             this.toast.create(Messages.ERROR);
         });
+    }
+
+    initNotificationSystem() {
+        this.notificationService.getNotificationsByUserId(this.currentUser.id);
+        this.notificationService.listeningNotification(this.currentUser.id);
     }
 
     initCurrentUserStats(uid) {
@@ -303,5 +312,22 @@ export class UserService {
 
     getCurrentUser() {
         return this.currentUser;
+    }
+
+    isNotificationsEnabled() {
+        if (this.currentUser !== undefined)
+            return this.currentUser.notifEnabled;
+    }
+
+    setNotificationsEnabled() {
+        this.currentUser.notifEnabled = !this.currentUser.notifEnabled;
+        this.setCurrentUser(this.currentUser).then(
+            p => {
+                if (this.currentUser.notifEnabled)
+                    this.toast.create('Notifications are enabled');
+                else
+                    this.toast.create('Notifications are disabled');
+            }
+        );
     }
 }
