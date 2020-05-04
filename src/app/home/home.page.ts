@@ -23,6 +23,7 @@ export class HomePage {
       this.router.navigate(['start']).then();
 
     this.notificationService.getNotificationsByUserId(authService.getLoggedData().uid);
+    this.notificationService.listeningNotification(authService.getLoggedData().uid);
   }
 
 }

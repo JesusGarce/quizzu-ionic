@@ -48,16 +48,7 @@ export class NotificationService {
     createNotification(title, message, userId) {
         const notification = new Notification('', title, message, userId);
 
-        return this.afStore.collection('notifications').add(JSON.parse(JSON.stringify(notification))).then(
-            res => {
-                res.get().then(
-                    r => {
-                        notification.setId(r.id);
-                        this.notificationList.push(notification);
-                    }
-                );
-            }
-        );
+        return this.afStore.collection('notifications').add(JSON.parse(JSON.stringify(notification))).then();
     }
 
     deleteNotification(id) {
@@ -79,6 +70,18 @@ export class NotificationService {
                     this.notificationList = this.notificationList.filter( n => n.id !== notification.id);
                 });
         }
+    }
+
+    listeningNotification(userId) {
+        const query = this.afStore.collection('notifications').ref.where('userId', '==', userId);
+        return query.onSnapshot(querySnapshot => {
+            for (const not of querySnapshot.docs.values()) {
+                if (this.notificationList.find( n => n.id === not.id) === undefined) {
+                    console.log(not.data());
+                    this.notificationList.push(new Notification(not.id, not.data().title, not.data().message, not.data().userId));
+                }
+            }
+        }, err => {});
     }
 
     getNotificationList() {

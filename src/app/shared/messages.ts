@@ -28,4 +28,8 @@ export abstract class Messages {
     static readonly ERROR_SAVE_QUESTION: string = 'We can not save the question. Try later';
     static readonly ERROR_FIND_GAME: string = 'We can not find the game. Try again later';
     static readonly ERROR: string = 'Ups! Something happened. Try later';
+
+    static readonly NOTIFICATION_TURN_TITLE: string = 'Is your turn';
+    static readonly NOTIFICATION_TURN_MESSAGE: string = 'Rival has already played, now is your turn';
+
 }
