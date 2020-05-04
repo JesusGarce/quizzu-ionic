@@ -119,6 +119,8 @@ export class MatchService {
                         if (player2.id === '') {
                             this.waitingAnotherPlayer(r.id);
                         } else {
+                            this.notificationService.createNotification(Messages.NOTIFICATION_NEW_GAME_TITLE,
+                                Messages.NOTIFICATION_NEW_GAME_MESSAGE, player2.id).then();
                             this.createMatchDataShow(r.data(), r.id, this.userService.getCurrentUser().id, true);
                         }
                     }
