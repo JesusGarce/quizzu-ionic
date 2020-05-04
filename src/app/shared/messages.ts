@@ -35,5 +35,7 @@ export abstract class Messages {
     static readonly NOTIFICATION_NEW_GAME_MESSAGE: string = 'Someone has challenged you. Play now!';
     static readonly NOTIFICATION_FRIEND_REQUEST_TITLE: string = 'New friend request';
     static readonly NOTIFICATION_FRIEND_REQUEST_MESSAGE: string = 'Someone wants to be your friend. Accept it!';
+    static readonly NOTIFICATION_GAME_OVER_TITLE: string = 'The game is over';
+    static readonly NOTIFICATION_GAME_OVER_MESSAGE: string = 'Go to your history to see the result';
 
 }

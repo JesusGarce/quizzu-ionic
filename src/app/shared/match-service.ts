@@ -216,7 +216,8 @@ export class MatchService {
         }
         if (!correct && !this.oppositePlayerFinish(match) || (this.playerFinish(match))) {
             match.player1Turn = !match.player1Turn;
-            this.sendNotificationTurn(match);
+            if (!this.checkIfMatchIsFinished(match))
+                this.sendNotificationTurn(match);
         }
         if (this.checkIfMatchIsFinished(match)) {
             match = this.finishMatch(match);

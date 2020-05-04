@@ -14,6 +14,7 @@ import {FinishMatchPage} from './finish-match/finish-match.page';
 import {Constants} from '../../../shared/constants';
 import {Messages} from '../../../shared/messages';
 import {PointsService} from './points.service';
+import {NotificationService} from '../../../shared/notification-service';
 
 @Component({
   selector: 'app-match',
@@ -49,7 +50,8 @@ export class MatchPage implements OnInit {
                private modalController: ModalController,
                private spinnerLoading: SpinnerLoadingService,
                private toast: ToastService,
-               private http: HttpClient) {
+               private http: HttpClient,
+               private notificationService: NotificationService) {
     this.user = this.userService.currentUser;
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
@@ -148,13 +150,13 @@ export class MatchPage implements OnInit {
         this.words.push(wordlist.words[randomNumber]);
         if (this.correctWordPosition === arrayNumbers.length) {
           this.correctWord = wordlist.words[randomNumber];
-          this.getQuestion(wordlist);
+          this.getQuestion();
         }
       }
     }
   }
 
-  getQuestion(wordlist) {
+  getQuestion() {
       this.matchWordsApiService.getDefinition(this.correctWord)
           .subscribe((data: Word) => {
             this.question = data.definitions[0].definition;
@@ -224,6 +226,7 @@ export class MatchPage implements OnInit {
 
   async finishGame() {
     this.match = this.matchService.getCurrentMatch();
+    this.createNotificationFinishMatch(this.match);
     if (this.getStateFinishMatch() !== Constants.RESULT_GAME_DEFEAT)
       this.pointsService.increaseUserPointsByFinishMatch(this.match, this.getStateFinishMatch()).then();
     const modal = await this.modalController.create({
@@ -237,5 +240,14 @@ export class MatchPage implements OnInit {
     modal.onDidDismiss().then(() => {});
 
     return await modal.present();
+  }
+
+  createNotificationFinishMatch(match) {
+    if (this.user.id === match.player1.id)
+      return this.notificationService.createNotification(Messages.NOTIFICATION_GAME_OVER_TITLE,
+          Messages.NOTIFICATION_GAME_OVER_MESSAGE, this.match.player2.id);
+    else
+      return this.notificationService.createNotification(Messages.NOTIFICATION_GAME_OVER_TITLE,
+          Messages.NOTIFICATION_GAME_OVER_MESSAGE, this.match.player1.id);
   }
 }
