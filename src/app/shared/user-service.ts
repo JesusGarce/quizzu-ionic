@@ -10,6 +10,7 @@ import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
 import {UserMin} from './user-min.model';
 import {Messages} from './messages';
+import {NotificationService} from './notification-service';
 
 @Injectable({
     providedIn: 'root'
@@ -27,6 +28,7 @@ export class UserService {
         private storage: AngularFireStorage,
         private spinnerLoading: SpinnerLoadingService,
         private toast: ToastService,
+        private notificationService: NotificationService,
     ) {
     }
 
@@ -234,6 +236,8 @@ export class UserService {
                         merge: true
                     });
                 this.toast.create(Messages.FRIEND_REQUEST_SENT);
+                this.notificationService.createNotification(Messages.NOTIFICATION_FRIEND_REQUEST_TITLE,
+                    Messages.NOTIFICATION_FRIEND_REQUEST_MESSAGE, friendUser.id).then();
             } else {
                 this.toast.create(Messages.USER_NOT_FOUND);
             }

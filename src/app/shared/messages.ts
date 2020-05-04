@@ -33,5 +33,7 @@ export abstract class Messages {
     static readonly NOTIFICATION_TURN_MESSAGE: string = 'Rival has already played, now is your turn';
     static readonly NOTIFICATION_NEW_GAME_TITLE: string = 'New game request';
     static readonly NOTIFICATION_NEW_GAME_MESSAGE: string = 'Someone has challenged you. Play now!';
+    static readonly NOTIFICATION_FRIEND_REQUEST_TITLE: string = 'New friend request';
+    static readonly NOTIFICATION_FRIEND_REQUEST_MESSAGE: string = 'Someone wants to be your friend. Accept it!';
 
 }
