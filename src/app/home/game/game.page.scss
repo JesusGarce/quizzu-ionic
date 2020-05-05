@@ -55,73 +55,82 @@ ion-item {
 .button-white {
   --background: #ffffff;
   color: #A92EDF;
+  font-size: large;
+  border-radius: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 2.5px;
+}
+
+.icon-medium {
+  font-size: 30px;
 }
 
 .h2-white{
-  color: white;
-  padding: 0;
-  margin: 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+color: white;
+padding: 0;
+margin: 0;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .h3-white{
-  color: white;
-  padding: 0;
-  margin: 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+color: white;
+padding: 0;
+margin: 0;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .h3-title{
-  padding: 0;
-  margin: 0;
+padding: 0;
+margin: 0;
 }
 
 .list-md{
-  padding: 0;
+padding: 0;
 }
 
 
 .icon-big{
-  color: #A92EDF;
-  font-size: 50px;
+color: #A92EDF;
+font-size: 50px;
 }
 
 .list-size{
-  max-height: 350px;
-  overflow-y: scroll;
+max-height: 350px;
+overflow-y: scroll;
 }
 
 .game-result{
-  background-color: #cfcfcf;
-  margin-right: 10px;
-  border-radius: 4px;
-  padding: 3px;
+background-color: #cfcfcf;
+margin-right: 10px;
+border-radius: 4px;
+padding: 3px;
 }
 
 .result-local {
-  color: #A92EDF;
+color: #A92EDF;
 }
 
 .result-away {
-  color: #252326;
+color: #252326;
 }
 
 .button-notification {
-  position: absolute;
-  display: inline-block;
-  font-size: large;
-  right: 0.5em;
-  --border-radius: 30px;
-  --padding-bottom: 13px;
-  --padding-top: 13px;
-  --padding-start: 15px;
-  --padding-end: 15px;
-  height: auto;
-  top: 10%;
+position: absolute;
+display: inline-block;
+font-size: large;
+right: 0.5em;
+--border-radius: 30px;
+--padding-bottom: 13px;
+--padding-top: 13px;
+--padding-start: 15px;
+--padding-end: 15px;
+height: auto;
+top: 10%;
 }
 
 .button-notification:disabled,
 .button-notification[disabled]{
-  --background: #252326;
-  opacity: 1;
+--background: #252326;
+opacity: 1;
 }

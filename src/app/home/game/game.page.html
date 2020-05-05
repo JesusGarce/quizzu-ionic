@@ -70,8 +70,15 @@
     <ion-card color="primary">
         <ion-card-title><h2 class="h2-white">New game</h2></ion-card-title>
         <ion-row class="new-game-row">
-            <ion-button class="button-white" (click)="chooseLevel()">Play now</ion-button>
-            <ion-button class="button-white" (click)="goToFriendsPage()">Challenge a friend</ion-button>
+            <ion-tab-button class="button-white" (click)="chooseLevel()">
+                <ion-icon class="icon-medium" name="person-circle-outline"></ion-icon>Practise <br/> mode
+            </ion-tab-button>
+            <ion-tab-button class="button-white" (click)="chooseLevel()">
+                <ion-icon class="icon-medium" name="earth-outline"></ion-icon>Play <br/> now
+            </ion-tab-button>
+            <ion-tab-button class="button-white" (click)="goToFriendsPage()">
+                <ion-icon class="icon-medium" name="people-circle-outline"></ion-icon>Challenge <br/> a friend
+            </ion-tab-button>
         </ion-row>
     </ion-card>
 

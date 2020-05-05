@@ -230,9 +230,11 @@ export class MatchService {
 
     sendNotificationTurn(match) {
         if (match.player1Turn)
-            this.notificationService.createNotification(Messages.NOTIFICATION_TURN_TITLE, Messages.NOTIFICATION_TURN_MESSAGE, match.player1.id).then();
+            this.notificationService.createNotification(Messages.NOTIFICATION_TURN_TITLE,
+                Messages.NOTIFICATION_TURN_MESSAGE, match.player1.id).then();
         else
-            this.notificationService.createNotification(Messages.NOTIFICATION_TURN_TITLE, Messages.NOTIFICATION_TURN_MESSAGE, match.player2.id).then();
+            this.notificationService.createNotification(Messages.NOTIFICATION_TURN_TITLE,
+                Messages.NOTIFICATION_TURN_MESSAGE, match.player2.id).then();
     }
 
     playerFinish(match) {
