@@ -1,0 +1,178 @@
+.welcome-card img {
+  max-height: 35vh;
+  overflow: hidden;
+}
+
+ion-button {
+  &.btnFalse {
+    --background: #F22929;
+  }
+}
+
+ion-button {
+  &.btnOK {
+    --background: #55F229;
+  }
+}
+
+ion-button:disabled,
+ion-button[disabled]{
+  opacity: 1;
+}
+
+.img-toolbar {
+  max-width: 40%;
+  height: auto;
+}
+
+ion-title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.title-question {
+  display: flex;
+  justify-content: center;
+}
+
+ion-card {
+  padding-top: 2px;
+  overflow: visible;
+  padding-bottom: 25px;
+}
+
+ion-card-subtitle {
+  font-size: x-large;
+}
+
+.card-question {
+  padding-bottom: 2px;
+}
+
+.card-player {
+  padding: 0;
+  justify-content: center;
+}
+
+.player {
+  padding: 5px;
+}
+
+.player-name {
+  color: #211f21;
+  margin:0;
+  padding: 0;
+  font-size: large;
+}
+
+.player-row {
+  justify-content: center;
+}
+
+h3 {
+  color: #211f21;
+  justify-content: center;
+  margin:0;
+  padding: 0;
+}
+
+.time-question {
+  position: absolute;
+  padding-left: 18px;
+  padding-right: 18px;
+  align-content: center;
+  background-color: #211f21;
+  border-radius: 50%;
+  display: inline-block;
+  bottom: -25px;
+  margin-left:-29px
+}
+
+h2 {
+  color:white;
+}
+
+.questions {
+  padding-top: 15px;
+}
+
+.blink {
+  font-size: 28px;
+  animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.counter {
+  font-size: x-large;
+}
+
+.achievement-container {
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+h5 {
+  color: #A92EDF;
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-size: 1.4em;
+  text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+h4 {
+  color: #252326;
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-size: 1.65em;
+  text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+.answer-h3{
+  color: #A92EDF;
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-size: 2.5em;
+  text-shadow: -1px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+ion-avatar {
+  max-width: 25%;
+  max-height: 25%;
+  padding: 5px;
+}
+
+.close-button {
+  --background: #252326;
+}
+
+.div-button {
+  bottom: 20px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.record {
+  font-size: large;
+  color: #252326;
+}
+
+.record-row {
+  background: #d7d8da;
+  display: block;
+}
