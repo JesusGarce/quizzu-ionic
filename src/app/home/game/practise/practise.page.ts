@@ -13,6 +13,8 @@ import {Constants} from '../../../shared/constants';
 import {CountdownStartPage} from '../match/countdown-start/countdown-start.page';
 import {Word} from '../match/wordsapi-service/word.model';
 import {Messages} from '../../../shared/messages';
+import {FinishMatchPage} from '../match/finish-match/finish-match.page';
+import {FinishPractisePage} from './finish-practise/finish-practise.page';
 
 @Component({
   selector: 'app-practise',
@@ -162,9 +164,12 @@ export class PractisePage implements OnInit {
       this.ngOnInit();
       this.initData();
     } else {
-      if (this.record < this.numberQuestion)
+      if (this.record < this.numberQuestion) {
         this.updateRecord();
-      this.router.navigate(['home/game']).then();
+        this.showNewRecord().then();
+      } else {
+        this.router.navigate(['home/game']);
+      }
     }
   }
 
@@ -207,5 +212,19 @@ export class PractisePage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async showNewRecord() {
+    const modal = await this.modalController.create({
+      component: FinishPractisePage,
+      componentProps: {
+        level: this.level,
+        record: this.numberQuestion
+      }
+    });
+
+    modal.onDidDismiss().then(() => {});
+
+    return await modal.present();
   }
 }
