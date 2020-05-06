@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../../assets/quizzu_logo.png"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content align="center" class="bg-pink">
+  <h1>NEW RECORD</h1>
+
+  <lottie-animation-view
+          [options]="lottieConfig"
+          [width]="200"
+          [height]="250"
+          (animCreated)="handleAnimation($event)">
+  </lottie-animation-view>
+
+  <ion-card color="white">
+        <ion-card-header>
+          <ion-avatar>
+            <img src="{{this.user.profile}}">
+          </ion-avatar>
+          <ion-card-title><h2>{{this.user.username}}</h2></ion-card-title>
+          <ion-card-title>Record: {{this.record}}</ion-card-title>
+        </ion-card-header>
+  </ion-card>
+  <hr>
+  <ion-button style="--background:white" (click)="closeModal()"><h3>Go Home</h3></ion-button>
+
+</ion-content>
