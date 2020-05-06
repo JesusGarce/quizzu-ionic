@@ -1,6 +1,12 @@
 
 export class UserStats {
     user: string;
+    practise: {
+        c2: number,
+        c1: number,
+        b2: number,
+        b1: number
+    };
     c2level: {
         c2played: number
         c2won: number,
@@ -28,6 +34,11 @@ export class UserStats {
 
     constructor(user) {
         this.user = user;
+
+        this.practise.c2 = 0;
+        this.practise.c1 = 0;
+        this.practise.b2 = 0;
+        this.practise.b1 = 0;
 
         this.c2level.c2played = 0;
         this.c2level.c2won = 0;

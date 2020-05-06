@@ -24,6 +24,9 @@ export abstract class Messages {
     static readonly NEW_GAME_TITLE: string = 'New game is ready';
     static readonly NEW_GAME: string = 'Opponent found! Do you want to start now?';
     static readonly VERIFY_EMAIL: string = 'You should verify your e-mail';
+    static readonly RECORD_PRACTISE: string = 'Congratulations! Your new record is ';
+    static readonly PRACTISE_CLOSED: string = 'Do you want to <strong>close</strong> this question? You will lose all your progression';
+    static readonly PRACTISE_CLOSED_TITLE: string = 'Finish practise mode';
 
     static readonly ERROR_SAVE_QUESTION: string = 'We can not save the question. Try later';
     static readonly ERROR_FIND_GAME: string = 'We can not find the game. Try again later';

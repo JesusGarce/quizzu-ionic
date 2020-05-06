@@ -5,7 +5,7 @@ import {UserService} from '../../../shared/user-service';
 import {MatchService} from '../../../shared/match-service';
 import {PointsService} from '../match/points.service';
 import {MatchWordsApiService} from '../match/wordsapi-service/match-wordsapi-service';
-import {ModalController} from '@ionic/angular';
+import {AlertController, ModalController} from '@ionic/angular';
 import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loading.service';
 import {ToastService} from '../../../shared/toast-service';
 import {HttpClient} from '@angular/common/http';
@@ -20,8 +20,8 @@ import {Messages} from '../../../shared/messages';
   styleUrls: ['./practise.page.scss', '../../../app.component.scss'],
 })
 export class PractisePage implements OnInit {
-  loaded = false;
   numberQuestion: number;
+  level: string;
   counter: any;
   less5seconds = false;
   user: any;
@@ -35,7 +35,8 @@ export class PractisePage implements OnInit {
   interval: any;
   displayAnswer = false;
   answer: number;
-  consecutives: number;
+  userStats: any;
+  record: number;
 
   constructor(private authService: AuthenticationService,
               private router: Router,
@@ -47,8 +48,13 @@ export class PractisePage implements OnInit {
               private modalController: ModalController,
               private spinnerLoading: SpinnerLoadingService,
               private toast: ToastService,
+              private alertController: AlertController,
               private http: HttpClient) {
-    this.user = this.userService.currentUser;
+    this.user = this.userService.getCurrentUser();
+    this.userStats = this.userService.getCurrentUserStats();
+    this.level = this.route.snapshot.paramMap.get('level');
+    this.getRecord();
+    this.numberQuestion = 0;
     this.initData();
   }
 
@@ -59,20 +65,20 @@ export class PractisePage implements OnInit {
   initData() {
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
-    this.initializeWords('b2');
+    this.initializeWords(this.level);
     this.answerDone = false;
     this.displayAnswer = false;
     this.counter = Constants.TIME_QUESTION;
-    this.numberQuestion = 1;
+    this.numberQuestion ++;
   }
 
   startTimer() {
     this.interval = setInterval(() => {
-      this.counter --;
+      this.counter--;
       if (this.counter === 5) {
         this.less5seconds = true;
       }
-      if (this.counter === 0) return true;
+      if (this.counter === 0) this.checkAnswer();
     }, 1000);
   }
 
@@ -97,6 +103,17 @@ export class PractisePage implements OnInit {
         });
   }
 
+  getRecord() {
+    if (this.level === Constants.LEVEL_C2)
+      this.record = this.userStats.practise.c2;
+    else if (this.level === Constants.LEVEL_C1)
+      this.record = this.userStats.practise.c1;
+    else if (this.level === Constants.LEVEL_B2)
+      this.record = this.userStats.practise.b2;
+    else if (this.level === Constants.LEVEL_B1)
+      this.record = this.userStats.practise.b1;
+  }
+
   findFourRandomWords(wordlist) {
     const arrayNumbers = [];
     this.correctWordPosition = this.randomWord(1, Constants.QUESTIONS);
@@ -114,15 +131,12 @@ export class PractisePage implements OnInit {
   }
 
   getQuestion() {
-    /*
     this.matchWordsApiService.getDefinition(this.correctWord)
         .subscribe((data: Word) => {
           this.question = data.definitions[0].definition;
         }, error => {
-          console.log('Error: ' + error);
-          this.initializeWords(this.match.gameLevel);
+          this.initializeWords(this.level);
         });
-     */
   }
 
   doingAnswer(answer) {
@@ -137,21 +151,61 @@ export class PractisePage implements OnInit {
   checkAnswer() {
     if (!this.isCorrectAnswer())
       this.wordsButtonFail[this.answer] = true;
-    else
-      this.consecutives ++;
 
-    this.displayAnswer = true;
+    this.delay(500).then(
+        p => {this.displayAnswer = true}
+    );
   }
 
-  randomWord(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  closeQuestion() {
+    if (this.isCorrectAnswer()) {
+      this.ngOnInit();
+      this.initData();
+    } else {
+      if (this.record < this.numberQuestion)
+        this.updateRecord();
+      this.router.navigate(['home/game']).then();
+    }
+  }
+
+  updateRecord() {
+    this.toast.create(Messages.RECORD_PRACTISE + this.numberQuestion);
+    this.userService.updatePractiseStats(this.level, this.numberQuestion).then(
+        r => {
+          this.record = this.numberQuestion;
+        });
   }
 
   async delay(ms: number) {
     await new Promise(resolve => setTimeout(() => resolve(), ms)).then();
   }
 
+  randomWord(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
   isCorrectAnswer() {
     return this.correctWordPosition === this.answer;
+  }
+
+  async goToHome() {
+    const alert = await this.alertController.create({
+      header: Messages.PRACTISE_CLOSED_TITLE,
+      message: Messages.PRACTISE_CLOSED,
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Yes',
+          handler: () => {
+            this.router.navigate(['home/game']).then();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

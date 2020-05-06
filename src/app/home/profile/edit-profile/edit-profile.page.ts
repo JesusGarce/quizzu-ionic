@@ -24,7 +24,7 @@ export class EditProfilePage implements OnInit {
         private toastService: ToastService,
         private userService: UserService
     ) {
-        this.user = this.userService.currentUser;
+        this.user = this.userService.getCurrentUser();
     }
 
     ngOnInit() {

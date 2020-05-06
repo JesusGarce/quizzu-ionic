@@ -11,16 +11,16 @@
       <ion-card align="center" class="card-player" color="primary">
         <ion-row class="player-row">
           <ion-avatar>
-            <img src="../../../../assets/perchick_happy.png">
+            <img src="{{this.user.profile}}">
           </ion-avatar>
           <div align="center" class="player">
-            <h3 class="player-name">CHUSGARCE</h3>
-            <ion-card-subtitle>123</ion-card-subtitle>
+            <h3 class="player-name">{{this.user.username}}</h3>
+            <ion-card-subtitle>{{numberQuestion}}</ion-card-subtitle>
           </div>
         </ion-row>
         <ion-row class="record-row">
           <div align="center" class="record">
-            Record: 0
+            Record: {{record}}
           </div>
         </ion-row>
       </ion-card>
@@ -72,7 +72,7 @@
 
   <hr>
   <div class="div-button">
-    <ion-button class="close-button"><h2>Close</h2></ion-button>
+    <ion-button class="close-button" (click)="goToHome()"><h2>Close</h2></ion-button>
   </div>
 
   <div *ngIf="displayAnswer" class="achievement-container">
@@ -89,7 +89,6 @@
       <h3 class="answer-h3" align="center" *ngIf="isCorrectAnswer()"> CORRECT! </h3>
       <h3 class="answer-h3" align="center" *ngIf="!isCorrectAnswer()"> INCORRECT! </h3>
       <h4 align="center"> Answer was {{this.correctWord}} </h4>
-      <h5 align="center">+ {{this.matchService.getTurnPoints(counter, isCorrectAnswer(),consecutives)}} POINTS</h5>
     </div>
 
     <hr>

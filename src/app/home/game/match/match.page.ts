@@ -52,7 +52,7 @@ export class MatchPage implements OnInit {
                private toast: ToastService,
                private http: HttpClient,
                private notificationService: NotificationService) {
-    this.user = this.userService.currentUser;
+    this.user = this.userService.getCurrentUser();
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();
@@ -131,7 +131,6 @@ export class MatchPage implements OnInit {
   }
 
   initializeWords(level) {
-    console.log('Initialize words: ' + level);
     this.words = [];
     const url = 'assets/docs/wordlist_' + level + '.json';
     this.http.get(url, {responseType: 'json'})
@@ -161,7 +160,6 @@ export class MatchPage implements OnInit {
           .subscribe((data: Word) => {
             this.question = data.definitions[0].definition;
           }, error => {
-            console.log('Error: ' + error);
             this.initializeWords(this.match.gameLevel);
           });
   }

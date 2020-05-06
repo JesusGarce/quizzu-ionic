@@ -32,9 +32,9 @@ export class FriendsPage implements OnInit  {
       private matchService: MatchService,
       private notificationService: NotificationService,
   ) {
-    this.friendRequests = userService.currentUser.friendRequests;
-    this.friends = userService.currentUser.friends;
-    this.user = userService.currentUser;
+    this.friendRequests = userService.getCurrentUser().friendRequests;
+    this.friends = userService.getCurrentUser().friends;
+    this.user = userService.getCurrentUser();
     this.findUser = '';
   }
 

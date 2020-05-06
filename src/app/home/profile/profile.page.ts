@@ -29,8 +29,8 @@ export class ProfilePage {
         private notificationService: NotificationService,
         private alertController: AlertController,
     ) {
-        this.user = this.userService.currentUser;
-        this.userStats = this.userService.currentUserStats;
+        this.user = this.userService.getCurrentUser();
+        this.userStats = this.userService.getCurrentUserStats();
         this.notificationsEnabled = this.userService.isNotificationsEnabled();
 
         this.matchesWon = this.userStats.c2level.c2won + this.userStats.c1level.c1won +

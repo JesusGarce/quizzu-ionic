@@ -11,6 +11,7 @@ import {ToastService} from './toast-service';
 import {UserMin} from './user-min.model';
 import {Messages} from './messages';
 import {NotificationService} from './notification-service';
+import {Constants} from './constants';
 
 @Injectable({
     providedIn: 'root'
@@ -183,6 +184,19 @@ export class UserService {
         return userStats;
     }
 
+    updatePractiseStats(level, consecutives) {
+        if (level === Constants.LEVEL_C2)
+            this.currentUserStats.practise.c2 = consecutives;
+        else if (level === Constants.LEVEL_C1)
+            this.currentUserStats.practise.c1 = consecutives;
+        else if (level === Constants.LEVEL_B2)
+            this.currentUserStats.practise.b2 = consecutives;
+        else if (level === Constants.LEVEL_B1)
+            this.currentUserStats.practise.b1 = consecutives;
+
+        return this.setUserStats(this.currentUserStats, this.currentUser.id);
+    }
+
     onProfileUpload(event) {
         this.spinnerLoading.show();
         const n = Date.now();
@@ -312,6 +326,10 @@ export class UserService {
 
     getCurrentUser() {
         return this.currentUser;
+    }
+
+    getCurrentUserStats() {
+        return this.currentUserStats;
     }
 
     isNotificationsEnabled() {
