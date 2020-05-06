@@ -43,7 +43,7 @@ export class GamePage {
     this.router.navigate(['home/friends']);
   }
 
-  async chooseLevel() {
+  async chooseLevel(gameMode) {
     const modal = await this.modalController.create({
       component: SelectLevelModalPage,
     });
@@ -51,7 +51,10 @@ export class GamePage {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned.data !== null) {
         this.levelMatch = dataReturned.data;
-        this.searchingOpponent();
+        if (gameMode === 'practise')
+          this.startPractise(this.levelMatch);
+        else
+          this.searchingOpponent();
       }
     });
 
@@ -73,6 +76,10 @@ export class GamePage {
     });
 
     return await modal.present();
+  }
+
+  startPractise(gameLevel) {
+    this.router.navigate(['home/game/practise/' + gameLevel]).then();
   }
 
   acceptGame(game) {

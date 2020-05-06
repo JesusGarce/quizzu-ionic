@@ -131,7 +131,6 @@ export class MatchPage implements OnInit {
   }
 
   initializeWords(level) {
-    console.log('Initialize words: ' + level);
     this.words = [];
     const url = 'assets/docs/wordlist_' + level + '.json';
     this.http.get(url, {responseType: 'json'})
