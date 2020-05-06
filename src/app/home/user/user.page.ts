@@ -32,7 +32,7 @@ export class UserPage implements OnInit {
   ) {
     this.isFriend = false;
     this.isPending = false;
-    this.currentUser = this.userService.currentUser;
+    this.currentUser = this.userService.getCurrentUser();
     this.userService.getUser(this.route.snapshot.paramMap.get('id')).then(doc => {
       if (doc.exists) {
         this.spinnerLoading.hide();

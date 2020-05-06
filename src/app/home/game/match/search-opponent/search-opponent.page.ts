@@ -41,7 +41,7 @@ export class SearchOpponentPage implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
+    this.user = this.userService.getCurrentUser();
   }
 
   handleAnimation(anim: any) {

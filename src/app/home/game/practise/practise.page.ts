@@ -169,7 +169,7 @@ export class PractisePage implements OnInit {
   }
 
   updateRecord() {
-    this.toast.create('Congratulations! Your new record is ' + this.numberQuestion);
+    this.toast.create(Messages.RECORD_PRACTISE + this.numberQuestion);
     this.userService.updatePractiseStats(this.level, this.numberQuestion).then(
         r => {
           this.record = this.numberQuestion;
@@ -190,8 +190,8 @@ export class PractisePage implements OnInit {
 
   async goToHome() {
     const alert = await this.alertController.create({
-      header: 'Finish practise mode',
-      message: 'Do you want to close this question? You will lose all your progression',
+      header: Messages.PRACTISE_CLOSED_TITLE,
+      message: Messages.PRACTISE_CLOSED,
       buttons: [
         {
           text: 'No',

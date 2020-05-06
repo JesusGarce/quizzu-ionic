@@ -28,7 +28,7 @@ export class FinishMatchPage implements OnInit {
               private navParams: NavParams,
               private route: ActivatedRoute,
               private modalController: ModalController) {
-    this.user = this.userService.currentUser;
+    this.user = this.userService.getCurrentUser();
     this.state = this.navParams.data.state;
     this.match = this.navParams.data.match;
     this.configLottie();
