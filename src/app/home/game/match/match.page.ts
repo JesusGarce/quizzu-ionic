@@ -7,14 +7,16 @@ import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import {MatchWordsApiService} from './wordsapi-service/match-wordsapi-service';
+import {MatchWordsApiService} from '../../../shared/wordsapi-service/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
-import {Word} from './wordsapi-service/word.model';
+import {Word} from '../../../shared/wordsapi-service/word.model';
 import {FinishMatchPage} from './finish-match/finish-match.page';
 import {Constants} from '../../../shared/constants';
 import {Messages} from '../../../shared/messages';
 import {PointsService} from './points.service';
 import {NotificationService} from '../../../shared/notification-service';
+import {Synonyms} from '../../../shared/wordsapi-service/synonym.model';
+import {Antonyms} from '../../../shared/wordsapi-service/antonym.model';
 
 @Component({
   selector: 'app-match',
@@ -156,12 +158,48 @@ export class MatchPage implements OnInit {
   }
 
   getQuestion() {
+    if (this.match.type === Constants.GAME_ANTONYMS)
+      this.matchWordsApiService.getAntonym(this.correctWord)
+          .subscribe((data: Antonyms) => {
+            if (data.antonyms.length === 0)
+              this.initializeWords(this.match.gameLevel);
+            this.question = this.storeAllAntonyms(data);
+          }, error => {
+            this.initializeWords(this.match.gameLevel);
+          });
+    else if (this.match.type === Constants.GAME_SYNONYMS)
+      this.matchWordsApiService.getSynonym(this.correctWord)
+          .subscribe((data: Synonyms) => {
+            if (data.synonyms.length === 0)
+              this.initializeWords(this.match.gameLevel);
+            this.question = this.storeAllSynonyms(data);
+          }, error => {
+            this.initializeWords(this.match.gameLevel);
+          });
+    else {
       this.matchWordsApiService.getDefinition(this.correctWord)
           .subscribe((data: Word) => {
             this.question = data.definitions[0].definition;
           }, error => {
             this.initializeWords(this.match.gameLevel);
           });
+    }
+  }
+
+  storeAllSynonyms(data) {
+    let allSynonyms = '';
+    for (const synonym of data.synonyms)
+      allSynonyms = allSynonyms.concat(synonym , ', ');
+    allSynonyms = allSynonyms.slice(0 , allSynonyms.length - 2);
+    return allSynonyms;
+  }
+
+  storeAllAntonyms(data) {
+    let allAntonyms = '';
+    for (const antonym of data.antonyms)
+      allAntonyms = allAntonyms.concat(antonym, ', ');
+    allAntonyms = allAntonyms.slice(0 , allAntonyms.length - 2);
+    return allAntonyms;
   }
 
   doingAnswer(answer) {

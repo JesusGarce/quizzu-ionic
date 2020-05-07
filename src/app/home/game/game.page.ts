@@ -11,6 +11,7 @@ import {Messages} from '../../shared/messages';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
 import {Constants} from '../../shared/constants';
+import {Options} from '../../shared/options.model';
 
 @Component({
   selector: 'app-game',
@@ -19,7 +20,7 @@ import {Constants} from '../../shared/constants';
 })
 export class GamePage {
 
-  levelMatch: string;
+  optionSelected: Options;
   matchFoundId: string;
   matchesActive: MatchShow[];
   matchesFinished: MatchShow[];
@@ -50,11 +51,10 @@ export class GamePage {
     });
 
     modal.onDidDismiss().then((dataReturned) => {
-      console.log(dataReturned.data);
       if (dataReturned.data !== undefined) {
-        this.levelMatch = dataReturned.data.level;
+        this.optionSelected = new Options(dataReturned.data.type, dataReturned.data.level);
         if (gameMode === Constants.GAME_MODE_PRACTISE)
-          this.startPractise(this.levelMatch);
+          this.startPractise(this.optionSelected);
         else
           this.searchingOpponent();
       }
@@ -67,7 +67,7 @@ export class GamePage {
     const modal = await this.modalController.create({
       component: SearchOpponentPage,
       componentProps: {
-        level: this.levelMatch
+        options: this.optionSelected
       }
     });
 
@@ -80,8 +80,8 @@ export class GamePage {
     return await modal.present();
   }
 
-  startPractise(gameLevel) {
-    this.router.navigate(['home/game/practise/' + gameLevel]).then();
+  startPractise(options) {
+    this.router.navigate(['home/game/practise/' + options.type + '/' + options.level]).then();
   }
 
   acceptGame(game) {

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {SpinnerLoadingService} from '../../../../shared/spinner-loading/spinner-loading.service';
-import {ToastService} from '../../../../shared/toast-service';
+import {SpinnerLoadingService} from '../spinner-loading/spinner-loading.service';
+import {ToastService} from '../toast-service';
 import {AlertController, ModalController} from '@ionic/angular';
-import {MatchService} from '../../../../shared/match-service';
+import {MatchService} from '../match-service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
@@ -41,6 +41,26 @@ export class MatchWordsApiService {
             .set('x-rapidapi-key', this.key);
 
         return this.http.get(this.url + word + '/definitions', { 'headers': headers });
+    }
+
+    getSynonym(word) {
+        const headers = new HttpHeaders()
+            .set('content-type', 'application/json')
+            .set('Access-Control-Allow-Origin', '*')
+            .set('x-rapidapi-host', this.host)
+            .set('x-rapidapi-key', this.key);
+
+        return this.http.get(this.url + word + '/synonyms', { 'headers': headers });
+    }
+
+    getAntonym(word) {
+        const headers = new HttpHeaders()
+            .set('content-type', 'application/json')
+            .set('Access-Control-Allow-Origin', '*')
+            .set('x-rapidapi-host', this.host)
+            .set('x-rapidapi-key', this.key);
+
+        return this.http.get(this.url + word + '/antonyms', { 'headers': headers });
     }
 
 }

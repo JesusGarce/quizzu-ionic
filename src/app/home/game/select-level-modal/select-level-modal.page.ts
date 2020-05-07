@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ModalController, NavParams} from '@ionic/angular';
 import {ToastService} from '../../../shared/toast-service';
 import {Constants} from '../../../shared/constants';
+import {Messages} from '../../../shared/messages';
+import {Options} from '../../../shared/options.model';
 
 @Component({
   selector: 'app-select-level-modal',
@@ -10,33 +12,31 @@ import {Constants} from '../../../shared/constants';
 })
 export class SelectLevelModalPage implements OnInit {
 
-  selection: any;
+  selection: Options;
 
   constructor(
       private modalController: ModalController,
       private toast: ToastService,
   ) {
-    this.selection = {};
-    this.selection.type = '';
-    this.selection.level = '';
+    this.selection = new Options('', '');
   }
 
   ngOnInit() {
   }
 
   selectLevel(level) {
-    this.selection.level = level;
+    this.selection.setLevel(level);
   }
 
   selectType(type) {
-    this.selection.type = type;
+    this.selection.setType(type);
   }
 
   async startGame() {
     if ((this.selection.level !== '') && (this.selection.type !== ''))
       await this.modalController.dismiss(this.selection);
     else {
-      this.toast.create('You should choose a level and game before start');
+      this.toast.create(Messages.CHOOSE_LEVEL_AND_GAME);
     }
   }
 

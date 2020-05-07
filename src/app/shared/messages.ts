@@ -27,6 +27,7 @@ export abstract class Messages {
     static readonly RECORD_PRACTISE: string = 'Congratulations! Your new record is ';
     static readonly PRACTISE_CLOSED: string = 'Do you want to <strong>close</strong> this question? You will lose all your progression';
     static readonly PRACTISE_CLOSED_TITLE: string = 'Finish practise mode';
+    static readonly CHOOSE_LEVEL_AND_GAME: string = 'You should choose a level and game before start';
 
     static readonly ERROR_SAVE_QUESTION: string = 'We can not save the question. Try later';
     static readonly ERROR_FIND_GAME: string = 'We can not find the game. Try again later';
