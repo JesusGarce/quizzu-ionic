@@ -9,15 +9,40 @@
     <ion-card-title><h2>Select level</h2></ion-card-title>
     <ion-card-content>
       <ion-grid>
-          <ion-button class="levelButton" expand="block" (click)="closeModal('c2')"><h1>C2</h1></ion-button>
-          <ion-button class="levelButton" expand="block" (click)="closeModal('c1')"><h1>C1</h1></ion-button>
-          <ion-button class="levelButton" expand="block" (click)="closeModal('b2')"><h1>B2</h1></ion-button>
-          <ion-button class="levelButton" expand="block" (click)="closeModal('b1')"><h1>B1</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="selectLevel('c2')" [disabled]="isC2Level()"><h1>C2</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="selectLevel('c1')" [disabled]="isC1Level()"><h1>C1</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="selectLevel('b2')" [disabled]="isB2Level()"><h1>B2</h1></ion-button>
+          <ion-button class="levelButton" expand="block" (click)="selectLevel('b1')" [disabled]="isB1Level()"><h1>B1</h1></ion-button>
       </ion-grid>
     </ion-card-content>
   </ion-card>
+    <ion-card color="mediumlight">
+        <ion-card-title><h2>Select game</h2></ion-card-title>
+        <ion-card-content>
+            <ion-grid>
+                <ion-button class="levelButton" expand="block" (click)="selectType('definitions')" [disabled]="isDefinitionMode()">
+                    <h1>Definitions</h1>
+                    <ion-icon name="star"></ion-icon>
+                </ion-button>
+                <ion-button class="levelButton" expand="block" (click)="selectType('synonyms')" [disabled]="isSynonymMode()">
+                    <h1>Synonyms</h1>
+                </ion-button>
+                <ion-button class="levelButton" expand="block" (click)="selectType('antonyms')" [disabled]="isAntonymMode()">
+                    <h1>Antonyms</h1>
+                </ion-button>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
 
-  <ion-col text-center>
-    <ion-button expand="block" (click)="closeModal(null)">Close</ion-button>
-  </ion-col>
+    <ion-row class="menu-buttons">
+        <ion-tab-button class="menu-button" (click)="closeModal()">
+            <!-- <ion-icon class="icon-medium" name="close-circle"></ion-icon> -->
+            Close
+        </ion-tab-button>
+        <ion-tab-button class="menu-button" (click)="startGame()">
+            <!--  <ion-icon class="icon-medium" name="play-circle"></ion-icon> Start -->
+            Start
+        </ion-tab-button>
+    </ion-row>
+
 </ion-content>

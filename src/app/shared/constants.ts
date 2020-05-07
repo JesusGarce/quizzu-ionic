@@ -25,4 +25,11 @@ export abstract class Constants {
     static readonly LEVEL_B2: string = 'b2';
     static readonly LEVEL_C1: string = 'c1';
     static readonly LEVEL_C2: string = 'c2';
+
+    static readonly GAME_MODE_PRACTISE: string = 'practise';
+    static readonly GAME_MODE_MATCH: string = 'match';
+
+    static readonly GAME_DEFINITIONS: string = 'definitions';
+    static readonly GAME_SYNONYMS: string = 'synonyms';
+    static readonly GAME_ANTONYMS: string = 'antonyms';
 }
