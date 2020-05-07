@@ -1,8 +1,47 @@
 
 .levelButton{
-  margin: 10px;
+  margin: 5px;
+  flex-flow: column;
+}
+
+.levelButton:disabled,
+.levelButton[disabled]{
+  --background: #252326;
+  opacity: 1;
+}
+
+.menu-button {
+  --background: #A92EDF;
+  color: #FFFFFF;
+  font-size: xx-large;
+  border-radius: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 10px;
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+}
+
+.menu-buttons {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.icon-medium {
+  font-size: 40px;
 }
 
 h2{
   color: #A92EDF;
+  margin: 0;
+}
+
+p{
+  font-size: x-small;
+}
+
+ion-icon {
+  right: 0;
+  position: absolute;
 }

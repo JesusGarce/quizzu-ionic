@@ -10,6 +10,7 @@ import {SearchOpponentPage} from './match/search-opponent/search-opponent.page';
 import {Messages} from '../../shared/messages';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
+import {Constants} from '../../shared/constants';
 
 @Component({
   selector: 'app-game',
@@ -49,9 +50,10 @@ export class GamePage {
     });
 
     modal.onDidDismiss().then((dataReturned) => {
-      if (dataReturned.data !== null) {
-        this.levelMatch = dataReturned.data;
-        if (gameMode === 'practise')
+      console.log(dataReturned.data);
+      if (dataReturned.data !== undefined) {
+        this.levelMatch = dataReturned.data.level;
+        if (gameMode === Constants.GAME_MODE_PRACTISE)
           this.startPractise(this.levelMatch);
         else
           this.searchingOpponent();
