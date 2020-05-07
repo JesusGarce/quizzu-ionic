@@ -86,7 +86,7 @@ const routes: Routes = [
     loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
   },
   {
-    path: 'game/practise/:level',
+    path: 'game/practise/:type/:level',
     loadChildren: () => import('./game/practise/practise.module').then( m => m.PractisePageModule)
   }
 

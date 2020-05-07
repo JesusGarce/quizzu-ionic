@@ -30,7 +30,7 @@ import {LottieAnimationViewModule} from 'ng-lottie';
 import {SelectLevelModalPageModule} from './home/game/select-level-modal/select-level-modal.module';
 import {CountdownStartPageModule} from './home/game/match/countdown-start/countdown-start.module';
 import {SearchOpponentPageModule} from './home/game/match/search-opponent/search-opponent.module';
-import {MatchWordsApiService} from './home/game/match/wordsapi-service/match-wordsapi-service';
+import {MatchWordsApiService} from './shared/wordsapi-service/match-wordsapi-service';
 import {FinishMatchPageModule} from './home/game/match/finish-match/finish-match.module';
 import {NotificationsPageModule} from './home/notifications/notifications.module';
 import {NotificationService} from './shared/notification-service';

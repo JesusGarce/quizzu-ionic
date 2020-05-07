@@ -106,8 +106,8 @@ export class MatchService {
         return this.afStore.doc(`match/${id}`).ref.get();
     }
 
-    createNewMatch(level, player2) {
-        const match = new Match(level,
+    createNewMatch(options, player2) {
+        const match = new Match(options,
             new UserMin(this.userService.getCurrentUser().id, this.userService.getCurrentUser().username,
                 this.userService.getCurrentUser().profile), player2);
 
@@ -257,11 +257,12 @@ export class MatchService {
         return Math.round(50 * ((100 + (counter * 1)) / 100) * ((100 + (consecutives * 25)) / 100));
     }
 
-    findFreeMatch(level) {
+    findFreeMatch(options) {
         return this.afStore.collection('match')
             .ref
             .where('player2.username', '==', '')
-            .where('gameLevel', '==', level)
+            .where('gameLevel', '==', options.level)
+            .where('type', '==', options.type)
             .get();
     }
 

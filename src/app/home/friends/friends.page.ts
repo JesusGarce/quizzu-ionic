@@ -9,6 +9,7 @@ import {MatchService} from '../../shared/match-service';
 import {SelectLevelModalPage} from '../game/select-level-modal/select-level-modal.page';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
+import {Options} from '../../shared/options.model';
 
 @Component({
   selector: 'app-friends',
@@ -20,7 +21,7 @@ export class FriendsPage implements OnInit  {
   friendRequests: UserMin[];
   friends: UserMin[];
   findUser: string;
-  levelMatch: string;
+  options: Options;
   user: any;
 
   constructor(
@@ -54,8 +55,8 @@ export class FriendsPage implements OnInit  {
   }
 
   startGameAgainst(friend) {
-      if (this.levelMatch !== null) {
-          this.matchService.createNewMatch(this.levelMatch, friend);
+      if (this.options !== null) {
+          this.matchService.createNewMatch(this.options, friend);
       }
   }
 
@@ -144,7 +145,7 @@ export class FriendsPage implements OnInit  {
 
         modal.onDidDismiss().then((dataReturned) => {
             if (dataReturned !== null) {
-                this.levelMatch = dataReturned.data;
+                this.options = dataReturned.data;
                 this.startGameAgainst(friend);
             }
         });

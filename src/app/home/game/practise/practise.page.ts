@@ -4,17 +4,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../shared/user-service';
 import {MatchService} from '../../../shared/match-service';
 import {PointsService} from '../match/points.service';
-import {MatchWordsApiService} from '../match/wordsapi-service/match-wordsapi-service';
+import {MatchWordsApiService} from '../../../shared/wordsapi-service/match-wordsapi-service';
 import {AlertController, ModalController} from '@ionic/angular';
 import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loading.service';
 import {ToastService} from '../../../shared/toast-service';
 import {HttpClient} from '@angular/common/http';
 import {Constants} from '../../../shared/constants';
 import {CountdownStartPage} from '../match/countdown-start/countdown-start.page';
-import {Word} from '../match/wordsapi-service/word.model';
+import {Word} from '../../../shared/wordsapi-service/word.model';
 import {Messages} from '../../../shared/messages';
 import {FinishMatchPage} from '../match/finish-match/finish-match.page';
 import {FinishPractisePage} from './finish-practise/finish-practise.page';
+import {Options} from '../../../shared/options.model';
+import {Antonyms} from '../../../shared/wordsapi-service/antonym.model';
+import {Synonyms} from '../../../shared/wordsapi-service/synonym.model';
 
 @Component({
   selector: 'app-practise',
@@ -23,7 +26,7 @@ import {FinishPractisePage} from './finish-practise/finish-practise.page';
 })
 export class PractisePage implements OnInit {
   numberQuestion: number;
-  level: string;
+  options: Options;
   counter: any;
   less5seconds = false;
   user: any;
@@ -54,7 +57,7 @@ export class PractisePage implements OnInit {
               private http: HttpClient) {
     this.user = this.userService.getCurrentUser();
     this.userStats = this.userService.getCurrentUserStats();
-    this.level = this.route.snapshot.paramMap.get('level');
+    this.options = new Options(this.route.snapshot.paramMap.get('type'), this.route.snapshot.paramMap.get('level'));
     this.getRecord();
     this.numberQuestion = 0;
     this.initData();
@@ -67,7 +70,7 @@ export class PractisePage implements OnInit {
   initData() {
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
-    this.initializeWords(this.level);
+    this.initializeWords(this.options.level);
     this.answerDone = false;
     this.displayAnswer = false;
     this.counter = Constants.TIME_QUESTION;
@@ -106,13 +109,13 @@ export class PractisePage implements OnInit {
   }
 
   getRecord() {
-    if (this.level === Constants.LEVEL_C2)
+    if (this.options.level === Constants.LEVEL_C2)
       this.record = this.userStats.practise.c2;
-    else if (this.level === Constants.LEVEL_C1)
+    else if (this.options.level === Constants.LEVEL_C1)
       this.record = this.userStats.practise.c1;
-    else if (this.level === Constants.LEVEL_B2)
+    else if (this.options.level === Constants.LEVEL_B2)
       this.record = this.userStats.practise.b2;
-    else if (this.level === Constants.LEVEL_B1)
+    else if (this.options.level === Constants.LEVEL_B1)
       this.record = this.userStats.practise.b1;
   }
 
@@ -133,12 +136,53 @@ export class PractisePage implements OnInit {
   }
 
   getQuestion() {
-    this.matchWordsApiService.getDefinition(this.correctWord)
-        .subscribe((data: Word) => {
-          this.question = data.definitions[0].definition;
-        }, error => {
-          this.initializeWords(this.level);
-        });
+    if (this.options.type === Constants.GAME_ANTONYMS)
+      this.matchWordsApiService.getAntonym(this.correctWord)
+          .subscribe((data: Antonyms) => {
+            if (data.antonyms.length === 0)
+              this.initializeWords(this.options.level);
+            else {
+              this.question = this.storeAllAntonyms(data);
+            }
+          }, error => {
+            this.initializeWords(this.options.level);
+          });
+    else if (this.options.type === Constants.GAME_SYNONYMS)
+      this.matchWordsApiService.getSynonym(this.correctWord)
+          .subscribe((data: Synonyms) => {
+            if (data.synonyms.length === 0)
+              this.initializeWords(this.options.level);
+            else {
+              this.question = this.storeAllSynonyms(data);
+            }
+          }, error => {
+            this.initializeWords(this.options.level);
+          });
+    else {
+      this.matchWordsApiService.getDefinition(this.correctWord)
+          .subscribe((data: Word) => {
+            this.question = data.definitions[0].definition;
+          }, error => {
+            this.initializeWords(this.options.level);
+          });
+    }
+  }
+
+  storeAllSynonyms(data) {
+    let allSynonyms = '';
+    for (const synonym of data.synonyms) {
+      allSynonyms = allSynonyms.concat(synonym , ', ');
+    }
+    allSynonyms = allSynonyms.slice(0 , allSynonyms.length - 2);
+    return allSynonyms;
+  }
+
+  storeAllAntonyms(data) {
+    let allAntonyms = '';
+    for (const antonym of data.antonyms)
+      allAntonyms = allAntonyms.concat(antonym, ', ');
+    allAntonyms = allAntonyms.slice(0 , allAntonyms.length - 2);
+    return allAntonyms;
   }
 
   doingAnswer(answer) {
@@ -175,7 +219,7 @@ export class PractisePage implements OnInit {
 
   updateRecord() {
     this.toast.create(Messages.RECORD_PRACTISE + this.numberQuestion);
-    this.userService.updatePractiseStats(this.level, this.numberQuestion).then(
+    this.userService.updatePractiseStats(this.options.level, this.numberQuestion).then(
         r => {
           this.record = this.numberQuestion;
         });
@@ -218,7 +262,7 @@ export class PractisePage implements OnInit {
     const modal = await this.modalController.create({
       component: FinishPractisePage,
       componentProps: {
-        level: this.level,
+        level: this.options.level,
         record: this.numberQuestion
       }
     });

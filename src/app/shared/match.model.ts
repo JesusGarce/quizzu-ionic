@@ -6,6 +6,7 @@ export class Match {
     player2Points: number;
     created: Date;
     gameLevel: string;
+    type: string;
     player1: UserMin;
     player2: UserMin;
     matchAccepted: boolean;
@@ -14,12 +15,13 @@ export class Match {
     player2RemainsQuestions: number;
     winnerId: string;
 
-    public constructor(gameLevel, player1, player2) {
+    public constructor(options, player1, player2) {
         this.leaveId = '';
         this.player1Points = 0;
         this.player2Points = 0;
         this.created = new Date();
-        this.gameLevel = gameLevel;
+        this.gameLevel = options.level;
+        this.type = options.type;
         this.player1 = player1;
         this.player2 = player2;
         this.matchAccepted = false;

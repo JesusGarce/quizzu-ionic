@@ -6,6 +6,7 @@ import {MatchService} from '../../../../shared/match-service';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
 import {UserMin} from '../../../../shared/user-min.model';
 import {Messages} from '../../../../shared/messages';
+import {Options} from '../../../../shared/options.model';
 
 @Component({
   selector: 'app-search-opponent',
@@ -20,7 +21,7 @@ export class SearchOpponentPage implements OnInit {
   private creating = false;
   private created = false;
   private found = false;
-  private level: string;
+  private options: Options;
   private user: any;
 
   constructor(private authService: AuthenticationService,
@@ -36,7 +37,7 @@ export class SearchOpponentPage implements OnInit {
       autoplay: true,
       loop: true
     };
-    this.level = this.navParams.data.level;
+    this.options = new Options(this.navParams.data.options.type, this.navParams.data.options.level);
     this.doSearch();
   }
 
@@ -49,12 +50,12 @@ export class SearchOpponentPage implements OnInit {
   }
 
   doSearch() {
-    this.matchService.findFreeMatch(this.level).then(
+    this.matchService.findFreeMatch(this.options).then(
         matches => {
           if (matches.empty) {
             this.showCreating();
             this.created = true;
-            this.matchService.createNewMatch(this.level, new UserMin('', '', ''))
+            this.matchService.createNewMatch(this.options, new UserMin('', '', ''))
                 .then(
                     () => {
                       this.showSearching();
@@ -83,7 +84,7 @@ export class SearchOpponentPage implements OnInit {
             }
             if (!found) {
               this.created = true;
-              this.matchService.createNewMatch(this.level, new UserMin('', '', ''))
+              this.matchService.createNewMatch(this.options, new UserMin('', '', ''))
                   .then(
                       () => {
                         this.showSearching();
