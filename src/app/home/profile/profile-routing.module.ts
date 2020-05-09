@@ -7,7 +7,11 @@ const routes: Routes = [
     {
         path: '',
         component: ProfilePage,
-    }
+    },  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+  }
+
 ];
 
 @NgModule({

@@ -36,6 +36,7 @@ import {NotificationsPageModule} from './home/notifications/notifications.module
 import {NotificationService} from './shared/notification-service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import {FinishPractisePageModule} from './home/game/practise/finish-practise/finish-practise.module';
+import {SettingsPageModule} from './home/profile/settings/settings.module';
 
 @NgModule({
   declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
@@ -60,6 +61,7 @@ import {FinishPractisePageModule} from './home/game/practise/finish-practise/fin
       SearchOpponentPageModule,
       FinishMatchPageModule,
       FinishPractisePageModule,
+      SettingsPageModule,
       NotificationsPageModule,
     HttpClientModule,
   ],
