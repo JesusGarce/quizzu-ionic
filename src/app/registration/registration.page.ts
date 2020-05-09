@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../shared/authentication-service';
-import {User} from '../shared/user.model';
+import {User} from '../shared/models/user.model';
 import {ToastService} from '../shared/toast-service';
 import {Messages} from '../shared/messages';
 

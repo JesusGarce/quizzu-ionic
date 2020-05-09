@@ -4,9 +4,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../../shared/user-service';
 import {MatchService} from '../../../../shared/match-service';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
-import {UserMin} from '../../../../shared/user-min.model';
+import {UserMin} from '../../../../shared/models/user-min.model';
 import {Messages} from '../../../../shared/messages';
-import {Options} from '../../../../shared/options.model';
+import {Options} from '../../../../shared/models/options.model';
 
 @Component({
   selector: 'app-search-opponent',

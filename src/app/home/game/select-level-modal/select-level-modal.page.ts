@@ -3,7 +3,7 @@ import {ModalController, NavParams} from '@ionic/angular';
 import {ToastService} from '../../../shared/toast-service';
 import {Constants} from '../../../shared/constants';
 import {Messages} from '../../../shared/messages';
-import {Options} from '../../../shared/options.model';
+import {Options} from '../../../shared/models/options.model';
 
 @Component({
   selector: 'app-select-level-modal',

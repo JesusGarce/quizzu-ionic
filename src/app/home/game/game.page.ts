@@ -4,14 +4,14 @@ import {UserService} from '../../shared/user-service';
 import {Router} from '@angular/router';
 import {AlertController, ModalController} from '@ionic/angular';
 import {SelectLevelModalPage} from './select-level-modal/select-level-modal.page';
-import {MatchShow} from '../../shared/match-show.model';
+import {MatchShow} from '../../shared/models/match-show.model';
 import {ToastService} from '../../shared/toast-service';
 import {SearchOpponentPage} from './match/search-opponent/search-opponent.page';
 import {Messages} from '../../shared/messages';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
 import {Constants} from '../../shared/constants';
-import {Options} from '../../shared/options.model';
+import {Options} from '../../shared/models/options.model';
 
 @Component({
   selector: 'app-game',

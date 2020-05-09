@@ -7,16 +7,16 @@ import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import {MatchWordsApiService} from '../../../shared/wordsapi-service/match-wordsapi-service';
+import {MatchWordsApiService} from '../../../shared/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
-import {Word} from '../../../shared/wordsapi-service/word.model';
+import {Word} from '../../../shared/models/word.model';
 import {FinishMatchPage} from './finish-match/finish-match.page';
 import {Constants} from '../../../shared/constants';
 import {Messages} from '../../../shared/messages';
 import {PointsService} from './points.service';
 import {NotificationService} from '../../../shared/notification-service';
-import {Synonyms} from '../../../shared/wordsapi-service/synonym.model';
-import {Antonyms} from '../../../shared/wordsapi-service/antonym.model';
+import {Synonyms} from '../../../shared/models/synonym.model';
+import {Antonyms} from '../../../shared/models/antonym.model';
 
 @Component({
   selector: 'app-match',

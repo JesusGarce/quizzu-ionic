@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {User} from './user.model';
+import {User} from './models/user.model';
 import {Router} from '@angular/router';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {UserStats} from './user-stats.model';
+import {UserStats} from './models/user-stats.model';
 import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
-import {UserMin} from './user-min.model';
+import {UserMin} from './models/user-min.model';
 import {Messages} from './messages';
 import {NotificationService} from './notification-service';
 import {Constants} from './constants';

@@ -4,20 +4,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../../shared/user-service';
 import {MatchService} from '../../../shared/match-service';
 import {PointsService} from '../match/points.service';
-import {MatchWordsApiService} from '../../../shared/wordsapi-service/match-wordsapi-service';
+import {MatchWordsApiService} from '../../../shared/match-wordsapi-service';
 import {AlertController, ModalController} from '@ionic/angular';
 import {SpinnerLoadingService} from '../../../shared/spinner-loading/spinner-loading.service';
 import {ToastService} from '../../../shared/toast-service';
 import {HttpClient} from '@angular/common/http';
 import {Constants} from '../../../shared/constants';
 import {CountdownStartPage} from '../match/countdown-start/countdown-start.page';
-import {Word} from '../../../shared/wordsapi-service/word.model';
+import {Word} from '../../../shared/models/word.model';
 import {Messages} from '../../../shared/messages';
 import {FinishMatchPage} from '../match/finish-match/finish-match.page';
 import {FinishPractisePage} from './finish-practise/finish-practise.page';
-import {Options} from '../../../shared/options.model';
-import {Antonyms} from '../../../shared/wordsapi-service/antonym.model';
-import {Synonyms} from '../../../shared/wordsapi-service/synonym.model';
+import {Options} from '../../../shared/models/options.model';
+import {Antonyms} from '../../../shared/models/antonym.model';
+import {Synonyms} from '../../../shared/models/synonym.model';
 
 @Component({
   selector: 'app-practise',

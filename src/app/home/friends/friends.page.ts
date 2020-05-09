@@ -3,13 +3,13 @@ import {AlertController, ModalController} from '@ionic/angular';
 import {UserService} from '../../shared/user-service';
 import {ToastService} from '../../shared/toast-service';
 import {Router} from '@angular/router';
-import {UserMin} from '../../shared/user-min.model';
+import {UserMin} from '../../shared/models/user-min.model';
 import {SearchModalUserPage} from './search-modal-user/search-modal-user.page';
 import {MatchService} from '../../shared/match-service';
 import {SelectLevelModalPage} from '../game/select-level-modal/select-level-modal.page';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
-import {Options} from '../../shared/options.model';
+import {Options} from '../../shared/models/options.model';
 
 @Component({
   selector: 'app-friends',

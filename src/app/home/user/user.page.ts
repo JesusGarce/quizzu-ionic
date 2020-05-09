@@ -3,10 +3,10 @@ import {AuthenticationService} from '../../shared/authentication-service';
 import {Router, ActivatedRoute} from '@angular/router';
 import {UserService} from '../../shared/user-service';
 import {SpinnerLoadingService} from '../../shared/spinner-loading/spinner-loading.service';
-import {UserMin} from '../../shared/user-min.model';
+import {UserMin} from '../../shared/models/user-min.model';
 import {AlertController} from '@ionic/angular';
 import {ToastService} from '../../shared/toast-service';
-import {User} from '../../shared/user.model';
+import {User} from '../../shared/models/user.model';
 import {Messages} from '../../shared/messages';
 
 @Component({
