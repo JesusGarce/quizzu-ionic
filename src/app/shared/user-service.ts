@@ -57,17 +57,39 @@ export class UserService {
         this.currentUserStats = new UserStats(userId);
     }
 
+    loginOrSignInFromGoogle(user) {
+        this.getUser(user.uid).then(
+            r => {
+                if (r.exists) {
+                    this.initCurrentUser(user.uid);
+                    this.router.navigate(['home']);
+                    this.spinnerLoading.hide();
+                }
+                else
+                    this.createUserFromDataGoogle(user)
+                        .then(() => this.initCurrentUser(user.uid));
+            }
+        );
+    }
+
     createUserFromDataGoogle(user) {
+        this.createUserStats(user.uid);
         const userStatsRef: AngularFirestoreDocument<any> = this.afStore.doc(`user-stats/${user.uid}`);
         userStatsRef.set(JSON.parse(JSON.stringify(this.currentUserStats)), {
             merge: true
-        });
+        }).then();
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
         const userData = new User(user.uid, user.email, user.displayName.toLowerCase(), user.photoURL);
-        this.initCurrentUser(user.uid);
         return userRef.set(JSON.parse(JSON.stringify(userData)), {
             merge: true
-        });
+        }).then( p => this.spinnerLoading.hide());
+    }
+
+    existUser(username) {
+        return this.afStore.collection('users')
+            .ref
+            .where('username', '==', username)
+            .get();
     }
 
     initCurrentUser(uid) {

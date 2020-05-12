@@ -49,6 +49,9 @@ export class AuthenticationService {
     return this.ngFireAuth.auth.createUserWithEmailAndPassword(user.email, password).
         then(result => {
       this.userService.createUser(user, result.user.uid);
+      this.spinnerLoading.hide();
+      this.sendVerificationMail();
+      this.router.navigate(['verify-email']);
     }).catch((error) => {
       this.toast.create(Messages.ERROR);
     });
@@ -72,7 +75,7 @@ export class AuthenticationService {
 
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? true : false;
+    return (user !== null && user.emailVerified !== false);
   }
 
   getLoggedData() {
@@ -91,7 +94,7 @@ export class AuthenticationService {
           this.userService.createUserFromDataGoogle(response.user).then(r => {
             this.spinnerLoading.hide();
           });
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home/enter-username']);
         });
   }
 
@@ -99,14 +102,14 @@ export class AuthenticationService {
     this.spinnerLoading.show();
     return this.ngFireAuth.auth.signInWithPopup(provider)
     .then((result) => {
+      console.log(result.user);
        this.ngZone.run(() => {
-          this.router.navigate(['home']);
+         this.router.navigate(['home/enter-username']);
         });
-      this.userService.createUserFromDataGoogle(result.user).then(r => {
-        this.spinnerLoading.hide();
-      });
-    }).catch((error) => {
-          this.toast.create(Messages.ERROR);
+      this.userService.loginOrSignInFromGoogle(result.user);
+    }).catch((err) => {
+          this.spinnerLoading.hide();
+          this.toast.create(Messages.ERROR + ':' + err);
     });
   }
 
@@ -130,8 +133,14 @@ export class AuthenticationService {
   }
 
   initUser(uid) {
-    this.userService.initCurrentUser(uid);
-    this.userService.initCurrentUserStats(uid);
-    this.matchService.initMatches(uid);
+    this.userService.getUser(uid).then(
+        user => {
+          if (user.exists) {
+            this.userService.initCurrentUser(uid);
+            this.userService.initCurrentUserStats(uid);
+            this.matchService.initMatches(uid);
+          }
+        }
+    );
   }
 }

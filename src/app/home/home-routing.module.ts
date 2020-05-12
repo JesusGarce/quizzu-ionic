@@ -88,7 +88,11 @@ const routes: Routes = [
   {
     path: 'game/practise/:type/:level',
     loadChildren: () => import('./game/practise/practise.module').then( m => m.PractisePageModule)
+  },  {
+    path: 'enter-username',
+    loadChildren: () => import('./enter-username/enter-username.module').then( m => m.EnterUsernamePageModule)
   }
+
 
 
 ];

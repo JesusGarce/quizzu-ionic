@@ -4,6 +4,8 @@ import {AuthenticationService} from '../shared/authentication-service';
 import {User} from '../shared/models/user.model';
 import {ToastService} from '../shared/toast-service';
 import {Messages} from '../shared/messages';
+import {UserService} from '../shared/user-service';
+import {SpinnerLoadingService} from '../shared/spinner-loading/spinner-loading.service';
 
 @Component({
   selector: 'app-registration',
@@ -20,6 +22,8 @@ export class RegistrationPage implements OnInit {
       public authService: AuthenticationService,
       public router: Router,
       public toast: ToastService,
+      public userService: UserService,
+      private spinnerLoading: SpinnerLoadingService,
   ) {
       this.password = '';
       this.confirmPassword = '';
@@ -34,14 +38,20 @@ export class RegistrationPage implements OnInit {
       if (password !== confirmPassword) {
           this.toast.create(Messages.PROFILE_DIFFERENT_PASSWORDS);
       }
-
-      this.authService.registerUser(this.user, this.password)
-      .then(() => {
-        this.authService.sendVerificationMail();
-        this.router.navigate(['verify-email']);
-      }).catch(() => {
-          this.toast.create(Messages.ERROR);
-      });
+      this.userService.existUser(this.user.username).then(
+          u => {
+              if (u.empty) {
+                  this.authService.registerUser(this.user, this.password)
+                      .then(() => {})
+                      .catch(err => {
+                      this.spinnerLoading.hide();
+                      this.toast.create(Messages.ERROR + ':' + err);
+                  });
+              } else {
+                  this.toast.create(Messages.EXIST_USERNAME);
+                  this.spinnerLoading.hide();
+              }
+          });
   }
 
 }

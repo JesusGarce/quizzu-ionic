@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title align="center" class="ion-text-center">
+      <img class="img-toolbar" src="../../../assets/quizzu_logo.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <ion-list-header>Please write your username</ion-list-header>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Username</ion-label>
+      <ion-input [(ngModel)]="this.username" name="username" required type="text"></ion-input>
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="rewriteUsername()" expand="block" type="submit">Choose username</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
