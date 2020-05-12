@@ -24,7 +24,7 @@ import {Synonyms} from '../../../shared/models/synonym.model';
   templateUrl: './practise.page.html',
   styleUrls: ['./practise.page.scss', '../../../app.component.scss'],
 })
-export class PractisePage implements OnInit {
+export class PractisePage {
   numberQuestion: number;
   options: Options;
   counter: any;
@@ -63,11 +63,8 @@ export class PractisePage implements OnInit {
     this.initData();
   }
 
-  ngOnInit() {
-    this.startCountdown().then();
-  }
-
   initData() {
+    this.spinnerLoading.show();
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
     this.initializeWords(this.options.level);
@@ -88,6 +85,8 @@ export class PractisePage implements OnInit {
   }
 
   async startCountdown() {
+    this.spinnerLoading.hide();
+
     const modal = await this.modalController.create({
       component: CountdownStartPage,
     });
@@ -142,6 +141,7 @@ export class PractisePage implements OnInit {
             if (data.antonyms.length === 0)
               this.initializeWords(this.options.level);
             else {
+              this.startCountdown().then();
               this.question = this.storeAllAntonyms(data);
             }
           }, error => {
@@ -153,6 +153,7 @@ export class PractisePage implements OnInit {
             if (data.synonyms.length === 0)
               this.initializeWords(this.options.level);
             else {
+              this.startCountdown().then();
               this.question = this.storeAllSynonyms(data);
             }
           }, error => {
@@ -162,6 +163,7 @@ export class PractisePage implements OnInit {
       this.matchWordsApiService.getDefinition(this.correctWord)
           .subscribe((data: Word) => {
             this.question = data.definitions[0].definition;
+            this.startCountdown().then();
           }, error => {
             this.initializeWords(this.options.level);
           });
@@ -205,7 +207,6 @@ export class PractisePage implements OnInit {
 
   closeQuestion() {
     if (this.isCorrectAnswer()) {
-      this.ngOnInit();
       this.initData();
     } else {
       if (this.record < this.numberQuestion) {
