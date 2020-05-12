@@ -140,6 +140,16 @@ export class UserService {
             });
     }
 
+    setUser(user) {
+        if (user.id === this.currentUser.id)
+            this.currentUser = user;
+        return this.afStore.collection('users')
+            .doc(user.id)
+            .set(JSON.parse(JSON.stringify(user)), {
+                merge: true
+            });
+    }
+
     setUserStats(userStats, userId) {
         return this.afStore.collection('user-stats')
             .doc(userId)

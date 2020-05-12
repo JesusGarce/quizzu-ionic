@@ -272,8 +272,7 @@ export class MatchPage {
   async finishGame() {
     this.match = this.matchService.getCurrentMatch();
     this.createNotificationFinishMatch(this.match);
-    if (this.getStateFinishMatch() !== Constants.RESULT_GAME_DEFEAT)
-      this.pointsService.increaseUserPointsByFinishMatch(this.match, this.getStateFinishMatch()).then();
+    this.pointsService.increaseUserPointsByFinishMatch(this.match, this.getStateFinishMatch());
     const modal = await this.modalController.create({
       component: FinishMatchPage,
       componentProps: {
