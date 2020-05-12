@@ -91,9 +91,7 @@ export class AuthenticationService {
     const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
     this.ngFireAuth.auth.signInWithCredential(credential)
         .then((response) => {
-          this.userService.createUserFromDataGoogle(response.user).then(r => {
-            this.spinnerLoading.hide();
-          });
+          this.userService.loginOrSignInFromGoogle(response.user);
           this.router.navigate(['/home/enter-username']);
         });
   }
