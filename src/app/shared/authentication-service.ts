@@ -92,7 +92,7 @@ export class AuthenticationService {
     this.ngFireAuth.auth.signInWithCredential(credential)
         .then((response) => {
           this.userService.loginOrSignInFromGoogle(response.user);
-          this.router.navigate(['/home/enter-username']);
+          this.router.navigate(['enter-username']);
         });
   }
 
@@ -102,7 +102,7 @@ export class AuthenticationService {
     .then((result) => {
       console.log(result.user);
        this.ngZone.run(() => {
-         this.router.navigate(['home/enter-username']);
+         this.router.navigate(['enter-username']);
         });
       this.userService.loginOrSignInFromGoogle(result.user);
     }).catch((err) => {

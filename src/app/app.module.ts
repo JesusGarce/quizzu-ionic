@@ -34,53 +34,54 @@ import {MatchWordsApiService} from './shared/match-wordsapi-service';
 import {FinishMatchPageModule} from './home/game/match/finish-match/finish-match.module';
 import {NotificationsPageModule} from './home/notifications/notifications.module';
 import {NotificationService} from './shared/notification-service';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import {FinishPractisePageModule} from './home/game/practise/finish-practise/finish-practise.module';
 import {SettingsPageModule} from './home/profile/settings/settings.module';
 
 @NgModule({
-  declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
-  entryComponents: [
-      EditImageProfileComponent,
-      SpinnerLoadingComponent,
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    LottieAnimationViewModule.forRoot(),
-    AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule,
-    AngularFireDatabaseModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-    OverlayModule,
-      SearchModalUserPageModule,
-      SelectLevelModalPageModule,
-      CountdownStartPageModule,
-      SearchOpponentPageModule,
-      FinishMatchPageModule,
-      FinishPractisePageModule,
-      SettingsPageModule,
-      NotificationsPageModule,
-    HttpClientModule,
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AuthenticationService,
-    ToastService,
-    UserService,
-      MatchService,
-      MatchWordsApiService,
-      NotificationService,
-    AngularFirestoreModule,
-    Facebook,
-      LocalNotifications,
-    { provide: StorageBucket, useValue: 'gs://quizzu-1fd29.appspot.com/' }
-  ],
-  schemas: [],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],
+    entryComponents: [
+        EditImageProfileComponent,
+        SpinnerLoadingComponent,
+    ],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        LottieAnimationViewModule.forRoot(),
+        AppRoutingModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireAuthModule,
+        AngularFireDatabaseModule,
+        AngularFirestoreModule,
+        AngularFireStorageModule,
+        OverlayModule,
+        SearchModalUserPageModule,
+        SelectLevelModalPageModule,
+        CountdownStartPageModule,
+        SearchOpponentPageModule,
+        FinishMatchPageModule,
+        FinishPractisePageModule,
+        SettingsPageModule,
+        NotificationsPageModule,
+        HttpClientModule,
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+        AuthenticationService,
+        ToastService,
+        UserService,
+        MatchService,
+        MatchWordsApiService,
+        NotificationService,
+        AngularFirestoreModule,
+        Facebook,
+        LocalNotifications,
+        {provide: StorageBucket, useValue: 'gs://quizzu-1fd29.appspot.com/'}
+    ],
+    schemas: [],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

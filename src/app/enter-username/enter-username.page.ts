@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthenticationService} from '../../shared/authentication-service';
+import {AuthenticationService} from '../shared/authentication-service';
 import {Router} from '@angular/router';
 import {PopoverController} from '@ionic/angular';
-import {UserService} from '../../shared/user-service';
-import {Messages} from '../../shared/messages';
-import {SpinnerLoadingService} from '../../shared/spinner-loading/spinner-loading.service';
-import {ToastService} from '../../shared/toast-service';
+import {UserService} from '../shared/user-service';
+import {Messages} from '../shared/messages';
+import {SpinnerLoadingService} from '../shared/spinner-loading/spinner-loading.service';
+import {ToastService} from '../shared/toast-service';
 
 @Component({
   selector: 'app-enter-username',
   templateUrl: './enter-username.page.html',
-  styleUrls: ['./enter-username.page.scss', '../../app.component.scss'],
+  styleUrls: ['./enter-username.page.scss', '../app.component.scss'],
 })
 export class EnterUsernamePage implements OnInit {
   username: string;

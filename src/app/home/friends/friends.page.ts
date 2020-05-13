@@ -10,6 +10,7 @@ import {SelectLevelModalPage} from '../game/select-level-modal/select-level-moda
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
 import {Options} from '../../shared/models/options.model';
+import {Messages} from '../../shared/messages';
 
 @Component({
   selector: 'app-friends',
@@ -68,7 +69,7 @@ export class FriendsPage implements OnInit  {
           this.friends = this.userService.currentUser.friends;
           this.userService.acceptFriendRequestOtherUser(friendRequest);
         }, () => {
-          this.toast.create('Ups! Something happened, try later.');
+          this.toast.create(Messages.ERROR);
         }
     );
   }
@@ -80,8 +81,8 @@ export class FriendsPage implements OnInit  {
 
   async deleteRequest(friendRequest) {
     const alert = await this.alertController.create({
-      header: 'Delete friend request',
-      message: 'Do you want to <strong>delete</strong> this friend request?',
+      header: Messages.DELETE_FRIEND_REQUEST_TITLE,
+      message: Messages.DELETE_FRIEND_REQUEST,
       buttons: [
         {
           text: 'No',
@@ -92,10 +93,10 @@ export class FriendsPage implements OnInit  {
           handler: () => {
             this.userService.removeFriendRequest(friendRequest).then(
                 () => {
-              this.toast.create('You has deleted a friend request');
+              this.toast.create(Messages.FRIEND_REQUEST_DELETED);
               this.friendRequests = this.userService.currentUser.friendRequests;
                 }, () => {
-              this.toast.create('Ups! Something happened, try later.');
+              this.toast.create(Messages.ERROR);
             });
           }
         }
@@ -119,8 +120,8 @@ export class FriendsPage implements OnInit  {
 
   async confirmNewGame(friend) {
     const alert = await this.alertController.create({
-      header: 'Start new game',
-      message: 'Do you want to <strong>start</strong> a new game?',
+      header: Messages.START_NEW_GAME_TITLE,
+      message: Messages.START_NEW_GAME,
       buttons: [
         {
           text: 'No',

@@ -28,7 +28,6 @@ export class LoginPage implements OnInit {
     this.authService.signInWithEmailAndPassword(email.value, password.value)
       .then((res) => {
         if (res.user.emailVerified) {
-            console.log('logInUser');
           this.userService.initCurrentUser(res.user.uid);
           this.userService.initCurrentUserStats(res.user.uid);
           this.router.navigate(['home']);

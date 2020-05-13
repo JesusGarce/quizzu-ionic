@@ -3,6 +3,7 @@ import {UserService} from '../../../shared/user-service';
 import {AlertController, ModalController} from '@ionic/angular';
 import {NotificationService} from '../../../shared/notification-service';
 import {NotificationsPage} from '../../notifications/notifications.page';
+import {Messages} from '../../../shared/messages';
 
 @Component({
   selector: 'app-settings',
@@ -27,8 +28,8 @@ export class SettingsPage implements OnInit {
   async changeNotifications() {
     if (this.userService.isNotificationsEnabled()) {
       const alert = await this.alertController.create({
-        header: 'Disable notifications',
-        message: 'Do you want to <strong>disable</strong> the notifications?',
+        header: Messages.DISABLE_NOTIFICATIONS_TITLE,
+        message: Messages.DISABLE_NOTIFICATIONS,
         buttons: [
           {
             text: 'No',

@@ -19,7 +19,6 @@ export class ProfilePage {
     matchesLost: number;
     user: any;
     userStats: any;
-    notificationsEnabled: boolean;
 
     constructor(
         private authService: AuthenticationService,
