@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {ModalController, NavParams} from '@ionic/angular';
 import {NotificationService} from '../../shared/notification-service';
 import {UserService} from '../../shared/user-service';
-import {Notification} from '../../shared/notification.model';
+import {Notification} from '../../shared/models/notification.model';
 
 @Component({
   selector: 'app-notifications',

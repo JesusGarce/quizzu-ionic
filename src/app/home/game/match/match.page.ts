@@ -7,23 +7,23 @@ import {MatchService} from '../../../shared/match-service';
 import {CountdownStartPage} from './countdown-start/countdown-start.page';
 import {ModalController} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import {MatchWordsApiService} from '../../../shared/wordsapi-service/match-wordsapi-service';
+import {MatchWordsApiService} from '../../../shared/match-wordsapi-service';
 import {ToastService} from '../../../shared/toast-service';
-import {Word} from '../../../shared/wordsapi-service/word.model';
+import {Word} from '../../../shared/models/word.model';
 import {FinishMatchPage} from './finish-match/finish-match.page';
 import {Constants} from '../../../shared/constants';
 import {Messages} from '../../../shared/messages';
 import {PointsService} from './points.service';
 import {NotificationService} from '../../../shared/notification-service';
-import {Synonyms} from '../../../shared/wordsapi-service/synonym.model';
-import {Antonyms} from '../../../shared/wordsapi-service/antonym.model';
+import {Synonyms} from '../../../shared/models/synonym.model';
+import {Antonyms} from '../../../shared/models/antonym.model';
 
 @Component({
   selector: 'app-match',
   templateUrl: './match.page.html',
   styleUrls: ['./match.page.scss', '../../../app.component.scss'],
 })
-export class MatchPage implements OnInit {
+export class MatchPage {
   match: any;
   loaded = false;
   numberQuestion: number;
@@ -80,22 +80,20 @@ export class MatchPage implements OnInit {
     }
   }
 
-  checkIfRemainsQuestions() {
-    if ((this.match.player1Turn && (this.match.player1RemainsQuestions < 1)) ||
-        (!this.match.player1Turn && (this.match.player2RemainsQuestions < 1))) {
+  initDataIfAnyRemainsQuestions() {
+    if (((this.match.player1.id === this.user.id) && (this.match.player1RemainsQuestions < 1)) ||
+        ((this.match.player2.id === this.user.id) && (this.match.player2RemainsQuestions < 1))) {
       this.toast.create(Messages.NOT_REMAIN_QUESTIONS);
       this.modalController.dismiss().then();
       this.router.navigate(['home/game']).then();
+    } else {
+      this.initData();
     }
   }
 
-  ngOnInit() {
-    this.startCountdown().then();
-  }
-
   initData() {
+    this.spinnerLoading.show();
     this.checkIfIsPlayerTurn();
-    this.checkIfRemainsQuestions();
     this.wordsButtonOK = [];
     this.wordsButtonFail = [];
     this.initializeWords(this.match.gameLevel);
@@ -121,6 +119,7 @@ export class MatchPage implements OnInit {
   }
 
   async startCountdown() {
+    this.spinnerLoading.hide();
     const modal = await this.modalController.create({
       component: CountdownStartPage,
     });
@@ -163,7 +162,10 @@ export class MatchPage implements OnInit {
           .subscribe((data: Antonyms) => {
             if (data.antonyms.length === 0)
               this.initializeWords(this.match.gameLevel);
-            this.question = this.storeAllAntonyms(data);
+            else {
+              this.question = this.storeAllAntonyms(data);
+              this.startCountdown().then();
+            }
           }, error => {
             this.initializeWords(this.match.gameLevel);
           });
@@ -172,14 +174,22 @@ export class MatchPage implements OnInit {
           .subscribe((data: Synonyms) => {
             if (data.synonyms.length === 0)
               this.initializeWords(this.match.gameLevel);
-            this.question = this.storeAllSynonyms(data);
+            else {
+              this.question = this.storeAllSynonyms(data);
+              this.startCountdown().then();
+            }
           }, error => {
             this.initializeWords(this.match.gameLevel);
           });
     else {
       this.matchWordsApiService.getDefinition(this.correctWord)
           .subscribe((data: Word) => {
-            this.question = data.definitions[0].definition;
+            if (data.definitions.length > 0) {
+              this.question = data.definitions[0].definition;
+              this.startCountdown().then();
+            } else {
+              this.initializeWords(this.match.gameLevel);
+            }
           }, error => {
             this.initializeWords(this.match.gameLevel);
           });
@@ -215,8 +225,7 @@ export class MatchPage implements OnInit {
     if (this.matchService.checkIfMatchIsFinished(this.match))
       this.finishGame().then();
     else if (this.isCorrectAnswer()) {
-      this.ngOnInit();
-      this.initData();
+      this.initDataIfAnyRemainsQuestions();
     } else {
       this.router.navigate(['home/game']).then();
     }
@@ -263,8 +272,7 @@ export class MatchPage implements OnInit {
   async finishGame() {
     this.match = this.matchService.getCurrentMatch();
     this.createNotificationFinishMatch(this.match);
-    if (this.getStateFinishMatch() !== Constants.RESULT_GAME_DEFEAT)
-      this.pointsService.increaseUserPointsByFinishMatch(this.match, this.getStateFinishMatch()).then();
+    this.pointsService.increaseUserPointsByFinishMatch(this.match, this.getStateFinishMatch());
     const modal = await this.modalController.create({
       component: FinishMatchPage,
       componentProps: {

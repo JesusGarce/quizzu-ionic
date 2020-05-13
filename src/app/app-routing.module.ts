@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('./verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
   },
   {
+    path: 'enter-username',
+    loadChildren: () => import('./enter-username/enter-username.module').then (m => m.EnterUsernamePageModule)
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   }

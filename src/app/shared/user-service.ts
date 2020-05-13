@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {User} from './user.model';
+import {User} from './models/user.model';
 import {Router} from '@angular/router';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {UserStats} from './user-stats.model';
+import {UserStats} from './models/user-stats.model';
 import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToastService} from './toast-service';
-import {UserMin} from './user-min.model';
+import {UserMin} from './models/user-min.model';
 import {Messages} from './messages';
 import {NotificationService} from './notification-service';
 import {Constants} from './constants';
@@ -57,17 +57,39 @@ export class UserService {
         this.currentUserStats = new UserStats(userId);
     }
 
+    loginOrSignInFromGoogle(user) {
+        this.getUser(user.uid).then(
+            r => {
+                if (r.exists) {
+                    this.initCurrentUser(user.uid);
+                    this.router.navigate(['home']);
+                    this.spinnerLoading.hide();
+                }
+                else
+                    this.createUserFromDataGoogle(user)
+                        .then(() => this.initCurrentUser(user.uid));
+            }
+        );
+    }
+
     createUserFromDataGoogle(user) {
+        this.createUserStats(user.uid);
         const userStatsRef: AngularFirestoreDocument<any> = this.afStore.doc(`user-stats/${user.uid}`);
         userStatsRef.set(JSON.parse(JSON.stringify(this.currentUserStats)), {
             merge: true
-        });
+        }).then();
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
         const userData = new User(user.uid, user.email, user.displayName.toLowerCase(), user.photoURL);
-        this.initCurrentUser(user.uid);
         return userRef.set(JSON.parse(JSON.stringify(userData)), {
             merge: true
-        });
+        }).then( p => this.spinnerLoading.hide());
+    }
+
+    existUser(username) {
+        return this.afStore.collection('users')
+            .ref
+            .where('username', '==', username)
+            .get();
     }
 
     initCurrentUser(uid) {
@@ -114,6 +136,16 @@ export class UserService {
         return this.afStore.collection('users')
             .doc(this.currentUser.id)
             .set(JSON.parse(JSON.stringify(editUser)), {
+                merge: true
+            });
+    }
+
+    setUser(user) {
+        if (user.id === this.currentUser.id)
+            this.currentUser = user;
+        return this.afStore.collection('users')
+            .doc(user.id)
+            .set(JSON.parse(JSON.stringify(user)), {
                 merge: true
             });
     }

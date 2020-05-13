@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {SpinnerLoadingService} from '../spinner-loading/spinner-loading.service';
-import {ToastService} from '../toast-service';
+import {SpinnerLoadingService} from './spinner-loading/spinner-loading.service';
+import {ToastService} from './toast-service';
 import {AlertController, ModalController} from '@ionic/angular';
-import {MatchService} from '../match-service';
+import {MatchService} from './match-service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({

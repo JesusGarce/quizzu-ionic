@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {ModalController, NavParams} from '@ionic/angular';
-import {UserMin} from '../../../shared/user-min.model';
+import {UserMin} from '../../../shared/models/user-min.model';
 
 @Component({
   selector: 'app-search-modal-user',

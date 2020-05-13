@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../shared/authentication-service';
-import {UserService} from '../shared/user-service';
-import {MatchService} from '../shared/match-service';
+import {AuthenticationService} from '../authentication-service';
+import {UserService} from '../user-service';
+import {MatchService} from '../match-service';
 import {Router} from '@angular/router';
-import {NotificationService} from '../shared/notification-service';
+import {NotificationService} from '../notification-service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss', '../app.component.scss']
+  templateUrl: '../../home/home.page.html',
+  styleUrls: ['../../home/home.page.scss', '../../app.component.scss']
 })
 export class HomePage {
 

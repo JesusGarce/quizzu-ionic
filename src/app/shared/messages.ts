@@ -9,7 +9,10 @@ export abstract class Messages {
     static readonly HISTORY_DELETED: string = 'Match history deleted successfully';
     static readonly FRIEND_DELETED: string = 'Friend delete successfully';
     static readonly DELETE_FRIEND_TITLE: string = 'Delete friend';
+    static readonly DELETE_FRIEND_REQUEST_TITLE: string = 'Delete friend request';
     static readonly DELETE_FRIEND: string = 'Do you want to <strong>delete</strong> this friend?';
+    static readonly DELETE_FRIEND_REQUEST: string = 'Do you want to <strong>delete</strong> this friend request?';
+    static readonly FRIEND_REQUEST_DELETED: string = 'Friend request delete successfully';
     static readonly PROFILE_CHANGED: string = 'Your profile has changed successfully';
     static readonly PROFILE_DIFFERENT_PASSWORDS: string = 'Your profile has changed successfully';
     static readonly PROFILE_PASSWORD_LENGTH_ERROR: string = 'Passwords are not the same';
@@ -28,6 +31,11 @@ export abstract class Messages {
     static readonly PRACTISE_CLOSED: string = 'Do you want to <strong>close</strong> this question? You will lose all your progression';
     static readonly PRACTISE_CLOSED_TITLE: string = 'Finish practise mode';
     static readonly CHOOSE_LEVEL_AND_GAME: string = 'You should choose a level and game before start';
+    static readonly EXIST_USERNAME: string = 'Username already exist, choose another';
+    static readonly START_NEW_GAME: string = 'Do you want to <strong>start</strong> a new game?';
+    static readonly START_NEW_GAME_TITLE: string = 'Start new game';
+    static readonly DISABLE_NOTIFICATIONS_TITLE: string = 'Disable notifications';
+    static readonly DISABLE_NOTIFICATIONS: string = 'Do you want to <strong>disable</strong> the notifications?';
 
     static readonly ERROR_SAVE_QUESTION: string = 'We can not save the question. Try later';
     static readonly ERROR_FIND_GAME: string = 'We can not find the game. Try again later';

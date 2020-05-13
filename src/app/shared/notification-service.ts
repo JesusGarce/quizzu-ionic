@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {Notification} from './notification.model';
+import {Notification} from './models/notification.model';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @Injectable({
@@ -41,8 +41,6 @@ export class NotificationService {
         return this.afStore.doc(`users/${userId}`).ref.get().then(user => {
             if (user.exists) {
                 const userData = user.data();
-                console.log('Create notification');
-                console.log(userData.notifEnabled);
                 if (userData.notifEnabled) {
                     this.afStore.collection('notifications').add(JSON.parse(JSON.stringify(notification))).then();
                 }

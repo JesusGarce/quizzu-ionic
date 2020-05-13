@@ -6,6 +6,7 @@ import {AlertController, ModalController, PopoverController} from '@ionic/angula
 import {UserService} from '../../shared/user-service';
 import {NotificationsPage} from '../notifications/notifications.page';
 import {NotificationService} from '../../shared/notification-service';
+import {SettingsPage} from './settings/settings.page';
 
 @Component({
     selector: 'app-profile',
@@ -18,7 +19,6 @@ export class ProfilePage {
     matchesLost: number;
     user: any;
     userStats: any;
-    notificationsEnabled: boolean;
 
     constructor(
         private authService: AuthenticationService,
@@ -26,12 +26,9 @@ export class ProfilePage {
         private popoverController: PopoverController,
         private userService: UserService,
         private modalController: ModalController,
-        private notificationService: NotificationService,
-        private alertController: AlertController,
-    ) {
+        private notificationService: NotificationService) {
         this.user = this.userService.getCurrentUser();
         this.userStats = this.userService.getCurrentUserStats();
-        this.notificationsEnabled = this.userService.isNotificationsEnabled();
 
         this.matchesWon = this.userStats.c2level.c2won + this.userStats.c1level.c1won +
             this.userStats.b2level.b2won + this.userStats.b1level.b1won;
@@ -64,32 +61,13 @@ export class ProfilePage {
         return await modal.present();
     }
 
-    async changeNotifications() {
-        if (this.userService.isNotificationsEnabled()) {
-            const alert = await this.alertController.create({
-                header: 'Disable notifications',
-                message: 'Do you want to <strong>disable</strong> the notifications?',
-                buttons: [
-                    {
-                        text: 'No',
-                        role: 'cancel',
-                        cssClass: 'secondary',
-                        handler: () => {
-                            this.notificationsEnabled = true;
-                        }
-                    }, {
-                        text: 'Yes',
-                        handler: () => {
-                            this.userService.setNotificationsEnabled();
-                        }
-                    }
-                ]
-            });
-
-            await alert.present();
-        } else {
-            this.userService.setNotificationsEnabled();
-        }
+    async openSettings() {
+        const modal = await this.modalController.create({
+            component: SettingsPage,
+            componentProps: {}
+        });
+        modal.onDidDismiss().then(() => {
+        });
+        return await modal.present();
     }
-
 }
