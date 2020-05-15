@@ -35,4 +35,9 @@ export class NotificationsPage implements OnInit {
     return this.notificationService.getNotificationListLength() === 0;
   }
 
+  getNotifications() {
+    return this.notificationService.getNotificationList();
+  }
+
+
 }

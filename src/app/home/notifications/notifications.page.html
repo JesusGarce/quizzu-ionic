@@ -20,7 +20,7 @@
                     </p>
                 </ion-col>
             </div>
-            <ion-list *ngFor="let notification of this.notificationService.getNotificationList()">
+            <ion-list *ngFor="let notification of getNotifications()">
                 <ion-item>
                     <ion-avatar item-start>
                       <ion-icon class="icon-notification" name="alert-circle-outline"></ion-icon>
