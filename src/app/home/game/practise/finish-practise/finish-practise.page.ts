@@ -13,9 +13,9 @@ import {ModalController, NavParams} from '@ionic/angular';
 export class FinishPractisePage implements OnInit {
   public lottieConfig: object;
   private anim: any;
-  private user: any;
+  public user: any;
   private level: string;
-  private record: number;
+  public record: number;
 
   constructor(private authService: AuthenticationService,
               private router: Router,

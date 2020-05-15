@@ -17,10 +17,10 @@ export class SearchOpponentPage implements OnInit {
 
   public lottieConfig: object;
   private anim: any;
-  private searching = true;
-  private creating = false;
-  private created = false;
-  private found = false;
+  public searching = true;
+  public creating = false;
+  public created = false;
+  public found = false;
   private options: Options;
   private user: any;
 

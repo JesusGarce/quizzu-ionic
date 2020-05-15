@@ -67,4 +67,16 @@ export class SettingsPage implements OnInit {
     this.modalController.dismiss().then();
   }
 
+  isAnyNotification() {
+    return this.notificationService.getNotificationListLength() === 0;
+  }
+
+  isNotificationsEnabled() {
+    return this.userService.isNotificationsEnabled();
+  }
+
+  notificationLength() {
+    return this.notificationService.notificationList.length;
+  }
+
 }

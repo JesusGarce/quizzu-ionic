@@ -163,4 +163,16 @@ export class FriendsPage implements OnInit  {
         });
         return await modal.present();
     }
+
+    isAnyNotification() {
+      return this.notificationService.getNotificationListLength() === 0;
+    }
+
+    isNotificationsEnabled() {
+      return this.userService.isNotificationsEnabled();
+    }
+
+    notificationLength() {
+      return this.notificationService.notificationList.length;
+    }
 }

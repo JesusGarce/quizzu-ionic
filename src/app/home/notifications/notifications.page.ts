@@ -31,4 +31,8 @@ export class NotificationsPage implements OnInit {
     this.notificationService.deleteNotification(id).then();
   }
 
+  isAnyNotification() {
+    return this.notificationService.getNotificationListLength() === 0;
+  }
+
 }

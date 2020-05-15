@@ -27,7 +27,7 @@ export class GamePage {
   matchesPending: MatchShow[];
   loaded = false;
 
-  constructor(private matchService: MatchService,
+  constructor(public matchService: MatchService,
               private userService: UserService,
               private alertController: AlertController,
               private router: Router,
@@ -156,5 +156,17 @@ export class GamePage {
     modal.onDidDismiss().then(() => {
     });
     return await modal.present();
+  }
+
+  isAnyNotification() {
+    return this.notificationService.getNotificationListLength() === 0;
+  }
+
+  isNotificationsEnabled() {
+    return this.userService.isNotificationsEnabled();
+  }
+
+  notificationLength() {
+    return this.notificationService.notificationList.length;
   }
 }

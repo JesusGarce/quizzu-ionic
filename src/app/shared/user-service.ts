@@ -127,10 +127,6 @@ export class UserService {
         this.currentUser = '';
     }
 
-    goToEditProfile() {
-        this.router.navigate(['home/profile/edit']);
-    }
-
     setCurrentUser(editUser) {
         this.currentUser = editUser;
         return this.afStore.collection('users')

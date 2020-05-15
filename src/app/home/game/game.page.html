@@ -3,9 +3,9 @@
         <ion-title align="center" class="ion-text-center">
             <img class="img-toolbar" src="../../../assets/quizzu_logo.png">
             <ion-button class="button-notification" (click)="openNotifications()"
-                        [disabled]="this.notificationService.getNotificationListLength() === 0"
-                        *ngIf="this.userService.isNotificationsEnabled()">
-                {{notificationService.notificationList.length}}
+                        [disabled]="this.isAnyNotification()"
+                        *ngIf="isNotificationsEnabled()">
+                {{notificationLength()}}
             </ion-button>
         </ion-title>
     </ion-toolbar>
