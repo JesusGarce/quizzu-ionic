@@ -23,7 +23,6 @@ export class MatchWordsApiService {
         private toast: ToastService,
         private modalController: ModalController,
         private matchService: MatchService,
-        private alertController: AlertController,
         private http: HttpClient,
     ) {
         this.match = this.matchService.currentMatch;

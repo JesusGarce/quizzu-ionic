@@ -284,6 +284,7 @@ export class MatchService {
         const alert = await this.alertController.create({
             header: Messages.NEW_GAME_TITLE,
             message: Messages.NEW_GAME,
+            cssClass: 'alert',
             buttons: [
                 {
                     text: 'No',

@@ -100,6 +100,7 @@ export class SearchOpponentPage implements OnInit {
     const alert = await this.alertController.create({
       header: Messages.CLOSE_SEARCHING_TITLE,
       message: Messages.CLOSE_SEARCHING,
+      cssClass: 'alert',
       buttons: [
         {
           text: 'No',

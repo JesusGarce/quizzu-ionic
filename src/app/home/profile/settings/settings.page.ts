@@ -30,6 +30,7 @@ export class SettingsPage implements OnInit {
       const alert = await this.alertController.create({
         header: Messages.DISABLE_NOTIFICATIONS_TITLE,
         message: Messages.DISABLE_NOTIFICATIONS,
+        cssClass: 'alert',
         buttons: [
           {
             text: 'No',

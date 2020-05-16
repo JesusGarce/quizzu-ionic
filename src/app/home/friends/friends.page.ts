@@ -83,7 +83,8 @@ export class FriendsPage implements OnInit  {
     const alert = await this.alertController.create({
       header: Messages.DELETE_FRIEND_REQUEST_TITLE,
       message: Messages.DELETE_FRIEND_REQUEST,
-      buttons: [
+        cssClass: 'alert',
+        buttons: [
         {
           text: 'No',
           role: 'cancel',
@@ -122,7 +123,8 @@ export class FriendsPage implements OnInit  {
     const alert = await this.alertController.create({
       header: Messages.START_NEW_GAME_TITLE,
       message: Messages.START_NEW_GAME,
-      buttons: [
+        cssClass: 'alert',
+        buttons: [
         {
           text: 'No',
           role: 'cancel',

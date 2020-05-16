@@ -24,3 +24,26 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@font-face {
+  font-family: 'CandyBeans';
+  src: url('assets/fonts/CandyBeans.otf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Staatliches';
+  src: url('assets/fonts/Staatliches-Regular.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Provicali';
+  src: url('assets/fonts/Provicali.otf') format('truetype');
+  font-style: normal;
+}
+
+.alert {
+  text-transform: initial;
+  font-family: 'CandyBeans', sans-serif;
+}

@@ -242,6 +242,7 @@ export class PractisePage {
     const alert = await this.alertController.create({
       header: Messages.PRACTISE_CLOSED_TITLE,
       message: Messages.PRACTISE_CLOSED,
+      cssClass: 'alert',
       buttons: [
         {
           text: 'No',

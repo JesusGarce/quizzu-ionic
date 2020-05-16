@@ -98,6 +98,7 @@ export class GamePage {
     const alert = await this.alertController.create({
       header: Messages.GIVE_UP_MATCH_TITLE,
       message: Messages.GIVE_UP_MATCH,
+      cssClass: 'alert',
       buttons: [
         {
           text: 'No',
