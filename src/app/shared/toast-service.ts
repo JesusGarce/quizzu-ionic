@@ -13,7 +13,8 @@ export class ToastService {
             duration: ok ? null : duration,
             position: 'top',
             color: 'primary',
-            animated: true
+            animated: true,
+            cssClass: 'toast-css'
         }).then(toast => toast.present());
     }
 }

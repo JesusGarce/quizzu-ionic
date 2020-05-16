@@ -119,7 +119,7 @@ export class UserService {
             } else {
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
@@ -272,7 +272,7 @@ export class UserService {
                     });
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
@@ -293,7 +293,7 @@ export class UserService {
                 this.toast.create(Messages.USER_NOT_FOUND);
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
@@ -327,7 +327,7 @@ export class UserService {
                     });
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 

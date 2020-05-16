@@ -170,4 +170,16 @@ export class GamePage {
   notificationLength() {
     return this.notificationService.notificationList.length;
   }
+
+  refreshMatches(event) {
+    this.matchesFinished = [];
+    this.matchesActive = [];
+    this.matchesFinished = [];
+
+    this.matchService.initMatches(this.userService.getCurrentUser().id);
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
+  }
 }

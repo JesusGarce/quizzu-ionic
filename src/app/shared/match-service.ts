@@ -38,6 +38,9 @@ export class MatchService {
     }
 
     initMatches(userId) {
+        this.matchesActive = [];
+        this.matchesFinished = [];
+        this.matchesPendings = [];
         this.afStore.collection('match').ref
             .where('player1.id', '==', userId)
             .get()
@@ -138,6 +141,7 @@ export class MatchService {
                     this.saveMatch(matchLeft, doc.id).then(
                         () => {
                             this.toast.create(Messages.LEFT_GAME);
+                            this.matchesActive = this.matchesActive.filter(p => p.id !== match.id);
                         }
                     );
                 } else {
@@ -271,11 +275,13 @@ export class MatchService {
             .doc(matchId)
             .valueChanges()
             .subscribe( match => {
-                this.currentMatch = match;
-                if (this.currentMatch.player2.id !== '' &&
-                    this.currentMatch.player1RemainsQuestions === 15 &&
-                    this.currentMatch.player2RemainsQuestions === 15) {
-                    this.alertOpenMatch(matchId).then();
+                if (match !== undefined) {
+                    this.currentMatch = match;
+                    if (this.currentMatch.player2.id !== '' &&
+                        this.currentMatch.player1RemainsQuestions === 15 &&
+                        this.currentMatch.player2RemainsQuestions === 15) {
+                        this.alertOpenMatch(matchId).then();
+                    }
                 }
             });
     }

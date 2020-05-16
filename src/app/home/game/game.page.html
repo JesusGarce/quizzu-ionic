@@ -12,6 +12,9 @@
 </ion-header>
 
 <ion-content align="center">
+    <ion-refresher slot="fixed" (ionRefresh)="refreshMatches($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-card *ngIf="matchesPending.length !== 0" color="primary">
         <ion-card-title><h3 class="h3-white">Requested games</h3></ion-card-title>
         <ion-card-content>
