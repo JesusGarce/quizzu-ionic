@@ -11,7 +11,7 @@
     <ion-card color="mediumlight">
         <ion-card-title><h3 class="h3-title">Notifications</h3></ion-card-title>
         <ion-card-content>
-            <div *ngIf="this.isAnyNotification()">
+            <div *ngIf="!this.isAnyNotification()">
                 <ion-col>
                     <ion-icon class="icon-big" name="notifications-off-outline"></ion-icon>
                     <h2 class="no-notifications">You don't have any notification</h2>

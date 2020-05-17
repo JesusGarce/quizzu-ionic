@@ -14,8 +14,8 @@ export abstract class Messages {
     static readonly DELETE_FRIEND_REQUEST: string = 'Do you want to <strong>delete</strong> this friend request?';
     static readonly FRIEND_REQUEST_DELETED: string = 'Friend request delete successfully';
     static readonly PROFILE_CHANGED: string = 'Your profile has changed successfully';
-    static readonly PROFILE_DIFFERENT_PASSWORDS: string = 'Your profile has changed successfully';
-    static readonly PROFILE_PASSWORD_LENGTH_ERROR: string = 'Passwords are not the same';
+    static readonly PROFILE_DIFFERENT_PASSWORDS: string = 'Passwords are not the same';
+    static readonly PROFILE_PASSWORD_LENGTH_ERROR: string = 'Password length must be 8 at least';
     static readonly PROFILE_PASSWORD_CHANGED: string = 'Password has been changed successfully';
     static readonly PROFILE_PASSWORD_INCORRECT: string = 'Current password is incorrect. Try again';
     static readonly PROFILE_PASSWORD_TOO_MANY_REQUESTS: string = 'Too many requests. Wait a few minutes to try it again.';

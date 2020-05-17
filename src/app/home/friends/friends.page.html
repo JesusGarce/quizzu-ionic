@@ -11,6 +11,9 @@
 </ion-header>
 
 <ion-content align="center">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshFriends($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card color="mediumlight">
     <ion-card-title><h3 class="h3-title">Search a friend</h3></ion-card-title>
     <ion-card-content>

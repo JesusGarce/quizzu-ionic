@@ -22,9 +22,6 @@ export class GamePage {
 
   optionSelected: Options;
   matchFoundId: string;
-  matchesActive: MatchShow[];
-  matchesFinished: MatchShow[];
-  matchesPending: MatchShow[];
   loaded = false;
 
   constructor(public matchService: MatchService,
@@ -34,9 +31,6 @@ export class GamePage {
               private toast: ToastService,
               private modalController: ModalController,
               private notificationService: NotificationService) {
-    this.matchesActive = matchService.matchesActive;
-    this.matchesFinished = matchService.matchesFinished;
-    this.matchesPending = matchService.matchesPendings;
     this.loaded = true;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
@@ -85,12 +79,10 @@ export class GamePage {
   }
 
   acceptGame(game) {
-    this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
     this.matchService.acceptMatchPending(game);
   }
 
   deleteGame(game) {
-    this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
     this.matchService.deleteMatchPending(game);
   }
 
@@ -107,11 +99,7 @@ export class GamePage {
         }, {
           text: 'Yes',
           handler: () => {
-            this.matchService.leaveGameStarted(game).then(
-                () => {
-                  this.matchesActive = this.matchesActive.filter( p => p.id !== game.id);
-                  this.matchesFinished.push(game);
-                });
+            this.matchService.leaveGameStarted(game).then();
           }
         }
       ]
@@ -122,15 +110,11 @@ export class GamePage {
 
   deleteMatchesFinished() {
     this.matchService.deleteMatchesFinished();
-    this.matchesFinished = [];
     this.toast.create(Messages.HISTORY_DELETED);
   }
 
   goToMatch(match) {
-    const matchToChange = this.matchesActive.filter( p => p.id === match.id).pop();
-    matchToChange.turnLocalPlayer = !matchToChange.turnLocalPlayer;
-    const url = 'home/game/match/' + match.id;
-    this.router.navigate([url]);
+    this.matchService.goToMatch(match);
   }
 
   isWinner(match) {
@@ -172,10 +156,6 @@ export class GamePage {
   }
 
   refreshMatches(event) {
-    this.matchesFinished = [];
-    this.matchesActive = [];
-    this.matchesFinished = [];
-
     this.matchService.initMatches(this.userService.getCurrentUser().id);
 
     setTimeout(() => {

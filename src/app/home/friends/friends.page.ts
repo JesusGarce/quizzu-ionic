@@ -107,6 +107,14 @@ export class FriendsPage implements OnInit  {
     await alert.present();
   }
 
+  refreshFriends(event) {
+      this.userService.initCurrentUser(this.userService.getCurrentUser().id);
+
+      setTimeout(() => {
+          event.target.complete();
+      }, 2000);
+  }
+
     async openModal() {
         const modal = await this.modalController.create({
             component: SearchModalUserPage,

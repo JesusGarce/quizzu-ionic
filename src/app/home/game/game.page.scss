@@ -104,10 +104,22 @@ overflow-y: scroll;
 }
 
 .game-result{
-background-color: #cfcfcf;
+background-color: #ffffff;
 margin-right: 10px;
 border-radius: 4px;
 padding: 3px;
+}
+
+.game-type{
+  background-color: #A92EDF;
+  margin-right: 10px;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.type {
+  color: #A92EDF;
+  font-size: x-small;
 }
 
 .result-local {
