@@ -19,23 +19,19 @@ import {Messages} from '../../shared/messages';
 })
 export class FriendsPage implements OnInit  {
   items: UserMin[];
-  friendRequests: UserMin[];
-  friends: UserMin[];
   findUser: string;
   options: Options;
   user: any;
 
   constructor(
       private alertController: AlertController,
-      private userService: UserService,
+      public userService: UserService,
       private toast: ToastService,
       private router: Router,
       private modalController: ModalController,
       private matchService: MatchService,
       private notificationService: NotificationService,
   ) {
-    this.friendRequests = userService.getCurrentUser().friendRequests;
-    this.friends = userService.getCurrentUser().friends;
     this.user = userService.getCurrentUser();
     this.findUser = '';
   }
@@ -65,8 +61,6 @@ export class FriendsPage implements OnInit  {
     this.userService.acceptFriendRequest(friendRequest).then(
         () => {
           this.toast.create('Now ' + friendRequest.username.toString() + ' is your friend!');
-          this.friendRequests = this.userService.currentUser.friendRequests;
-          this.friends = this.userService.currentUser.friends;
           this.userService.acceptFriendRequestOtherUser(friendRequest);
         }, () => {
           this.toast.create(Messages.ERROR);
@@ -95,7 +89,6 @@ export class FriendsPage implements OnInit  {
             this.userService.removeFriendRequest(friendRequest).then(
                 () => {
               this.toast.create(Messages.FRIEND_REQUEST_DELETED);
-              this.friendRequests = this.userService.currentUser.friendRequests;
                 }, () => {
               this.toast.create(Messages.ERROR);
             });

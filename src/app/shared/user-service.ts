@@ -352,6 +352,14 @@ export class UserService {
         this.currentUser.friendRequests = this.currentUser.friendRequests.filter(p => p.id !== friend.id);
     }
 
+    getFriendsCurrentUser() {
+        return this.currentUser.friends;
+    }
+
+    getFriendRequestsCurrentUser() {
+        return this.currentUser.friendRequests;
+    }
+
     getCurrentUser() {
         return this.currentUser;
     }

@@ -95,18 +95,20 @@ export class AuthenticationService {
         .then((response) => {
           this.userService.loginOrSignInFromGoogle(response.user);
           this.router.navigate(['enter-username']);
-        });
+        }).catch((err) => {
+      this.spinnerLoading.hide();
+      this.toast.create(Messages.ERROR + ':' + err);
+    });
   }
 
   authGoogleLogin(provider) {
     this.spinnerLoading.show();
     return this.ngFireAuth.auth.signInWithPopup(provider)
     .then((result) => {
-      console.log(result.user);
        this.ngZone.run(() => {
+         this.userService.loginOrSignInFromGoogle(result.user);
          this.router.navigate(['enter-username']);
-        });
-      this.userService.loginOrSignInFromGoogle(result.user);
+       });
     }).catch((err) => {
           this.spinnerLoading.hide();
           this.toast.create(Messages.ERROR + ':' + err);

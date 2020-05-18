@@ -24,9 +24,9 @@
     </ion-card-content>
   </ion-card>
   <ion-card color="mediumlight">
-    <ion-card-title><h3 class="h3-title">Friends ({{friends.length}})</h3></ion-card-title>
+    <ion-card-title><h3 class="h3-title">Friends ({{this.userService.getFriendsCurrentUser().length}})</h3></ion-card-title>
     <ion-card-content>
-      <div *ngIf="friends.length === 0">
+      <div *ngIf="this.userService.getFriendsCurrentUser().length === 0">
         <ion-col>
           <ion-icon class="icon-big" name="beer-outline"></ion-icon>
           <h2>You don't have any friend</h2>
@@ -35,7 +35,7 @@
           </p>
         </ion-col>
       </div>
-      <ion-list *ngFor="let friend of friends">
+      <ion-list *ngFor="let friend of this.userService.getFriendsCurrentUser()">
         <ion-item>
           <ion-col>
             <h2 class="user" (click)="goToProfilePage(friend)">{{friend.username}}</h2>
@@ -50,9 +50,9 @@
   </ion-card>
 
   <ion-card color="mediumlight">
-    <ion-card-title><h3 class="h3-title">Friend requests ({{friendRequests.length}})</h3></ion-card-title>
+    <ion-card-title><h3 class="h3-title">Friend requests ({{this.userService.getFriendRequestsCurrentUser().length}})</h3></ion-card-title>
     <ion-card-content>
-      <div *ngIf="friendRequests.length === 0">
+      <div *ngIf="this.userService.getFriendRequestsCurrentUser().length === 0">
         <ion-col>
           <ion-icon class="icon-big" name="happy-outline"></ion-icon>
           <h2>You don't have any friend request</h2>
@@ -61,7 +61,7 @@
           </p>
         </ion-col>
       </div>
-      <ion-list *ngFor="let friendRequest of friendRequests">
+      <ion-list *ngFor="let friendRequest of this.userService.getFriendRequestsCurrentUser()">
         <ion-item>
           <ion-col (click)="goToProfilePage(friendRequest)">
             <h3>{{friendRequest.username}}</h3>
