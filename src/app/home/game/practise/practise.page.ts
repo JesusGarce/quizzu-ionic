@@ -160,13 +160,20 @@ export class PractisePage {
             this.initializeWords(this.options.level);
           });
     else {
-      this.matchWordsApiService.getDefinition(this.correctWord)
-          .subscribe((data: Word) => {
-            this.question = data.definitions[0].definition;
-            this.startCountdown().then();
-          }, error => {
-            this.initializeWords(this.options.level);
-          });
+      this.matchWordsApiService.checkCalls().subscribe((data: any) => {
+        console.log(data);
+        if (data.available) {
+          this.matchWordsApiService.getDefinition(this.correctWord)
+              .subscribe((word: Word) => {
+                this.question = word.definitions[0].definition;
+                this.startCountdown().then();
+              }, error => {
+                this.initializeWords(this.options.level);
+              });
+        }
+        else
+          return null;
+      });
     }
   }
 

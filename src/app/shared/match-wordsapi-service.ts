@@ -62,4 +62,8 @@ export class MatchWordsApiService {
         return this.http.get(this.url + word + '/antonyms', { 'headers': headers });
     }
 
+    checkCalls() {
+        return this.http.get('https://us-central1-quizzu-1fd29.cloudfunctions.net/callCounts');
+    }
+
 }

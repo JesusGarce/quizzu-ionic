@@ -182,17 +182,20 @@ export class MatchPage {
             this.initializeWords(this.match.gameLevel);
           });
     else {
-      this.matchWordsApiService.getDefinition(this.correctWord)
-          .subscribe((data: Word) => {
-            if (data.definitions.length > 0) {
-              this.question = data.definitions[0].definition;
-              this.startCountdown().then();
-            } else {
-              this.initializeWords(this.match.gameLevel);
-            }
-          }, error => {
-            this.initializeWords(this.match.gameLevel);
-          });
+      this.matchWordsApiService.checkCalls().subscribe((data: any) => {
+        console.log(data);
+        if (data.available) {
+          this.matchWordsApiService.getDefinition(this.correctWord)
+              .subscribe((word: Word) => {
+                this.question = word.definitions[0].definition;
+                this.startCountdown().then();
+              }, error => {
+                this.initializeWords(this.match.gameLevel);
+              });
+        }
+        else
+          return null;
+      });
     }
   }
 
