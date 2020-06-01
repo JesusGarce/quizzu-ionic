@@ -17,6 +17,7 @@ import {PointsService} from './points.service';
 import {NotificationService} from '../../../shared/notification-service';
 import {Synonyms} from '../../../shared/models/synonym.model';
 import {Antonyms} from '../../../shared/models/antonym.model';
+import {ServerService} from '../../../shared/server-service';
 
 @Component({
   selector: 'app-match',
@@ -53,6 +54,7 @@ export class MatchPage {
                private spinnerLoading: SpinnerLoadingService,
                private toast: ToastService,
                private http: HttpClient,
+               private serverService: ServerService,
                private notificationService: NotificationService) {
     this.user = this.userService.getCurrentUser();
     this.matchService.getMatch(this.route.snapshot.paramMap.get('id')).then(doc => {
@@ -157,6 +159,24 @@ export class MatchPage {
   }
 
   getQuestion() {
+    this.serverService.getServer().then(
+        s => {
+          if (!s.empty) {
+            const server = s.docs.pop();
+            if (server.data().wordsApiCallsDaily < 2500) {
+              this.serverService.updateApiCalls(server.data(), server.id).then();
+              this.doWordsApiCall();
+            } else {
+              this.toast.create('Ups! Quizzu used has been surpassed. You have to wait until tomorrow to play.');
+              this.spinnerLoading.hide();
+              this.router.navigate(['home/game']).then();
+            }
+          }
+        }
+    );
+  }
+
+  doWordsApiCall() {
     if (this.match.type === Constants.GAME_ANTONYMS)
       this.matchWordsApiService.getAntonym(this.correctWord)
           .subscribe((data: Antonyms) => {
@@ -182,17 +202,13 @@ export class MatchPage {
             this.initializeWords(this.match.gameLevel);
           });
     else {
-      this.matchWordsApiService.getDefinition(this.correctWord)
-          .subscribe((data: Word) => {
-            if (data.definitions.length > 0) {
-              this.question = data.definitions[0].definition;
-              this.startCountdown().then();
-            } else {
-              this.initializeWords(this.match.gameLevel);
-            }
-          }, error => {
-            this.initializeWords(this.match.gameLevel);
-          });
+          this.matchWordsApiService.getDefinition(this.correctWord)
+              .subscribe((word: Word) => {
+                this.question = word.definitions[0].definition;
+                this.startCountdown().then();
+              }, error => {
+                this.initializeWords(this.match.gameLevel);
+              });
     }
   }
 
