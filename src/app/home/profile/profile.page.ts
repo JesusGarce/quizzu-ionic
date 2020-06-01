@@ -70,4 +70,24 @@ export class ProfilePage {
         });
         return await modal.present();
     }
+
+    isAnyNotification() {
+        return this.notificationService.getNotificationListLength() === 0;
+    }
+
+    isNotificationsEnabled() {
+        return this.userService.isNotificationsEnabled();
+    }
+
+    notificationLength() {
+        return this.notificationService.notificationList.length;
+    }
+
+    goToEditProfile() {
+        this.router.navigate(['home/profile/edit']);
+    }
+
+    logout() {
+        this.authService.signOut();
+    }
 }

@@ -30,6 +30,7 @@ export class SettingsPage implements OnInit {
       const alert = await this.alertController.create({
         header: Messages.DISABLE_NOTIFICATIONS_TITLE,
         message: Messages.DISABLE_NOTIFICATIONS,
+        cssClass: 'alert',
         buttons: [
           {
             text: 'No',
@@ -65,6 +66,18 @@ export class SettingsPage implements OnInit {
 
   closeSettings() {
     this.modalController.dismiss().then();
+  }
+
+  isAnyNotification() {
+    return this.notificationService.getNotificationListLength() === 0;
+  }
+
+  isNotificationsEnabled() {
+    return this.userService.isNotificationsEnabled();
+  }
+
+  notificationLength() {
+    return this.notificationService.notificationList.length;
   }
 
 }

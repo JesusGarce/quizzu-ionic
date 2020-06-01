@@ -33,6 +33,7 @@ export class LoginPage implements OnInit {
           this.router.navigate(['home']);
         } else {
           this.toast.create(Messages.VERIFY_EMAIL);
+          this.router.navigate(['verify-email']);
         }
       }).catch(() => {
         this.toast.create(Messages.ERROR);

@@ -85,6 +85,7 @@ export class UserPage implements OnInit {
     const alert = await this.alertController.create({
       header: Messages.DELETE_FRIEND_TITLE,
       message: Messages.DELETE_FRIEND,
+      cssClass: 'alert',
       buttons: [
         {
           text: 'No',

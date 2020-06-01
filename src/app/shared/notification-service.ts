@@ -37,7 +37,6 @@ export class NotificationService {
 
     createNotification(title, message, userId) {
         const notification = new Notification('', title, message, userId);
-        console.log(notification);
         return this.afStore.doc(`users/${userId}`).ref.get().then(user => {
             if (user.exists) {
                 const userData = user.data();

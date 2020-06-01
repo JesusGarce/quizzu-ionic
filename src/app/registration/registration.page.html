@@ -12,39 +12,39 @@
         <ion-list-header>User information</ion-list-header>
 
         <ion-item lines="full">
-            <ion-label position="floating">Username</ion-label>
+            <ion-label class="label" position="floating">Username</ion-label>
             <ion-input [(ngModel)]="this.user.username" name="username" required type="text"></ion-input>
         </ion-item>
 
         <ion-item lines="full">
-            <ion-label position="floating">Password</ion-label>
+            <ion-label class="label" position="floating">Password</ion-label>
             <ion-input [(ngModel)]="password" name="password" required type="password"></ion-input>
         </ion-item>
 
         <ion-item lines="full">
-            <ion-label position="floating">Confirm Password</ion-label>
+            <ion-label class="label" position="floating">Confirm Password</ion-label>
             <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" required type="password"></ion-input>
         </ion-item>
 
         <ion-list-header>Personal information</ion-list-header>
 
         <ion-item lines="full">
-            <ion-label position="floating">First name</ion-label>
+            <ion-label class="label" position="floating">First name</ion-label>
             <ion-input [(ngModel)]="this.user.firstName" name="firstName" required type="text"></ion-input>
         </ion-item>
 
         <ion-item lines="full">
-            <ion-label position="floating">Last name</ion-label>
+            <ion-label class="label" position="floating">Last name</ion-label>
             <ion-input [(ngModel)]="this.user.lastName" name="lastName" required type="text"></ion-input>
         </ion-item>
 
         <ion-item lines="full">
-            <ion-label position="floating">E-mail</ion-label>
+            <ion-label class="label" position="floating">E-mail</ion-label>
             <ion-input [(ngModel)]="this.user.email" name="email" required type="text"></ion-input>
         </ion-item>
 
         <ion-item lines="full">
-            <ion-label position="floating">Birth date</ion-label>
+            <ion-label class="label" position="floating">Birth date</ion-label>
             <ion-datetime [(ngModel)]="this.user.birthDate" display-timezone="utc" name="birthDate"
                           required></ion-datetime>
         </ion-item>

@@ -294,4 +294,8 @@ export class MatchPage {
       return this.notificationService.createNotification(Messages.NOTIFICATION_GAME_OVER_TITLE,
           Messages.NOTIFICATION_GAME_OVER_MESSAGE, this.match.player1.id);
   }
+
+  getTurnPoints() {
+    return this.matchService.getTurnPoints(this.counter, this.isCorrectAnswer(), this.consecutives);
+  }
 }

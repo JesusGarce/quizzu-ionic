@@ -16,10 +16,10 @@ export class FinishMatchPage implements OnInit {
   private anim: any;
   private user: any;
   private state: string;
-  private victory: boolean;
-  private defeat: boolean;
-  private draw: boolean;
-  private match: any;
+  public victory: boolean;
+  public defeat: boolean;
+  public draw: boolean;
+  public match: any;
 
   constructor(private authService: AuthenticationService,
               private router: Router,

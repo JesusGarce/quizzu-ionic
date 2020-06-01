@@ -67,16 +67,7 @@
   --ion-color-light-tint: #f5f6f9;
 }
 
-@font-face {
-  font-family: 'Insaniburger';
-  src: url('../assets/fonts/Insanibc.ttf');//mine
-}
 
-:root,
-:root[mode='ios'],
-:root[mode='md'] {
-  font-family: 'Insaniburger', sans-serif !important;
-}
 
 :root {
   --ion-color-mediumlight: #cfcfcf;

@@ -7,13 +7,14 @@ export class MatchShow {
     localPlayerPoints: number;
     awayPlayerPoints: number;
     level: string;
+    type: string;
     turnLocalPlayer: boolean;
     matchAccepted: boolean;
     localPlayerRemainQuestions: number;
     awayPlayerRemainQuestions: number;
     
     constructor(id, isFinish, localWin, localPlayerName, awayPlayerName, localPlayerPoints, awayPlayerPoints, level,
-                turnLocalPlayer, matchAccepted, localPlayerRemainQuestions, awayPlayerRemainQuestions) {
+                type, turnLocalPlayer, matchAccepted, localPlayerRemainQuestions, awayPlayerRemainQuestions) {
         this.id = id;
         this.isFinish = isFinish;
         this.localWin = localWin;
@@ -22,6 +23,7 @@ export class MatchShow {
         this.localPlayerPoints = localPlayerPoints;
         this.awayPlayerPoints = awayPlayerPoints;
         this.level = level;
+        this.type = type;
         this.turnLocalPlayer = turnLocalPlayer;
         this.matchAccepted = matchAccepted;
         this.localPlayerRemainQuestions = localPlayerRemainQuestions;

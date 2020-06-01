@@ -1,5 +1,5 @@
 .img-toolbar {
-  max-width: 40%;
+  max-width: 35%;
   height: auto;
 }
 
@@ -9,9 +9,14 @@
 }
 
 * {
-  font-family: 'Insaniburger', sans-serif;
+  font-family: 'CandyBeans', sans-serif;
+  text-transform: uppercase;
 }
 
 ion-input{
-  font-family: 'Lato', sans-serif;;
+  font-family: 'CandyBeans', sans-serif;
+}
+
+.label {
+  text-transform: initial;
 }

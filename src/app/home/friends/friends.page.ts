@@ -19,23 +19,19 @@ import {Messages} from '../../shared/messages';
 })
 export class FriendsPage implements OnInit  {
   items: UserMin[];
-  friendRequests: UserMin[];
-  friends: UserMin[];
   findUser: string;
   options: Options;
   user: any;
 
   constructor(
       private alertController: AlertController,
-      private userService: UserService,
+      public userService: UserService,
       private toast: ToastService,
       private router: Router,
       private modalController: ModalController,
       private matchService: MatchService,
       private notificationService: NotificationService,
   ) {
-    this.friendRequests = userService.getCurrentUser().friendRequests;
-    this.friends = userService.getCurrentUser().friends;
     this.user = userService.getCurrentUser();
     this.findUser = '';
   }
@@ -65,8 +61,6 @@ export class FriendsPage implements OnInit  {
     this.userService.acceptFriendRequest(friendRequest).then(
         () => {
           this.toast.create('Now ' + friendRequest.username.toString() + ' is your friend!');
-          this.friendRequests = this.userService.currentUser.friendRequests;
-          this.friends = this.userService.currentUser.friends;
           this.userService.acceptFriendRequestOtherUser(friendRequest);
         }, () => {
           this.toast.create(Messages.ERROR);
@@ -83,7 +77,8 @@ export class FriendsPage implements OnInit  {
     const alert = await this.alertController.create({
       header: Messages.DELETE_FRIEND_REQUEST_TITLE,
       message: Messages.DELETE_FRIEND_REQUEST,
-      buttons: [
+        cssClass: 'alert',
+        buttons: [
         {
           text: 'No',
           role: 'cancel',
@@ -94,7 +89,6 @@ export class FriendsPage implements OnInit  {
             this.userService.removeFriendRequest(friendRequest).then(
                 () => {
               this.toast.create(Messages.FRIEND_REQUEST_DELETED);
-              this.friendRequests = this.userService.currentUser.friendRequests;
                 }, () => {
               this.toast.create(Messages.ERROR);
             });
@@ -104,6 +98,14 @@ export class FriendsPage implements OnInit  {
     });
 
     await alert.present();
+  }
+
+  refreshFriends(event) {
+      this.userService.initCurrentUser(this.userService.getCurrentUser().id);
+
+      setTimeout(() => {
+          event.target.complete();
+      }, 2000);
   }
 
     async openModal() {
@@ -122,7 +124,8 @@ export class FriendsPage implements OnInit  {
     const alert = await this.alertController.create({
       header: Messages.START_NEW_GAME_TITLE,
       message: Messages.START_NEW_GAME,
-      buttons: [
+        cssClass: 'alert',
+        buttons: [
         {
           text: 'No',
           role: 'cancel',
@@ -162,5 +165,17 @@ export class FriendsPage implements OnInit  {
         modal.onDidDismiss().then(() => {
         });
         return await modal.present();
+    }
+
+    isAnyNotification() {
+      return this.notificationService.getNotificationListLength() === 0;
+    }
+
+    isNotificationsEnabled() {
+      return this.userService.isNotificationsEnabled();
+    }
+
+    notificationLength() {
+      return this.notificationService.notificationList.length;
     }
 }

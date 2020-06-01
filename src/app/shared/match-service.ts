@@ -38,6 +38,9 @@ export class MatchService {
     }
 
     initMatches(userId) {
+        this.matchesActive = [];
+        this.matchesFinished = [];
+        this.matchesPendings = [];
         this.afStore.collection('match').ref
             .where('player1.id', '==', userId)
             .get()
@@ -76,11 +79,11 @@ export class MatchService {
         let match;
         if (data.player1.id === userId) {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player1.username,
-                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.player1Turn, data.matchAccepted,
+                data.player2.username, data.player1Points, data.player2Points, data.gameLevel, data.type, data.player1Turn, data.matchAccepted,
                 data.player1RemainsQuestions, data.player2RemainsQuestions);
         } else {
             match = new MatchShow(matchId, isFinish, (data.winnerId === userId), data.player2.username,
-                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, !data.player1Turn, data.matchAccepted,
+                data.player1.username, data.player2Points, data.player1Points, data.gameLevel, data.type, !data.player1Turn, data.matchAccepted,
                 data.player1RemainsQuestions, data.player2RemainsQuestions);
         }
         this.saveMatchShowInArray(match, data, active);
@@ -138,6 +141,8 @@ export class MatchService {
                     this.saveMatch(matchLeft, doc.id).then(
                         () => {
                             this.toast.create(Messages.LEFT_GAME);
+                            this.matchesActive = this.matchesActive.filter(p => p.id !== match.id);
+                            this.matchesFinished.push(match);
                         }
                     );
                 } else {
@@ -166,6 +171,7 @@ export class MatchService {
                     () => {
                         this.toast.create(Messages.ACCEPTED_GAME);
                         this.createMatchDataShow(matchAccepted, match.id, this.userService.getCurrentUser().id, true);
+                        this.matchesPendings = this.matchesPendings.filter( p => p.id !== match.id);
                     }
                 );
             } else {
@@ -182,7 +188,9 @@ export class MatchService {
         return this.afStore.collection('match')
             .doc(match.id)
             .delete()
-            .then( resp => {});
+            .then( resp => {
+                this.matchesPendings = this.matchesPendings.filter( p => p.id !== match.id);
+            });
     }
 
     saveMatch(match, id) {
@@ -195,7 +203,7 @@ export class MatchService {
     }
 
     checkIfMatchIsFinished(match) {
-        return ((match.player1RemainsQuestions < 1) && (match.player2RemainsQuestions < 1));
+        return (((match.player1RemainsQuestions < 1) && (match.player2RemainsQuestions < 1)) || match.leaveId !== '');
     }
 
     finishMatch(match) {
@@ -271,11 +279,13 @@ export class MatchService {
             .doc(matchId)
             .valueChanges()
             .subscribe( match => {
-                this.currentMatch = match;
-                if (this.currentMatch.player2.id !== '' &&
-                    this.currentMatch.player1RemainsQuestions === 15 &&
-                    this.currentMatch.player2RemainsQuestions === 15) {
-                    this.alertOpenMatch(matchId).then();
+                if (match !== undefined) {
+                    this.currentMatch = match;
+                    if (this.currentMatch.player2.id !== '' &&
+                        this.currentMatch.player1RemainsQuestions === 15 &&
+                        this.currentMatch.player2RemainsQuestions === 15) {
+                        this.alertOpenMatch(matchId).then();
+                    }
                 }
             });
     }
@@ -284,6 +294,7 @@ export class MatchService {
         const alert = await this.alertController.create({
             header: Messages.NEW_GAME_TITLE,
             message: Messages.NEW_GAME,
+            cssClass: 'alert',
             buttons: [
                 {
                     text: 'No',
@@ -336,5 +347,12 @@ export class MatchService {
     updateMatchInList(match, matchId) {
         this.matchesActive = this.matchesActive.filter(p => p.id !== matchId);
         this.createMatchDataShow(match, matchId, this.userService.getCurrentUser().id, true);
+    }
+
+    goToMatch(match) {
+        const matchToChange = this.matchesActive.filter( p => p.id === match.id).pop();
+        matchToChange.turnLocalPlayer = !matchToChange.turnLocalPlayer;
+        const url = 'home/game/match/' + match.id;
+        this.router.navigate([url]);
     }
 }

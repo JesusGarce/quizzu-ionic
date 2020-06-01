@@ -22,21 +22,15 @@ export class GamePage {
 
   optionSelected: Options;
   matchFoundId: string;
-  matchesActive: MatchShow[];
-  matchesFinished: MatchShow[];
-  matchesPending: MatchShow[];
   loaded = false;
 
-  constructor(private matchService: MatchService,
+  constructor(public matchService: MatchService,
               private userService: UserService,
               private alertController: AlertController,
               private router: Router,
               private toast: ToastService,
               private modalController: ModalController,
               private notificationService: NotificationService) {
-    this.matchesActive = matchService.matchesActive;
-    this.matchesFinished = matchService.matchesFinished;
-    this.matchesPending = matchService.matchesPendings;
     this.loaded = true;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
@@ -85,12 +79,10 @@ export class GamePage {
   }
 
   acceptGame(game) {
-    this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
     this.matchService.acceptMatchPending(game);
   }
 
   deleteGame(game) {
-    this.matchesPending = this.matchesPending.filter( p => p.id !== game.id);
     this.matchService.deleteMatchPending(game);
   }
 
@@ -98,6 +90,7 @@ export class GamePage {
     const alert = await this.alertController.create({
       header: Messages.GIVE_UP_MATCH_TITLE,
       message: Messages.GIVE_UP_MATCH,
+      cssClass: 'alert',
       buttons: [
         {
           text: 'No',
@@ -106,11 +99,7 @@ export class GamePage {
         }, {
           text: 'Yes',
           handler: () => {
-            this.matchService.leaveGameStarted(game).then(
-                () => {
-                  this.matchesActive = this.matchesActive.filter( p => p.id !== game.id);
-                  this.matchesFinished.push(game);
-                });
+            this.matchService.leaveGameStarted(game).then();
           }
         }
       ]
@@ -121,15 +110,11 @@ export class GamePage {
 
   deleteMatchesFinished() {
     this.matchService.deleteMatchesFinished();
-    this.matchesFinished = [];
     this.toast.create(Messages.HISTORY_DELETED);
   }
 
   goToMatch(match) {
-    const matchToChange = this.matchesActive.filter( p => p.id === match.id).pop();
-    matchToChange.turnLocalPlayer = !matchToChange.turnLocalPlayer;
-    const url = 'home/game/match/' + match.id;
-    this.router.navigate([url]);
+    this.matchService.goToMatch(match);
   }
 
   isWinner(match) {
@@ -156,5 +141,25 @@ export class GamePage {
     modal.onDidDismiss().then(() => {
     });
     return await modal.present();
+  }
+
+  isAnyNotification() {
+    return this.notificationService.getNotificationListLength() === 0;
+  }
+
+  isNotificationsEnabled() {
+    return this.userService.isNotificationsEnabled();
+  }
+
+  notificationLength() {
+    return this.notificationService.notificationList.length;
+  }
+
+  refreshMatches(event) {
+    this.matchService.initMatches(this.userService.getCurrentUser().id);
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
   }
 }

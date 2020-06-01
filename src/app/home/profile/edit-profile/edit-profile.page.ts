@@ -74,4 +74,7 @@ export class EditProfilePage implements OnInit {
             });
     }
 
+    closeEditProfile() {
+        this.router.navigate(['home/profile']);
+    }
 }

@@ -21,7 +21,7 @@ export class UserService {
     currentUser: any;
     currentUserStats: any;
     downloadURL: Observable<string>;
-    profileDefaultImage = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=25150dc7-a848-4fce-b900-53f47a9518ee';
+    profileDefaultImage = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=8fc2e87d-cce5-4239-a169-89d610cf9694';
 
     constructor(
         public afStore: AngularFirestore,
@@ -119,16 +119,12 @@ export class UserService {
             } else {
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
     removeCurrentUser() {
         this.currentUser = '';
-    }
-
-    goToEditProfile() {
-        this.router.navigate(['home/profile/edit']);
     }
 
     setCurrentUser(editUser) {
@@ -276,7 +272,7 @@ export class UserService {
                     });
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
@@ -297,7 +293,7 @@ export class UserService {
                 this.toast.create(Messages.USER_NOT_FOUND);
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
@@ -331,7 +327,7 @@ export class UserService {
                     });
             }
         }).catch(err => {
-            this.toast.create(Messages.ERROR);
+            this.toast.create(Messages.ERROR + ':' + err);
         });
     }
 
@@ -354,6 +350,14 @@ export class UserService {
 
     filterFriendRequests(friend) {
         this.currentUser.friendRequests = this.currentUser.friendRequests.filter(p => p.id !== friend.id);
+    }
+
+    getFriendsCurrentUser() {
+        return this.currentUser.friends;
+    }
+
+    getFriendRequestsCurrentUser() {
+        return this.currentUser.friendRequests;
     }
 
     getCurrentUser() {

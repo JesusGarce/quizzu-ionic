@@ -36,6 +36,7 @@ export class AuthenticationService {
         this.initUser(user.uid);
       } else {
         localStorage.setItem('user', null);
+        this.router.navigate(['start']);
       }
       spinnerLoading.hide();
     });
@@ -52,8 +53,8 @@ export class AuthenticationService {
       this.spinnerLoading.hide();
       this.sendVerificationMail();
       this.router.navigate(['verify-email']);
-    }).catch((error) => {
-      this.toast.create(Messages.ERROR);
+    }).catch((err) => {
+      this.toast.create(Messages.ERROR + ':' + err);
     });
   }
 
@@ -68,13 +69,14 @@ export class AuthenticationService {
     return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail)
     .then(() => {
       this.toast.create(Messages.PASSWORD_CHANGE_REQUEST_SENT);
-    }).catch((error) => {
-          this.toast.create(error);
+    }).catch((err) => {
+          this.toast.create(Messages.ERROR + ':' + err);
     });
   }
 
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
     return (user !== null && user.emailVerified !== false);
   }
 
@@ -93,18 +95,20 @@ export class AuthenticationService {
         .then((response) => {
           this.userService.loginOrSignInFromGoogle(response.user);
           this.router.navigate(['enter-username']);
-        });
+        }).catch((err) => {
+      this.spinnerLoading.hide();
+      this.toast.create(Messages.ERROR + ':' + err);
+    });
   }
 
   authGoogleLogin(provider) {
     this.spinnerLoading.show();
     return this.ngFireAuth.auth.signInWithPopup(provider)
     .then((result) => {
-      console.log(result.user);
        this.ngZone.run(() => {
+         this.userService.loginOrSignInFromGoogle(result.user);
          this.router.navigate(['enter-username']);
-        });
-      this.userService.loginOrSignInFromGoogle(result.user);
+       });
     }).catch((err) => {
           this.spinnerLoading.hide();
           this.toast.create(Messages.ERROR + ':' + err);
@@ -115,7 +119,7 @@ export class AuthenticationService {
     return this.ngFireAuth.auth.signOut().then(() => {
       this.userService.removeCurrentUser();
       this.matchService.removeMatches();
-      localStorage.removeItem('user');
+      localStorage.clear();
       this.router.navigate(['start']);
     });
   }
