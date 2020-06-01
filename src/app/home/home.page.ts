@@ -33,8 +33,6 @@ export class HomePage {
             'https://us-central1-quizzu-1fd29.cloudfunctions.net/hiWorld')
         .subscribe((data: any) => {
           console.log(data);
-          this.firebaseReply = data.text;
-          this.toast.create('Hi!');
         });
   }
 

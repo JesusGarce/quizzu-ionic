@@ -18,6 +18,7 @@ import {FinishPractisePage} from './finish-practise/finish-practise.page';
 import {Options} from '../../../shared/models/options.model';
 import {Antonyms} from '../../../shared/models/antonym.model';
 import {Synonyms} from '../../../shared/models/synonym.model';
+import {ServerService} from '../../../shared/server-service';
 
 @Component({
   selector: 'app-practise',
@@ -54,6 +55,7 @@ export class PractisePage {
               private spinnerLoading: SpinnerLoadingService,
               private toast: ToastService,
               private alertController: AlertController,
+              private serverService: ServerService,
               private http: HttpClient) {
     this.user = this.userService.getCurrentUser();
     this.userStats = this.userService.getCurrentUserStats();
@@ -135,6 +137,24 @@ export class PractisePage {
   }
 
   getQuestion() {
+    this.serverService.getServer().then(
+        s => {
+          if (!s.empty) {
+            const server = s.docs.pop();
+            if (server.data().wordsApiCallsDaily < 2500) {
+              this.serverService.updateApiCalls(server.data(), server.id).then();
+              this.doWordsApiCall();
+            } else {
+              this.toast.create('Ups! Quizzu used has been surpassed. You have to wait until tomorrow to play.');
+              this.spinnerLoading.hide();
+              this.router.navigate(['home/game']).then();
+            }
+          }
+        }
+    );
+  }
+
+  doWordsApiCall() {
     if (this.options.type === Constants.GAME_ANTONYMS)
       this.matchWordsApiService.getAntonym(this.correctWord)
           .subscribe((data: Antonyms) => {
@@ -160,20 +180,13 @@ export class PractisePage {
             this.initializeWords(this.options.level);
           });
     else {
-      this.matchWordsApiService.checkCalls().subscribe((data: any) => {
-        console.log(data);
-        if (data.available) {
-          this.matchWordsApiService.getDefinition(this.correctWord)
-              .subscribe((word: Word) => {
-                this.question = word.definitions[0].definition;
-                this.startCountdown().then();
-              }, error => {
-                this.initializeWords(this.options.level);
-              });
-        }
-        else
-          return null;
-      });
+      this.matchWordsApiService.getDefinition(this.correctWord)
+          .subscribe((data: Word) => {
+            this.question = data.definitions[0].definition;
+            this.startCountdown().then();
+          }, error => {
+            this.initializeWords(this.options.level);
+          });
     }
   }
 
