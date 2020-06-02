@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {NotificationService} from '../shared/notification-service';
 import {HttpClient} from '@angular/common/http';
 import {ToastService} from '../shared/toast-service';
+import {ServerService} from '../shared/server-service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,6 @@ import {ToastService} from '../shared/toast-service';
   styleUrls: ['./home.page.scss', '../app.component.scss']
 })
 export class HomePage {
-  firebaseReply: string;
 
   constructor(
       private authService: AuthenticationService,
@@ -23,17 +23,9 @@ export class HomePage {
       private router: Router,
       private toast: ToastService,
       private http: HttpClient,
+      private serverService: ServerService
   ) {
-    this.callCloudFunction();
-  }
-
-  callCloudFunction() {
-    this.http
-        .get(
-            'https://us-central1-quizzu-1fd29.cloudfunctions.net/hiWorld')
-        .subscribe((data: any) => {
-          console.log(data);
-        });
+    this.serverService.checkIfIsNewDay();
   }
 
 }
