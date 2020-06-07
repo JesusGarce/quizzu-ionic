@@ -21,7 +21,7 @@ export class UserService {
     currentUser: any;
     currentUserStats: any;
     downloadURL: Observable<string>;
-    profileDefaultImage = '694';
+    profileDefaultImage = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=8fc2e87d-cce5-4239-a169-89d610cf9694';
 
     constructor(
         public afStore: AngularFirestore,
@@ -42,6 +42,8 @@ export class UserService {
         user.friendRequests = [];
         user.profile = this.profileDefaultImage;
         user.notifEnabled = true;
+        this.currentUser = user;
+        console.log(this.currentUser);
         this.createUserStats(userId);
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
         userRef.set(JSON.parse(JSON.stringify(user)), {
@@ -55,6 +57,10 @@ export class UserService {
 
     createUserStats(userId) {
         this.currentUserStats = new UserStats(userId);
+    }
+
+    addUser() {
+        return this.afStore.collection('users').add(JSON.parse(JSON.stringify(this.currentUser)));
     }
 
     loginOrSignInFromGoogle(user) {

@@ -10,6 +10,7 @@ import {ToastService} from './toast-service';
 import {UserService} from './user-service';
 import {MatchService} from './match-service';
 import {Messages} from './messages';
+import {NotificationService} from './notification-service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class AuthenticationService {
       private spinnerLoading: SpinnerLoadingService,
       private toast: ToastService,
       private userService: UserService,
-      private matchService: MatchService
+      private matchService: MatchService,
   ) {
     spinnerLoading.show();
     this.ngFireAuth.authState.subscribe(user => {
@@ -49,10 +50,10 @@ export class AuthenticationService {
   registerUser(user, password) {
     return this.ngFireAuth.auth.createUserWithEmailAndPassword(user.email, password).
         then(result => {
-      this.userService.createUser(user, result.user.uid);
-      this.spinnerLoading.hide();
-      this.sendVerificationMail().then(() => {
-        // this.router.navigate(['verify-email']);
+          this.userService.createUser(user, result.user.uid);
+          this.spinnerLoading.hide();
+          this.sendVerificationMail().then(() => {
+            this.router.navigate(['verify-email']).then();
       });
     }).catch((err) => {
       this.toast.create(Messages.ERROR + ':' + err);
@@ -139,6 +140,9 @@ export class AuthenticationService {
             this.userService.initCurrentUser(uid);
             this.userService.initCurrentUserStats(uid);
             this.matchService.initMatches(uid);
+          } else {
+            this.signOut().then();
+            this.router.navigate(['start']).then();
           }
         }
     );

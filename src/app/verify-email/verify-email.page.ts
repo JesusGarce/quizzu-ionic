@@ -14,7 +14,6 @@ export class VerifyEmailPage implements OnInit {
     public userService: UserService
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }
