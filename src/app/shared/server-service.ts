@@ -15,12 +15,8 @@ export class ServerService {
     }
 
     checkIfIsNewDay() {
-        console.log('checkIfIsNewDay');
         this.getServer().then(
             data => {
-                console.log(data);
-                console.log(data.size);
-                console.log(data.empty);
                 if (data.empty) {
                     console.log('creating server...');
                     this.createServer().then();

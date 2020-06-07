@@ -51,18 +51,16 @@ export class AuthenticationService {
         then(result => {
       this.userService.createUser(user, result.user.uid);
       this.spinnerLoading.hide();
-      this.sendVerificationMail();
-      this.router.navigate(['verify-email']);
+      this.sendVerificationMail().then(() => {
+        // this.router.navigate(['verify-email']);
+      });
     }).catch((err) => {
       this.toast.create(Messages.ERROR + ':' + err);
     });
   }
 
   sendVerificationMail() {
-    return this.ngFireAuth.auth.currentUser.sendEmailVerification()
-    .then(() => {
-      this.router.navigate(['verify-email']);
-    });
+    return this.ngFireAuth.auth.currentUser.sendEmailVerification();
   }
 
   passwordRecover(passwordResetEmail) {
