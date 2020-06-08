@@ -42,6 +42,8 @@ export class UserService {
         user.friendRequests = [];
         user.profile = this.profileDefaultImage;
         user.notifEnabled = true;
+        this.currentUser = user;
+        console.log(this.currentUser);
         this.createUserStats(userId);
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
         userRef.set(JSON.parse(JSON.stringify(user)), {
@@ -55,6 +57,10 @@ export class UserService {
 
     createUserStats(userId) {
         this.currentUserStats = new UserStats(userId);
+    }
+
+    addUser() {
+        return this.afStore.collection('users').add(JSON.parse(JSON.stringify(this.currentUser)));
     }
 
     loginOrSignInFromGoogle(user) {
@@ -82,7 +88,7 @@ export class UserService {
         const userData = new User(user.uid, user.email, user.displayName.toLowerCase(), user.photoURL);
         return userRef.set(JSON.parse(JSON.stringify(userData)), {
             merge: true
-        }).then( p => this.spinnerLoading.hide());
+        }).then( () => this.spinnerLoading.hide());
     }
 
     existUser(username) {
