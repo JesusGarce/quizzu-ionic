@@ -10,7 +10,7 @@ import {ToastService} from './toast-service';
 import {UserService} from './user-service';
 import {MatchService} from './match-service';
 import {Messages} from './messages';
-import {NotificationService} from './notification-service';
+import {Platform} from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,7 @@ export class AuthenticationService {
       private toast: ToastService,
       private userService: UserService,
       private matchService: MatchService,
+      private platform: Platform,
   ) {
     spinnerLoading.show();
     this.ngFireAuth.authState.subscribe(user => {
@@ -41,6 +42,15 @@ export class AuthenticationService {
       }
       spinnerLoading.hide();
     });
+
+    this.ngFireAuth.auth.getRedirectResult().then( result => {
+          console.log(result);
+          this.userService.loginOrSignInFromGoogle(result.user);
+          this.router.navigate(['enter-username']);
+      }).catch(err => {
+          this.spinnerLoading.hide();
+          this.toast.create(Messages.ERROR + ':' + err);
+      });
   }
 
   signInWithEmailAndPassword(email, password) {
@@ -49,11 +59,11 @@ export class AuthenticationService {
 
   registerUser(user, password) {
     return this.ngFireAuth.auth.createUserWithEmailAndPassword(user.email, password).
-        then(result => {
-          this.userService.createUser(user, result.user.uid);
-          this.spinnerLoading.hide();
-          this.sendVerificationMail().then(() => {
-            this.router.navigate(['verify-email']).then();
+    then(result => {
+      this.userService.createUser(user, result.user.uid);
+      this.spinnerLoading.hide();
+      this.sendVerificationMail().then(() => {
+        this.router.navigate(['verify-email']).then();
       });
     }).catch((err) => {
       this.toast.create(Messages.ERROR + ':' + err);
@@ -66,11 +76,11 @@ export class AuthenticationService {
 
   passwordRecover(passwordResetEmail) {
     return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail)
-    .then(() => {
-      this.toast.create(Messages.PASSWORD_CHANGE_REQUEST_SENT);
-    }).catch((err) => {
+        .then(() => {
+          this.toast.create(Messages.PASSWORD_CHANGE_REQUEST_SENT);
+        }).catch((err) => {
           this.toast.create(Messages.ERROR + ':' + err);
-    });
+        });
   }
 
   get isLoggedIn(): boolean {
@@ -102,16 +112,21 @@ export class AuthenticationService {
 
   authGoogleLogin(provider) {
     this.spinnerLoading.show();
-    return this.ngFireAuth.auth.signInWithPopup(provider)
-    .then((result) => {
-       this.ngZone.run(() => {
-         this.userService.loginOrSignInFromGoogle(result.user);
-         this.router.navigate(['enter-username']);
-       });
-    }).catch((err) => {
-          this.spinnerLoading.hide();
-          this.toast.create(Messages.ERROR + ':' + err);
-    });
+    if (this.platform.is('desktop')) {
+      return this.ngFireAuth.auth.signInWithPopup(provider)
+          .then((result) => {
+            this.ngZone.run(() => {
+              this.userService.loginOrSignInFromGoogle(result.user);
+              this.router.navigate(['enter-username']);
+            });
+          }).catch((err) => {
+            this.spinnerLoading.hide();
+            this.toast.create(Messages.ERROR + ':' + err);
+          });
+    } else {
+      return this.ngFireAuth.auth.signInWithRedirect(provider)
+          .then(() => {});
+    }
   }
 
   signOut() {
