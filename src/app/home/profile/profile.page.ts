@@ -18,6 +18,7 @@ export class ProfilePage {
     matchesDraw: number;
     matchesLost: number;
     user: any;
+    profile: any;
     userStats: any;
 
     constructor(
@@ -29,6 +30,8 @@ export class ProfilePage {
         private notificationService: NotificationService) {
         this.user = this.userService.getCurrentUser();
         this.userStats = this.userService.getCurrentUserStats();
+        this.profile = this.userService.profile;
+        console.log(this.profile);
 
         this.matchesWon = this.userStats.c2level.c2won + this.userStats.c1level.c1won +
             this.userStats.b2level.b2won + this.userStats.b1level.b1won;
@@ -46,7 +49,9 @@ export class ProfilePage {
         });
 
         popover.onDidDismiss().then(() => {
+            this.profile = this.userService.profile;
             this.router.navigate(['/home/profile']);
+            console.log(this.profile);
         });
         return await popover.present();
     }

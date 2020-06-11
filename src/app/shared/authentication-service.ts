@@ -117,7 +117,7 @@ export class AuthenticationService {
           .then((result) => {
             this.ngZone.run(() => {
               this.userService.loginOrSignInFromGoogle(result.user);
-              this.router.navigate(['enter-username']);
+              this.router.navigate(['enter-username']).then();
             });
           }).catch((err) => {
             this.spinnerLoading.hide();

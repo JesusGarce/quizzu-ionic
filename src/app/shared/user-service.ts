@@ -19,6 +19,7 @@ import {Constants} from './constants';
 
 export class UserService {
     currentUser: any;
+    profile: any;
     currentUserStats: any;
     downloadURL: Observable<string>;
     profileDefaultImage = 'https://firebasestorage.googleapis.com/v0/b/quizzu-1fd29.appspot.com/o/profile%2Fdefault.png?alt=media&token=8fc2e87d-cce5-4239-a169-89d610cf9694';
@@ -43,7 +44,7 @@ export class UserService {
         user.profile = this.profileDefaultImage;
         user.notifEnabled = true;
         this.currentUser = user;
-        console.log(this.currentUser);
+        this.profile = this.currentUser.profile;
         this.createUserStats(userId);
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.id}`);
         userRef.set(JSON.parse(JSON.stringify(user)), {
@@ -70,10 +71,10 @@ export class UserService {
                     this.initCurrentUser(user.uid);
                     this.router.navigate(['home']);
                     this.spinnerLoading.hide();
-                }
-                else
+                } else {
                     this.createUserFromDataGoogle(user)
                         .then(() => this.initCurrentUser(user.uid));
+                }
             }
         );
     }
@@ -83,12 +84,12 @@ export class UserService {
         const userStatsRef: AngularFirestoreDocument<any> = this.afStore.doc(`user-stats/${user.uid}`);
         userStatsRef.set(JSON.parse(JSON.stringify(this.currentUserStats)), {
             merge: true
-        }).then();
+        });
         const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
         const userData = new User(user.uid, user.email, user.displayName.toLowerCase(), user.photoURL);
         return userRef.set(JSON.parse(JSON.stringify(userData)), {
             merge: true
-        }).then( () => this.spinnerLoading.hide());
+        });
     }
 
     existUser(username) {
@@ -102,6 +103,7 @@ export class UserService {
         this.afStore.doc(`users/${uid}`).ref.get().then(doc => {
             if (doc.exists) {
                 this.currentUser = doc.data();
+                this.profile = this.currentUser.profile;
                 if (this.isNotificationsEnabled()) {
                     this.initNotificationSystem();
                 }
@@ -131,6 +133,7 @@ export class UserService {
 
     removeCurrentUser() {
         this.currentUser = '';
+        this.profile = '';
     }
 
     setCurrentUser(editUser) {
@@ -245,15 +248,23 @@ export class UserService {
                     this.downloadURL = fileRef.getDownloadURL();
                     this.downloadURL.subscribe(url => {
                         if (url) {
+                            this.profile = url;
+                            url = this.add200x200(url);
                             this.currentUser.profile = url;
                             this.spinnerLoading.hide();
-                            return this.setCurrentUser(this.currentUser);
+                            this.setCurrentUser(this.currentUser).then();
                         }
                     });
                 })
             )
             .subscribe(url => {
             });
+    }
+
+    add200x200(url) {
+        const regexp = new RegExp('[?]');
+        const exec = regexp.exec(url);
+        return url.substr(0, exec.index) + '_200x200' + url.substr(exec.index);
     }
 
     acceptFriendRequest(friend) {
