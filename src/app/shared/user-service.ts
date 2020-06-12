@@ -43,6 +43,10 @@ export class UserService {
         user.friendRequests = [];
         user.profile = this.profileDefaultImage;
         user.notifEnabled = true;
+        this.storeNewUser(user, userId);
+    }
+
+    storeNewUser(user, userId) {
         this.currentUser = user;
         this.profile = this.currentUser.profile;
         this.createUserStats(userId);
@@ -64,7 +68,7 @@ export class UserService {
         return this.afStore.collection('users').add(JSON.parse(JSON.stringify(this.currentUser)));
     }
 
-    loginOrSignInFromGoogle(user) {
+    loginOrSignInFromOAuth(user) {
         this.getUser(user.uid).then(
             r => {
                 if (r.exists) {
@@ -72,24 +76,15 @@ export class UserService {
                     this.router.navigate(['home']);
                     this.spinnerLoading.hide();
                 } else {
-                    this.createUserFromDataGoogle(user)
-                        .then(() => this.initCurrentUser(user.uid));
+                    this.createUserFromDataOAuth(user);
                 }
             }
         );
     }
 
-    createUserFromDataGoogle(user) {
-        this.createUserStats(user.uid);
-        const userStatsRef: AngularFirestoreDocument<any> = this.afStore.doc(`user-stats/${user.uid}`);
-        userStatsRef.set(JSON.parse(JSON.stringify(this.currentUserStats)), {
-            merge: true
-        });
-        const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
+    createUserFromDataOAuth(user) {
         const userData = new User(user.uid, user.email, user.displayName.toLowerCase(), user.photoURL);
-        return userRef.set(JSON.parse(JSON.stringify(userData)), {
-            merge: true
-        });
+        this.storeNewUser(userData, user.uid);
     }
 
     existUser(username) {
@@ -249,7 +244,7 @@ export class UserService {
                     this.downloadURL.subscribe(url => {
                         if (url) {
                             this.profile = url;
-                            url = this.add200x200(url);
+                            url = this.add200x200ToPath(url);
                             this.currentUser.profile = url;
                             this.spinnerLoading.hide();
                             this.setCurrentUser(this.currentUser).then();
@@ -261,7 +256,7 @@ export class UserService {
             });
     }
 
-    add200x200(url) {
+    add200x200ToPath(url) {
         const regexp = new RegExp('[?]');
         const exec = regexp.exec(url);
         return url.substr(0, exec.index) + '_200x200' + url.substr(exec.index);

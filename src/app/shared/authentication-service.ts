@@ -43,14 +43,14 @@ export class AuthenticationService {
       spinnerLoading.hide();
     });
 
-    this.ngFireAuth.auth.getRedirectResult().then( result => {
-          console.log(result);
-          this.userService.loginOrSignInFromGoogle(result.user);
+    if (!this.platform.is('desktop')) {
+      this.ngFireAuth.auth.getRedirectResult().then(result => {
+          this.userService.loginOrSignInFromOAuth(result.user);
           this.router.navigate(['enter-username']);
       }).catch(err => {
-          this.spinnerLoading.hide();
-          this.toast.create(Messages.ERROR + ':' + err);
+        this.spinnerLoading.hide();
       });
+    }
   }
 
   signInWithEmailAndPassword(email, password) {
@@ -85,7 +85,6 @@ export class AuthenticationService {
 
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user);
     return (user !== null && user.emailVerified !== false);
   }
 
@@ -94,7 +93,7 @@ export class AuthenticationService {
   }
 
   signInWithGoogleAuth() {
-    return this.authGoogleLogin(new auth.GoogleAuthProvider());
+    this.authGoogleLogin(new auth.GoogleAuthProvider());
   }
 
   facebookAuth(res: FacebookLoginResponse) {
@@ -102,7 +101,7 @@ export class AuthenticationService {
     const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
     this.ngFireAuth.auth.signInWithCredential(credential)
         .then((response) => {
-          this.userService.loginOrSignInFromGoogle(response.user);
+          this.userService.loginOrSignInFromOAuth(response.user);
           this.router.navigate(['enter-username']);
         }).catch((err) => {
       this.spinnerLoading.hide();
@@ -113,18 +112,18 @@ export class AuthenticationService {
   authGoogleLogin(provider) {
     this.spinnerLoading.show();
     if (this.platform.is('desktop')) {
-      return this.ngFireAuth.auth.signInWithPopup(provider)
+      this.ngFireAuth.auth.signInWithPopup(provider)
           .then((result) => {
+            this.userService.loginOrSignInFromOAuth(result.user);
             this.ngZone.run(() => {
-              this.userService.loginOrSignInFromGoogle(result.user);
-              this.router.navigate(['enter-username']).then();
+               this.router.navigate(['enter-username']).then();
             });
           }).catch((err) => {
             this.spinnerLoading.hide();
             this.toast.create(Messages.ERROR + ':' + err);
           });
     } else {
-      return this.ngFireAuth.auth.signInWithRedirect(provider)
+      this.ngFireAuth.auth.signInWithRedirect(provider)
           .then(() => {});
     }
   }
