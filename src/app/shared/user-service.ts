@@ -64,22 +64,15 @@ export class UserService {
         this.currentUserStats = new UserStats(userId);
     }
 
-    addUser() {
-        return this.afStore.collection('users').add(JSON.parse(JSON.stringify(this.currentUser)));
+    logInFromOAuth(user) {
+        this.initCurrentUser(user.uid);
+        this.router.navigate(['home']).then();
+        this.spinnerLoading.hide();
     }
 
-    loginOrSignInFromOAuth(user) {
-        this.getUser(user.uid).then(
-            r => {
-                if (r.exists) {
-                    this.initCurrentUser(user.uid);
-                    this.router.navigate(['home']);
-                    this.spinnerLoading.hide();
-                } else {
-                    this.createUserFromDataOAuth(user);
-                }
-            }
-        );
+    signInFromOAuth(user) {
+        this.createUserFromDataOAuth(user);
+        this.router.navigate(['enter-username']).then();
     }
 
     createUserFromDataOAuth(user) {

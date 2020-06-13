@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="es.jesusgarce.quizzu" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Quizzu</name>
-    <description>Quizzu</description>
+    <description>A quiz online to learn English in a social way</description>
     <author email="tarraga.jesus@gmail.com" href="https://jesusgarce.github.io">JesusGarce Ltd</author>
     <content src="index.html" />
     <access origin="*" />
