@@ -45,9 +45,15 @@ export class AuthenticationService {
 
     if (!this.platform.is('desktop')) {
       this.ngFireAuth.auth.getRedirectResult().then(result => {
-          this.userService.loginOrSignInFromOAuth(result.user);
-          this.router.navigate(['enter-username']);
+        const user = result.user;
+        const isNewUser = result.additionalUserInfo.isNewUser;
+        if (isNewUser) {
+          this.userService.signInFromOAuth(user);
+        } else {
+          this.userService.logInFromOAuth(user);
+        }
       }).catch(err => {
+        this.toast.create(Messages.ERROR + ': ' + err);
         this.spinnerLoading.hide();
       });
     }
@@ -100,9 +106,17 @@ export class AuthenticationService {
     this.spinnerLoading.show();
     const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
     this.ngFireAuth.auth.signInWithCredential(credential)
-        .then((response) => {
-          this.userService.loginOrSignInFromOAuth(response.user);
-          this.router.navigate(['enter-username']);
+        .then((result) => {
+          const user = result.user;
+          const isNewUser = result.additionalUserInfo.isNewUser;
+          if (isNewUser) {
+            this.userService.signInFromOAuth(user);
+            this.ngZone.run(() => {
+              this.router.navigate(['enter-username']).then();
+            });
+          } else {
+            this.userService.logInFromOAuth(user);
+          }
         }).catch((err) => {
       this.spinnerLoading.hide();
       this.toast.create(Messages.ERROR + ':' + err);
@@ -114,10 +128,16 @@ export class AuthenticationService {
     if (this.platform.is('desktop')) {
       this.ngFireAuth.auth.signInWithPopup(provider)
           .then((result) => {
-            this.userService.loginOrSignInFromOAuth(result.user);
-            this.ngZone.run(() => {
-               this.router.navigate(['enter-username']).then();
-            });
+            const user = result.user;
+            const isNewUser = result.additionalUserInfo.isNewUser;
+            if (isNewUser) {
+              this.userService.signInFromOAuth(user);
+              this.ngZone.run(() => {
+                this.router.navigate(['enter-username']).then();
+              });
+            } else {
+              this.userService.logInFromOAuth(user);
+            }
           }).catch((err) => {
             this.spinnerLoading.hide();
             this.toast.create(Messages.ERROR + ':' + err);
