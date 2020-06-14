@@ -95,4 +95,8 @@ export class ProfilePage {
     logout() {
         this.authService.signOut();
     }
+
+    getProfile() {
+       return this.userService.profile;
+    }
 }
