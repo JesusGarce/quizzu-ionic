@@ -46,14 +46,16 @@ export class AuthenticationService {
     if (!this.platform.is('desktop')) {
       this.ngFireAuth.auth.getRedirectResult().then(result => {
         const user = result.user;
-        const isNewUser = result.additionalUserInfo.isNewUser;
+        let isNewUser = false;
+        if (user !== undefined)
+          isNewUser = result.additionalUserInfo.isNewUser;
         if (isNewUser) {
           this.userService.signInFromOAuth(user);
         } else {
           this.userService.logInFromOAuth(user);
         }
       }).catch(err => {
-        this.toast.create(Messages.ERROR + ': ' + err);
+        console.log(err);
         this.spinnerLoading.hide();
       });
     }
