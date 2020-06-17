@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
-import {ServerService} from './shared/server-service';
+import {ServerService} from './shared/services/server-service';
 
 @Component({
   selector: 'app-root',
