@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"><img class="img-toolbar" src="../../../assets/quizzu_logo.png"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content align="center">
+  <ion-grid>
+    <ion-col>
+      <ion-icon name="mail"></ion-icon>
+      <h2>Verification Email Sent</h2>
+      <p>
+        Please check your email and click on the link to verfiy your email address.
+      </p>
+      <ion-button type="submit" (click)="authService.sendVerificationMail()" expand="block">
+        Resend Verification Email
+      </ion-button>
+    </ion-col>
+  </ion-grid>
+</ion-content>

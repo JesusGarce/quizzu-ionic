@@ -17,26 +17,26 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {environment} from '../environments/environment';
 import {AngularFireStorageModule, StorageBucket} from '@angular/fire/storage';
 
-import {AuthenticationService} from './shared/authentication-service';
+import {AuthenticationService} from './shared/services/authentication-service';
 import {Facebook} from '@ionic-native/facebook/ngx';
-import {EditImageProfileComponent} from './home/profile/edit-image-profile.component';
+import {EditImageProfileComponent} from './components/home/profile/edit-image-profile.component';
 import {SpinnerLoadingComponent} from './shared/spinner-loading/spinner-loading.component';
 import {OverlayModule} from '@angular/cdk/overlay';
-import {ToastService} from './shared/toast-service';
-import {UserService} from './shared/user-service';
-import {MatchService} from './shared/match-service';
-import {SearchModalUserPageModule} from './home/friends/search-modal-user/search-modal-user.module';
+import {ToastService} from './shared/services/toast-service';
+import {UserService} from './shared/services/user-service';
+import {MatchService} from './shared/services/match-service';
+import {SearchModalUserPageModule} from './components/home/friends/search-modal-user/search-modal-user.module';
 import {LottieAnimationViewModule} from 'ng-lottie';
-import {SelectLevelModalPageModule} from './home/game/select-level-modal/select-level-modal.module';
-import {CountdownStartPageModule} from './home/game/match/countdown-start/countdown-start.module';
-import {SearchOpponentPageModule} from './home/game/match/search-opponent/search-opponent.module';
-import {MatchWordsApiService} from './shared/match-wordsapi-service';
-import {FinishMatchPageModule} from './home/game/match/finish-match/finish-match.module';
-import {NotificationsPageModule} from './home/notifications/notifications.module';
-import {NotificationService} from './shared/notification-service';
+import {SelectLevelModalPageModule} from './components/home/game/select-level-modal/select-level-modal.module';
+import {CountdownStartPageModule} from './components/home/game/match/countdown-start/countdown-start.module';
+import {SearchOpponentPageModule} from './components/home/game/match/search-opponent/search-opponent.module';
+import {MatchWordsApiService} from './shared/services/match-wordsapi-service';
+import {FinishMatchPageModule} from './components/home/game/match/finish-match/finish-match.module';
+import {NotificationsPageModule} from './components/home/notifications/notifications.module';
+import {NotificationService} from './shared/services/notification-service';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
-import {FinishPractisePageModule} from './home/game/practise/finish-practise/finish-practise.module';
-import {SettingsPageModule} from './home/profile/settings/settings.module';
+import {FinishPractisePageModule} from './components/home/game/practise/finish-practise/finish-practise.module';
+import {SettingsPageModule} from './components/home/profile/settings/settings.module';
 
 @NgModule({
     declarations: [AppComponent, EditImageProfileComponent, SpinnerLoadingComponent],

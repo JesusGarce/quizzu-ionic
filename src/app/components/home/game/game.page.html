@@ -1,0 +1,137 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title align="center" class="ion-text-center">
+            <img class="img-toolbar" src="../../../../assets/quizzu_logo.png">
+            <ion-button class="button-notification" (click)="openNotifications()"
+                        [disabled]="this.isAnyNotification()"
+                        *ngIf="isNotificationsEnabled()">
+                {{notificationLength()}}
+            </ion-button>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content align="center">
+    <ion-refresher slot="fixed" (ionRefresh)="refreshMatches($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-card *ngIf="matchService.matchesPendings.length !== 0" color="primary">
+        <ion-card-title><h3 class="h3-white">Requested games</h3></ion-card-title>
+        <ion-card-content>
+        <ion-list *ngFor="let match of matchService.matchesPendings">
+            <ion-item>
+                <ion-col>
+                    <h2>{{match.awayPlayerName}}</h2>
+                    <h3>{{match.level}} level</h3>
+                </ion-col>
+                <ion-button (click)="acceptGame(match)">
+                    <ion-icon name="checkmark" ></ion-icon>
+                </ion-button>
+                <ion-button (click)="deleteGame(match)">
+                    <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+            </ion-item>
+        </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card color="mediumlight">
+        <ion-card-title><h3 class="h3-title">Active games</h3></ion-card-title>
+        <ion-card-content>
+            <div *ngIf="matchService.matchesActive.length === 0">
+                <ion-col>
+                    <ion-icon class="icon-big" name="rocket-outline"></ion-icon>
+                    <h2>You aren't playing any match</h2>
+                    <p>
+                        What are you waiting? Start a game!
+                    </p>
+                </ion-col>
+            </div>
+            <ion-list *ngFor="let match of matchService.matchesActive">
+                <ion-item>
+                    <ion-col>
+                        <h2>{{match.awayPlayerName}}</h2>
+                        <ion-row>
+                            <h3>{{match.level}} level</h3>
+                        </ion-row>
+                    </ion-col>
+                    <ion-row class="game-result">
+                        <ion-col>
+                            <ion-row align="center">
+                        <h2 class="result-local">{{match.localPlayerPoints}} </h2>
+                        <h2 class="result-away"> -{{match.awayPlayerPoints}}</h2>
+                            </ion-row>
+                            <ion-row>
+                                <h2 class="type">{{match.type}}</h2>
+                            </ion-row>
+                        </ion-col>
+                    </ion-row>
+                    <ion-button class="button-game" (click)="goToMatch(match)" [disabled]="!youCanPlay(match)">
+                        <ion-icon name="game-controller"></ion-icon>
+                    </ion-button>
+                    <ion-button (click)="leftGameStarted(match)">
+                        <ion-icon name="close-outline"></ion-icon>
+                    </ion-button>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card color="primary">
+        <ion-card-title><h2 class="h2-white">New game</h2></ion-card-title>
+        <ion-row class="new-game-row">
+            <ion-tab-button class="button-white" (click)="chooseLevel('practise')">
+                <ion-icon class="icon-medium" name="person-circle-outline"></ion-icon>Practise <br/> mode
+            </ion-tab-button>
+            <ion-tab-button class="button-white" (click)="chooseLevel('match')">
+                <ion-icon class="icon-medium" name="earth-outline"></ion-icon>Play <br/> now
+            </ion-tab-button>
+            <ion-tab-button class="button-white" (click)="goToFriendsPage()">
+                <ion-icon class="icon-medium" name="people-circle-outline"></ion-icon>Challenge <br/> a friend
+            </ion-tab-button>
+        </ion-row>
+    </ion-card>
+
+    <ion-card color="mediumlight">
+        <ion-card-title><h3 class="h3-title">Last games</h3></ion-card-title>
+        <ion-card-content>
+            <div class="div-center" *ngIf="matchService.matchesFinished.length === 0">
+                <ion-col>
+                    <ion-icon class="icon-big" name="sad-outline"></ion-icon>
+                    <h2>You don't have matches finished yet</h2>
+                    <p>
+                        Come on! Start to play!
+                    </p>
+                </ion-col>
+            </div>
+            <ion-list *ngFor="let match of matchService.matchesFinished">
+                <ion-item>
+                    <ion-col>
+                        <h2>{{match.awayPlayerName}}</h2>
+                        <ion-row>
+                            <h3 class="local">{{match.localPlayerPoints}}</h3>
+                            <h3>-{{match.awayPlayerPoints}}</h3>
+                        </ion-row>
+                    </ion-col>
+                    <div *ngIf="isWinner(match)">
+                        <h2 class="last-games-result">VICTORY!
+                            <ion-icon name="trophy-outline"></ion-icon>
+                        </h2>
+                    </div>
+                    <div *ngIf="isLoser(match)">
+                        <h2 class="last-games-result">DEFEAT!
+                            <ion-icon name="skull-outline"></ion-icon>
+                        </h2>
+                    </div>
+                    <div *ngIf="isDrawn(match)">
+                        <h2 class="last-games-result">DRAW!
+                            <ion-icon name="hourglass-outline"></ion-icon>
+                        </h2>
+                    </div>
+                </ion-item>
+            </ion-list>
+            <ion-button *ngIf="matchService.matchesFinished.length !== 0" (click)="deleteMatchesFinished()">Delete history <ion-icon name="trash"></ion-icon></ion-button>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>
